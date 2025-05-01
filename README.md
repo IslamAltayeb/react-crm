@@ -46,5 +46,16 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 To learn React, check out the [React documentation](https://reactjs.org/).
 
 
+# step for running the project
+- download node.js  from https://nodejs.org/en
 
+- for eslint errors run the following commands
+npm install eslint-plugin-n --save-dev
+npm install eslint-plugin-promise --save-dev
+
+- run the follwing command
+npm install
+
+- for running the project
+npm start
 
