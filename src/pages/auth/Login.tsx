@@ -11,6 +11,9 @@ import { AuthUrl } from '../../services/ApiUrls';
 import '../../styles/style.css';
 import axios from 'axios'
 
+import '../../styles/style.css'
+import { LoginForm } from "./LoginForm";
+import { SignupForm } from './SignupForm';
 
 declare global {
     interface Window {
@@ -19,11 +22,11 @@ declare global {
     }
 }
 
-
 export default function Login() {
     const navigate = useNavigate()
     const [token, setToken] = useState(false)
     const [googleEnabled, setGoogleEnabled] = useState(false)
+    const [isLogin, setIsLogin] = useState(true);
 
     useEffect(() => {
         if (localStorage.getItem('Token')) {
@@ -132,17 +135,15 @@ export default function Login() {
                     sx={{ height: '100%', overflow: 'hidden', justifyItems: 'center' }}
                 >
                     <Grid item >
-                        <Stack sx={{ alignItems: 'center' }}>
-                            <h3>Welcome to BottleCRM</h3>
-                            <p> Free and OpenSource CRM from small medium business.</p>
-                            <img
-                                src={imgLogin}
-                                alt='register_ad_image'
-                                className='register-ad-image'
-                            />
-                            <footer className='register-footer'>
-                                bottlecrm.com
-                            </footer>
+                        <Stack
+                            sx={{
+                                width: '250%',
+                            }}
+                        >
+                            {
+                                isLogin ? (<LoginForm toggleForm={() => setIsLogin(false)} />
+                                ) : (<SignupForm toggleForm={() => setIsLogin(true)} />)
+                            }
                         </Stack>
                     </Grid>
                 </Grid>
