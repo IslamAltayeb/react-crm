@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Grid, Stack, Typography } from '@mui/material'
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,9 @@ import imgLogin from '../../assets/images/auth/img_login.png'
 import { GoogleButton } from '../../styles/CssStyled';
 import { fetchData } from '../../components/FetchData';
 import { AuthUrl } from '../../services/ApiUrls';
-import '../../styles/style.css'
+import '../../styles/style.css';
+import axios from 'axios'
+
 
 declare global {
     interface Window {
@@ -17,15 +19,23 @@ declare global {
     }
 }
 
+
 export default function Login() {
     const navigate = useNavigate()
     const [token, setToken] = useState(false)
+    const [googleEnabled, setGoogleEnabled] = useState(false)
 
     useEffect(() => {
         if (localStorage.getItem('Token')) {
             // navigate('/organization')
             navigate('/app')
         }
+    // Get ENABLE_GOOGLE_AUTH flag from backend
+        axios.get('/auth/config/')
+            .then(res => setGoogleEnabled(res.data.google_enabled))
+            .catch(err => {
+                console.error('Could not fetch auth config:', err)
+            })
     }, [token])
 
     const login = useGoogleLogin({
@@ -81,11 +91,12 @@ export default function Login() {
                                 }}
                             />
                             <Button onClick={signout}>logout</Button> */}
-
+                            {googleEnabled && (
                             <GoogleButton variant='outlined' onClick={() => login()} sx={{ fontSize: '12px', fontWeight: 500 }}>
                                 Sign in with Google
                                 <img src={imgGoogle} alt='google' style={{ width: '17px', marginLeft: '5px' }} />
                             </GoogleButton>
+                            )}
                             {/* <Grid item sx={{ mt: 2, alignItems: 'center', alignContent: 'center' }}>
                                 <Grid item sx={{ mt: 1, ml: 6 }}>
                                     <div className='authentication_wrapper'>
