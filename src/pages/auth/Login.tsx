@@ -31,7 +31,7 @@ export default function Login() {
             navigate('/app')
         }
     // Get ENABLE_GOOGLE_AUTH flag from backend
-        axios.get('/auth/config/')
+        axios.get("http://localhost:8000/api/auth/config/")
             .then(res => setGoogleEnabled(res.data.google_enabled))
             .catch(err => {
                 console.error('Could not fetch auth config:', err)
