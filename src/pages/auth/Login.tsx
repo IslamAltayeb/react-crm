@@ -4,7 +4,6 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import imgGoogle from '../../assets/images/auth/google.svg'
 import imgLogo from '../../assets/images/auth/img_logo.png'
-import imgLogin from '../../assets/images/auth/img_login.png'
 import { GoogleButton } from '../../styles/CssStyled';
 import { fetchData } from '../../components/FetchData';
 import { AuthUrl } from '../../services/ApiUrls';
@@ -34,7 +33,7 @@ export default function Login() {
             // navigate('/organization')
             navigate('/app')
         }
-    // Get ENABLE_GOOGLE_AUTH flag from backend
+        // Get ENABLE_GOOGLE_AUTH flag from backend
         axios.get("http://localhost:8000/api/auth/google-auth-config/")
             .then(res => setGoogleEnabled(res.data.google_enabled))
             .catch(err => {
@@ -85,42 +84,12 @@ export default function Login() {
                         </Grid>
                         <Typography variant='h5' style={{ fontWeight: 'bolder' }}>Sign In</Typography>
                         <Grid item sx={{ mt: 4 }}>
-                            {/* <GoogleLogin
-                                onSuccess={credentialResponse => {
-                                    console.log(credentialResponse);
-                                }}
-
-                                onError={() => {
-                                    console.log('Login Failed');
-                                }}
-                            />
-                            <Button onClick={signout}>logout</Button> */}
                             {googleEnabled && (
-                            <GoogleButton variant='outlined' onClick={() => login()} sx={{ fontSize: '12px', fontWeight: 500 }}>
-                                Sign in with Google
-                                <img src={imgGoogle} alt='google' style={{ width: '17px', marginLeft: '5px' }} />
-                            </GoogleButton>
+                                <GoogleButton variant='outlined' onClick={() => login()} sx={{ fontSize: '12px', fontWeight: 500 }}>
+                                    Sign in with Google
+                                    <img src={imgGoogle} alt='google' style={{ width: '17px', marginLeft: '5px' }} />
+                                </GoogleButton>
                             )}
-                            {/* <Grid item sx={{ mt: 2, alignItems: 'center', alignContent: 'center' }}>
-                                <Grid item sx={{ mt: 1, ml: 6 }}>
-                                    <div className='authentication_wrapper'>
-                                        <div className='authentication_block'>
-                                            <div className='buttons'>
-                                                <GoogleLogin
-                                                    onSuccess={credentialResponse => {
-                                                        console.log(credentialResponse);
-                                                    }}
-
-                                                    onError={() => {
-                                                        console.log('Login Failed');
-                                                    }}
-
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Grid>
-                            </Grid> */}
                         </Grid>
 
                     </Grid>
@@ -135,18 +104,10 @@ export default function Login() {
                     className='rightBg'
                     sx={{ height: '100%', overflow: 'hidden', justifyItems: 'center' }}
                 >
-                    <Grid item >
-                        <Stack
-                            sx={{
-                                width: '250%',
-                            }}
-                        >
-                            {
-                                isLogin ? (<LoginForm toggleForm={() => setIsLogin(false)} />
-                                ) : (<SignupForm toggleForm={() => setIsLogin(true)} />)
-                            }
-                        </Stack>
-                    </Grid>
+                    {
+                        isLogin ? (<LoginForm toggleForm={() => setIsLogin(false)} />
+                        ) : (<SignupForm toggleForm={() => setIsLogin(true)} />)
+                    }
                 </Grid>
             </Stack>
         </div>
