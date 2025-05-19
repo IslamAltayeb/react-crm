@@ -24,6 +24,7 @@ export const SignupForm: React.FC<{ toggleForm: () => void }> = ({ toggleForm })
                 mb: 5,
                 p: 5,
                 borderRadius: 4,
+                autoComplete: "off"
             }}
         >
             <Stack spacing={5} sx={{ pt: 25, pb: 5 }} component="form" onSubmit={handleSubmit}>
