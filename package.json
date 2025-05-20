@@ -52,7 +52,7 @@
   "devDependencies": {
     "@mui/types": "^7.2.4",
     "@types/react": "^18.2.14",
-    "eslint-plugin-n": "^17.17.0",
+    "eslint-plugin-n": "^17.18.0",
     "eslint-plugin-promise": "^7.2.1"
   },
   "overrides": {
