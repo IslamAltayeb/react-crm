@@ -16,6 +16,8 @@
     "@types/material-ui": "^0.21.12",
     "@types/node": "^20.3.2",
     "@types/react-dom": "^18.2.6",
+    "axios": "^1.9.0",
+    "js-cookie": "^3.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
@@ -51,6 +53,7 @@
   },
   "devDependencies": {
     "@mui/types": "^7.2.4",
+    "@types/js-cookie": "^3.0.6",
     "@types/react": "^18.2.14",
     "eslint-plugin-n": "^17.18.0",
     "eslint-plugin-promise": "^7.2.1"
