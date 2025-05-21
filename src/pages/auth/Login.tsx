@@ -27,9 +27,8 @@ export default function Login() {
   const [googleEnabled, setGoogleEnabled] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem('Token')) {
-      navigate('/organization');
-      // navigate('/app')
+    if (localStorage.getItem('accessToken')) {
+      navigate('/app');
     }
     // Get ENABLE_GOOGLE_AUTH flag from backend
     axios
@@ -38,7 +37,7 @@ export default function Login() {
       .catch((err) => {
         console.error('Could not fetch auth config:', err);
       });
-  }, [token]);
+  }, []);
 
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
@@ -51,8 +50,8 @@ export default function Login() {
       };
       fetchData(`${AuthUrl}/`, 'POST', JSON.stringify(apiToken), head)
         .then((res: any) => {
-          localStorage.setItem('Token', `Bearer ${res.access_token}`);
-          setToken(true);
+          localStorage.setItem('accessToken', `Bearer ${res.access_token}`);
+          navigate('/organization');
         })
         .catch((error: any) => {
           console.error('Error:', error);
