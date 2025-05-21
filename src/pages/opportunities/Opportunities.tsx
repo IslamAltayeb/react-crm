@@ -467,8 +467,19 @@ export default function Opportunities(props: any) {
                           </TableRow>
                         )
                       })
-                      : <TableRow> <TableCell colSpan={8} sx={{ border: 0 }}><Spinner /></TableCell></TableRow>
-                  }
+                                            : loading ? (
+                                                <TableRow>
+                                                  <TableCell colSpan={6} sx={{ border: 0 }}>
+                                                    <Spinner />
+                                                  </TableCell>
+                                                </TableRow>
+                                              ) : (
+                                                <TableRow>
+                                                  <TableCell colSpan={6} sx={{ border: 0, textAlign: 'center' }}>
+                                                    No opportunities found.
+                                                  </TableCell>
+                                                </TableRow>
+                                              )                   }
                   {/* {
                     emptyRows > 0 && (
                         <TableRow
