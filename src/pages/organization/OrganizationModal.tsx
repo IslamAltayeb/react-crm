@@ -52,7 +52,6 @@ export default function OrganizationModal(props: any) {
     Accept: 'application/json',
     'Content-Type': 'application/json',
     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    org: localStorage.getItem('org'),
   };
   const getOrganization = () => {
     const token = localStorage.getItem('accessToken');
@@ -78,6 +77,7 @@ export default function OrganizationModal(props: any) {
       });
   };
   const addOrganization = () => {
+    console.log(newOrganization, 'add org clicked');
     const organizationName = { name: newOrganization };
     fetchData(`${OrgUrl}/`, 'POST', organizationName, headers)
       .then((res) => {
