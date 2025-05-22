@@ -608,8 +608,19 @@ export default function Accounts() {
                                                             </TableRow>
                                                         )
                                                     })
-                                                : <TableRow> <TableCell colSpan={6} sx={{ border: 0 }}><Spinner /></TableCell></TableRow>
-                                        }
+                                            : loading ? (
+                                                <TableRow>
+                                                  <TableCell colSpan={6} sx={{ border: 0 }}>
+                                                    <Spinner />
+                                                  </TableCell>
+                                                </TableRow>
+                                              ) : (
+                                                <TableRow>
+                                                  <TableCell colSpan={6} sx={{ border: 0, textAlign: 'center' }}>
+                                                    No accounts found.
+                                                  </TableCell>
+                                                </TableRow>
+                                              )                                         }
                                         {
                                             // emptyRows > 0 && (
                                             //     <TableRow
@@ -686,8 +697,19 @@ export default function Accounts() {
                                                         </TableRow>
                                                     )
                                                 })
-                                                : <TableRow> <TableCell colSpan={6} sx={{ border: 0 }}><Spinner /></TableCell></TableRow>
-                                        }
+                                            : loading ? (
+                                                <TableRow>
+                                                  <TableCell colSpan={6} sx={{ border: 0 }}>
+                                                    <Spinner />
+                                                  </TableCell>
+                                                </TableRow>
+                                              ) : (
+                                                <TableRow>
+                                                  <TableCell colSpan={6} sx={{ border: 0, textAlign: 'center' }}>
+                                                    No accounts found.
+                                                  </TableCell>
+                                                </TableRow>
+                                              )                                        }
                                     </TableBody>
                                 }
 

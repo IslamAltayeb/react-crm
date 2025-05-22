@@ -181,6 +181,8 @@ export default function Leads(props: any) {
             setCountries(res?.countries)
             setIndustries(res?.industries)
             setLoading(false)
+            setOpenLoading(false);
+            setClosedLoading(false);
             // setLeadsList();
             // setInitial(false)
           }
@@ -464,7 +466,14 @@ export default function Leads(props: any) {
                   </Box>
                 </Box>
               </Box>
-            )) : <Spinner />
+            )) : openLoading ? (
+              <Spinner />
+            ) : (
+              <Box sx={{ textAlign: 'center', color: 'gray' }}>
+                No leads found.
+              </Box>
+            )
+
           }
         </Box>
         : <Box sx={{ p: '10px', mt: '5px' }}>
@@ -531,8 +540,13 @@ export default function Leads(props: any) {
                   </Box>
                 </Box>
               </Box>
-            )) :
+            )) : openLoading ? (
               <Spinner />
+            ) : (
+              <Box sx={{ textAlign: 'center', color: 'gray' }}>
+                No leads found.
+              </Box>
+            )
           }
         </Box>}
       {/* {loading &&
