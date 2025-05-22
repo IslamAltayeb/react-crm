@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 import {
   Typography,
   CircularProgress,
   Box
-} from '@mui/material'
+} from '@mui/material';
 
 export function Spinner () {
   return (
@@ -11,5 +11,5 @@ export function Spinner () {
       <CircularProgress />
       <Typography sx={{ fontWeight: '19px', ml: 1 }}>Loading....</Typography>
     </Box>
-  )
+  );
 }

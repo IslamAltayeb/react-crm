@@ -3,13 +3,13 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
+  Navigate
 } from 'react-router-dom';
 import Login from './pages/auth/Login';
 import { Home } from './pages/home/Home';
 import Organization from './pages/organization/Organization';
 
-function ProtectedRoutes() {
+function ProtectedRoutes () {
   const token = localStorage.getItem('accessToken');
   const org = localStorage.getItem('org');
 
@@ -18,12 +18,12 @@ function ProtectedRoutes() {
   return <Home />;
 }
 
-function OrgRoute() {
+function OrgRoute () {
   const token = localStorage.getItem('accessToken');
   return token ? <Organization /> : <Navigate to="/login" />;
 }
 
-function DefaultRedirect() {
+function DefaultRedirect () {
   const token = localStorage.getItem('accessToken');
   const org = localStorage.getItem('org');
 
@@ -32,7 +32,7 @@ function DefaultRedirect() {
   return <Navigate to="/app" />;
 }
 
-function App() {
+function App () {
   return (
     <Router>
       <Routes>
