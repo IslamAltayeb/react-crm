@@ -56,7 +56,6 @@ export default function OrganizationModal(props: any) {
   };
   const getOrganization = () => {
     const token = localStorage.getItem('accessToken');
-    console.log('Using token for org fetch', token);
     const headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',

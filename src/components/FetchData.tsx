@@ -10,7 +10,7 @@ export const Header = {
 export const Header1 = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
-  Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // fix key and add Bearer
+  Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 };
 
 export function fetchData(
@@ -19,8 +19,6 @@ export function fetchData(
   data: object | string = '',
   header: any
 ) {
-  console.log('Using token:', localStorage.getItem('accessToken')); // <--- add here to check token presence
-
   const options: RequestInit = {
     method,
     headers: header,
