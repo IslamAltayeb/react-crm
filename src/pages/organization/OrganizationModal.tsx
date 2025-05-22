@@ -77,7 +77,6 @@ export default function OrganizationModal(props: any) {
       });
   };
   const addOrganization = () => {
-    console.log(newOrganization, 'add org clicked');
     const organizationName = { name: newOrganization };
     fetchData(`${OrgUrl}/`, 'POST', organizationName, headers)
       .then((res) => {
