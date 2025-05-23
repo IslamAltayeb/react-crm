@@ -188,7 +188,7 @@ export default function Leads(props: any) {
     const Header = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('Token'),
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       org: localStorage.getItem('org'),
     };
     try {
@@ -331,7 +331,7 @@ export default function Leads(props: any) {
     const Header = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('Token'),
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       org: localStorage.getItem('org'),
     };
     fetchData(`${LeadUrl}/${selectedId}/`, 'DELETE', null as any, Header)
