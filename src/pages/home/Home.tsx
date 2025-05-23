@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
 import Organization from '../organization/Organization';
 
@@ -10,8 +10,11 @@ export const Home = (props: any) => {
   const navigate = useNavigate();
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <Sidebar open={open} />
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Outlet />
+      </Box>
     </Box>
   );
 };

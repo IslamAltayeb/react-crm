@@ -131,8 +131,8 @@ export default function OrganizationModal(props: any) {
                 m: '12px 10px -20px 0px',
               }}
             >
-              <IconButton size="small">
-                <FaTimes onClick={onHandleClose} />
+              <IconButton size="small" onClick={onHandleClose}>
+                <FaTimes />
               </IconButton>
             </Stack>
           ) : (
