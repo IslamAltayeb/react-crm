@@ -400,12 +400,13 @@ function AddContacts() {
                     <div className='fieldContainer2'>
                       <div className='fieldSubContainer'>
                         <div className='fieldTitle'>Mobile Number</div>
-                        <Tooltip title="Number must starts with +91">
+                        <Tooltip title="Number must start with + followed by country code (e.g. +1, +44, +91)">
                           <RequiredTextField
                             name='mobile_number'
                             value={formData.mobile_number}
                             onChange={handleChange}
                             required
+                            inputProps={{ pattern: "^\\+\\d{8,15}$", title: "Enter a valid international number, e.g. +14155552671" }}
                             style={{ width: '70%' }}
                             size='small'
                             error={!!errors?.mobile_number?.[0]}
@@ -416,8 +417,7 @@ function AddContacts() {
                       <div className='fieldSubContainer'>
                         <div className='fieldTitle'>Secondary Number</div>
                         <Tooltip title="Number must starts with +91">
-                          <RequiredTextField
-                            required
+                          <RequiredTextField                            
                             name='secondary_number'
                             value={formData.secondary_number}
                             onChange={handleChange}
