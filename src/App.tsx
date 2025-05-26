@@ -13,6 +13,7 @@ import Leads from './pages/leads/Leads';
 import Opportunities from './pages/opportunities/Opportunities';
 import Accounts from './pages/accounts/Accounts';
 import Company from './pages/company/Company';
+import AddCompany from './pages/company/AddCompany';
 import Users from './pages/users/Users';
 import Cases from './pages/cases/Cases';
 
@@ -50,6 +51,7 @@ function App() {
           <Route path="opportunities" element={<Opportunities />} />
           <Route path="accounts" element={<Accounts />} />
           <Route path="companies" element={<Company />} />
+          <Route path="companies/add-company" element={<AddCompany />} />
           <Route path="users" element={<Users />} />
           <Route path="cases" element={<Cases />} />
         </Route>
