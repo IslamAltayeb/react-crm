@@ -59,7 +59,7 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: '',
+    id: 'checkbox',
     numeric: false,
     disablePadding: false,
     label: '',
@@ -71,7 +71,7 @@ const headCells: readonly HeadCell[] = [
     label: 'Company',
   },
   {
-    id: '',
+    id: 'action',
     numeric: true,
     disablePadding: false,
     label: 'Action',
