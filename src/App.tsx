@@ -51,7 +51,6 @@ function App() {
           <Route path="opportunities" element={<Opportunities />} />
           <Route path="accounts" element={<Accounts />} />
           <Route path="companies" element={<Company />} />
-          <Route path="companies/add-company" element={<AddCompany />} />
           <Route path="users" element={<Users />} />
           <Route path="cases" element={<Cases />} />
         </Route>

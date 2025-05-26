@@ -717,9 +717,8 @@ export default function Users() {
                                                             {item.user_type ? item.user_type : '---'}
                                                         </TableCell> */}
                             <TableCell className="tableCell">
-                              <IconButton>
+                              <IconButton onClick={() => EditItem(item.id)}>
                                 <FaEdit
-                                  onClick={() => EditItem(item.id)}
                                   style={{
                                     fill: '#1A3353',
                                     cursor: 'pointer',
@@ -731,9 +730,8 @@ export default function Users() {
                                                                     style={{ fill: '#1A3353', cursor: 'pointer' }}
                                                                 /> */}
                               </IconButton>
-                              <IconButton>
+                              <IconButton onClick={() => deleteRow(item?.id)}>
                                 <FaTrashAlt
-                                  onClick={() => deleteRow(item?.id)}
                                   style={{
                                     fill: '#1A3353',
                                     cursor: 'pointer',
@@ -748,10 +746,9 @@ export default function Users() {
                       })
                     ) : (
                       <TableRow>
-                        {' '}
                         <TableCell colSpan={8} sx={{ border: 0 }}>
                           <Spinner />
-                        </TableCell>{' '}
+                        </TableCell>
                       </TableRow>
                     )}
                   </TableBody>
@@ -856,10 +853,9 @@ export default function Users() {
                       })
                     ) : (
                       <TableRow>
-                        {' '}
                         <TableCell colSpan={8} sx={{ border: 0 }}>
                           <Spinner />
-                        </TableCell>{' '}
+                        </TableCell>
                       </TableRow>
                     )}
                   </TableBody>
