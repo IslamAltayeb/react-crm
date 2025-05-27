@@ -43,6 +43,8 @@ import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
 
 type FormErrors = {
+  username?: string[];
+  password?: string[];
   email?: string[];
   role?: string[];
   phone?: string[];
@@ -59,6 +61,8 @@ type FormErrors = {
   is_organization_admin?: string[];
 };
 interface FormData {
+  username: string;
+  password: string;
   email: string;
   role: string;
   phone: string;
@@ -104,6 +108,7 @@ export function AddUsers() {
     navigate('/app/users');
   };
   const handleSubmit = (e: any) => {
+    console.log('Payload being submitted:', formData);
     e.preventDefault();
     submitForm();
   };
@@ -111,6 +116,8 @@ export function AddUsers() {
   const [profileErrors, setProfileErrors] = useState<FormErrors>({});
   const [userErrors, setUserErrors] = useState<FormErrors>({});
   const [formData, setFormData] = useState<FormData>({
+    username: '',
+    password: '',
     email: '',
     role: 'ADMIN',
     phone: '',
@@ -142,12 +149,13 @@ export function AddUsers() {
     const Header = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('Token'),
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       org: localStorage.getItem('org'),
     };
-    // console.log('Form data:', data);
 
     const data = {
+      username: formData.username,
+      password: formData.password,
       email: formData.email,
       role: formData.role,
       phone: formData.phone,
@@ -166,7 +174,7 @@ export function AddUsers() {
 
     fetchData(`${UsersUrl}/`, 'POST', JSON.stringify(data), Header)
       .then((res: any) => {
-        console.log('Form data:', res);
+        console.log('Full response:', res); // ✅ Log full response
         if (!res.error) {
           // setResponceError(data.error)
           // navigate('/contacts')profile_errors
@@ -182,10 +190,16 @@ export function AddUsers() {
           setUserErrors(res?.errors?.user_errors);
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error('Error during fetch:', err); // ✅ Log any fetch errors
+        setError(true);
+        setMsg('An error occurred while submitting the form.');
+      });
   };
   const resetForm = () => {
     setFormData({
+      username: '',
+      password: '',
       email: '',
       role: 'ADMIN',
       phone: '',
@@ -211,7 +225,6 @@ export function AddUsers() {
   const crntPage = 'Add Users';
   const backBtn = 'Back To Users';
 
-  // console.log(formData.profile_pic, 'formData.profile_pic')
   return (
     <Box sx={{ mt: '60px' }}>
       <CustomAppBar
@@ -242,6 +255,34 @@ export function AddUsers() {
                     noValidate
                     autoComplete="off"
                   >
+                    <div className="fieldSubContainer">
+                      <div className="fieldTitle">Username</div>
+                      <RequiredTextField
+                        required
+                        name="username"
+                        value={formData.username}
+                        onChange={handleChange}
+                        style={{ width: '70%' }}
+                        size="small"
+                        error={!!userErrors?.username?.[0]}
+                        helperText={userErrors?.username?.[0] || ''}
+                      />
+                    </div>
+
+                    <div className="fieldSubContainer">
+                      <div className="fieldTitle">Password</div>
+                      <RequiredTextField
+                        required
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        style={{ width: '70%' }}
+                        size="small"
+                        error={!!userErrors?.password?.[0]}
+                        helperText={userErrors?.password?.[0] || ''}
+                      />
+                    </div>
                     <div className="fieldContainer">
                       <div className="fieldSubContainer">
                         <div className="fieldTitle">Email</div>
@@ -326,7 +367,7 @@ export function AddUsers() {
                       <div className="fieldSubContainer">
                         <div className="fieldTitle">Alternate Phone</div>
                         <Tooltip title="Number must start with + followed by country code (e.g. +1, +44, +91)">
-                          <TextField                            
+                          <TextField
                             name="alternate_phone"
                             value={formData.alternate_phone}
                             onChange={handleChange}
@@ -345,110 +386,6 @@ export function AddUsers() {
                         </Tooltip>
                       </div>
                     </div>
-                    {/* <div className='fieldContainer2'>
-                                            <div className='fieldSubContainer'>
-                                                <div className='fieldTitle'>Profile picture</div>
-                                                <Stack sx={{ display: 'flex', flexDirection: 'column' }}>
-                                                    <Stack sx={{ display: 'flex', flexDirection: 'row' }}>
-                                                        <label htmlFor="avatar-input">
-                                                            <input
-                                                                id="avatar-input"
-                                                                name="profile_pic"
-                                                                type="file"
-                                                                accept="image/*"
-                                                                onChange={(e: any) => {
-                                                                    handleFileChange(e);
-                                                                    handleChange(e);
-                                                                }}
-                                                                style={inputStyles}
-                                                            />
-                                                            <IconButton
-                                                                component="span"
-                                                                color="primary"
-                                                                aria-label="upload avatar"
-                                                            >
-                                                                <FaUpload fill='lightgrey' />
-                                                            </IconButton>
-                                                        </label>
-                                                        <Box>  {formData.profile_pic !== null ?
-                                                            <Box sx={{ position: 'relative' }}>
-                                                                <Avatar src={formData.profile_pic || ''} />
-                                                                <FaTimes style={{ position: 'absolute', marginTop: '-45px', marginLeft: '25px', fill: 'lightgray', cursor: 'pointer' }}
-                                                                    onClick={() => setFormData({ ...formData, profile_pic: null })} />
-                                                            </Box> : ''}
-                                                        </Box>
-                                                        {formData.profile_pic && <Typography sx={{ color: '#d32f2f', fontSize: '12px', ml: '-70px', mt: '40px' }}>{profileErrors?.profile_pic?.[0] || userErrors?.profile_pic?.[0] || ''}</Typography>}
-                                                    </Stack>
-                                                </Stack>
-
-
-                                                {/* <label htmlFor='icon-button-file' style={{backgroundColor:'grey'}}>
-                                                    <Input
-                                                        id='icon-button-file'
-                                                        type='file'
-                                                        // ref={inputFileRef}
-                                                        sx={{
-                                                            display: 'table-caption'
-                                                        }}
-                                                    //     onChange={handleChange}
-                                                    // name='profile_pic'
-                                                    />
-                                                    <Button
-                                                        variant='outlined'
-                                                        sx={{
-                                                            width: '147px',
-                                                            height: '42px',
-                                                            position: 'relative',
-                                                            top: '-21px'
-                                                        }}
-                                                    // disableRipple
-                                                    // disableFocusRipple
-                                                    // disableTouchRipple
-                                                    // onClick={() => inputFileRef.current.click()}
-                                                    >
-                                                    <IconButton type='file' onChange={handleChange}
-                                                    name='profile_pic' >
-                                                        <Avatar src={formData.profile_pic}></Avatar></IconButton>
-                                                         Upload Files 
-                                                     </Button> 
-                                                </label> 
-                                                 <TextField
-                                                    type="file"
-                                                    onChange={handleChange}
-                                                    name='profile_pic'
-                                                    style={{ width: '70%' }}
-                                                    size='small'
-                                                    error={!!errors.profile_pic || !!errors?.profile_pic?.[0]}
-                                                    helperText={errors.profile_pic || errors?.profile_pic?.[0] || ''}
-                                                /> 
-                                            </div>
-                                            <div className='fieldSubContainer'>
-                                                <div className='fieldTitle'>Sales Access</div>
-                                                <AntSwitch
-                                                    name='has_sales_access'
-                                                    checked={formData.has_sales_access}
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className='fieldContainer2'>
-                                            <div className='fieldSubContainer'>
-                                                <div className='fieldTitle'>Marketing Access</div>
-                                                <AntSwitch
-                                                    name='has_marketing_access'
-                                                    checked={formData.has_marketing_access}
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='fieldSubContainer'>
-                                                <div className='fieldTitle'>Organization Admin</div>
-                                                <AntSwitch
-                                                    name='is_organization_admin'
-                                                    checked={formData.is_organization_admin}
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                        </div> */}
                   </Box>
                 </AccordionDetails>
               </Accordion>
@@ -621,229 +558,6 @@ export function AddUsers() {
                 </AccordionDetails>
               </Accordion>
             </div>
-            {/* Business Hours */}
-            {/* <div className='leadContainer'>
-                            <Accordion defaultExpanded style={{ width: '98%' }}>
-                        <AccordionSummary expandIcon={<FiChevronDown style={{ fontSize: '25px' }} />}>
-                                    <Typography className='accordion-header'>Account Information</Typography>
-                                </AccordionSummary>
-                                <Divider className='divider' />
-                                <AccordionDetails>
-                                    <Box
-                                        sx={{ width: '98%', color: '#1A3353' }}
-                                        component='form'
-                                        noValidate
-                                        autoComplete='off'
-                                    >
-                                        <div>
-                                            <div className='fieldSubContainer' style={{ marginLeft: '4.8%' }}>
-                                                <div className='fieldTitle'>Business Hours</div>
-                                                <TextField
-                                                    name='lead_source'
-                                                    select
-                                                    // onChange={onChange}
-                                                    // InputProps={{
-                                                    //     classes: {
-                                                    //         root: textFieldClasses.root
-                                                    //     }
-                                                    // }}
-                                                    className="custom-textfield"
-                                                    style={{ width: '70%' }}
-                                                >
-                                                    {state.roles && state.roles.map((option) => (
-                          <MenuItem key={option[1]} value={option[0]}>
-                            {option[0]}
-                          </MenuItem>
-                        ))} 
-                                                </TextField>
-                                            </div>
-                                        </div>
-                                    </Box>
-                                </AccordionDetails>
-                            </Accordion>
-                        </div> */}
-            {/* Preferences */}
-            {/* <div className='leadContainer'>
-                            <Accordion defaultExpanded style={{ width: '98%' }}>
-                       <AccordionSummary expandIcon={<FiChevronDown style={{ fontSize: '25px' }} />}>
-                                    <Typography className='accordion-header'>Account Information</Typography>
-                                </AccordionSummary>
-                                <Divider className='divider' />
-                                <AccordionDetails>
-                                    <Box
-                                        sx={{ width: '98%', color: '#1A3353' }}
-                                        component='form'
-                                        noValidate
-                                        autoComplete='off'
-                                    >
-                                        <div className='fieldContainer'>
-                                            <div className='fieldSubContainer'>
-                                                <div className='fieldTitle'>Default Page After Login</div>
-                                                <TextField
-                                                    name='lead_source'
-                                                    select
-                                                    // onChange={onChange}
-                                                    // InputProps={{
-                                                    //     classes: {
-                                                    //         root: textFieldClasses.root
-                                                    //     }
-                                                    // }}
-                                                    className="custom-textfield"
-                                                    style={{ width: '70%' }}
-                                                >
-                                                    {state.roles && state.roles.map((option) => (
-                          <MenuItem key={option[1]} value={option[0]}>
-                            {option[0]}
-                          </MenuItem>
-                        ))} 
-                                                </TextField>
-                                            </div>
-                                            <div className='fieldSubContainer'>
-                                                <div className='fieldTitle'>Persone Name Format</div>
-                                                <TextField
-                                                    name='lead_source'
-                                                    select
-                                                    // onChange={onChange}
-                                                    // InputProps={{
-                                                    //     classes: {
-                                                    //         root: textFieldClasses.root
-                                                    //     }
-                                                    // }}
-                                                    className="custom-textfield"
-                                                    style={{ width: '70%' }}
-                                                >
-                                                    {state.roles && state.roles.map((option) => (
-                          <MenuItem key={option[1]} value={option[0]}>
-                            {option[0]}
-                          </MenuItem>
-                        ))} 
-                                                </TextField>
-                                            </div>
-                                        </div>
-                                        <div className='fieldContainer2'>
-                                            <div className='fieldSubContainer'>
-                                                <div className='fieldTitle'>Prefferred Currency</div>
-                                                <TextField
-                                                    name='lead_source'
-                                                    select
-                                                    // onChange={onChange}
-                                                    // InputProps={{
-                                                    //     classes: {
-                                                    //         root: textFieldClasses.root
-                                                    //     }
-                                                    // }}
-                                                    className="custom-textfield"
-                                                    style={{ width: '70%' }}
-                                                >
-                                                     {state.roles && state.roles.map((option) => (
-                          <MenuItem key={option[1]} value={option[0]}>
-                            {option[0]}
-                          </MenuItem>
-                        ))} 
-                                                </TextField>
-                                            </div>
-                                            <div className='fieldSubContainer'>
-                                                <div className='fieldTitle'>Digit Grouping Pattern</div>
-                                                <TextField
-                                                    name='lead_source'
-                                                    select
-                                                    // onChange={onChange}
-                                                    // InputProps={{
-                                                    //     classes: {
-                                                    //         root: textFieldClasses.root
-                                                    //     }
-                                                    // }}
-                                                    className="custom-textfield"
-                                                    style={{ width: '70%' }}
-                                                >
-                                                    {state.roles && state.roles.map((option) => (
-                          <MenuItem key={option[1]} value={option[0]}>
-                            {option[0]}
-                          </MenuItem>
-                        ))} 
-                                                </TextField>
-                                            </div>
-                                        </div>
-                                        <div className='fieldContainer2'>
-                                            <div className='fieldSubContainer'>
-                                                <div className='fieldTitle'>Digit Grouping Seperator</div>
-                                                <TextField
-                                                    name='lead_source'
-                                                    select
-                                                    // onChange={onChange}
-                                                    // InputProps={{
-                                                    //     classes: {
-                                                    //         root: textFieldClasses.root
-                                                    //     }
-                                                    // }}
-                                                    className="custom-textfield"
-                                                    style={{ width: '70%' }}
-                                                >
-                                                     {state.roles && state.roles.map((option) => (
-                          <MenuItem key={option[1]} value={option[0]}>
-                            {option[0]}
-                          </MenuItem>
-                        ))} 
-                                                </TextField>
-                                            </div>
-                                            <div className='fieldSubContainer'>
-                                                <div className='fieldTitle'>Number of Currency Decimals</div>
-                                                <TextField
-                                                    name='lead_source'
-                                                    select
-                                                    // onChange={onChange}
-                                                    // InputProps={{
-                                                    //     classes: {
-                                                    //         root: textFieldClasses.root
-                                                    //     }
-                                                    // }}
-                                                    className="custom-textfield"
-                                                    style={{ width: '70%' }}
-                                                >
-                                                 {state.roles && state.roles.map((option) => (
-                          <MenuItem key={option[1]} value={option[0]}>
-                            {option[0]}
-                          </MenuItem>
-                        ))} 
-                                                </TextField>
-                                            </div>
-                                        </div>
-                                    </Box>
-                                </AccordionDetails>
-                            </Accordion>
-                        </div> */}
-            {/* Signature Block */}
-            {/* <div className='leadContainer'>
-                            <Accordion defaultExpanded style={{ width: '98%' }}>
-                              <AccordionSummary expandIcon={<FiChevronDown style={{ fontSize: '25px' }} />}>
-                                    <Typography className='accordion-header'>Account Information</Typography>
-                                </AccordionSummary>
-                                <Divider className='divider' />
-                                <AccordionDetails>
-                                    <Box
-                                        sx={{ width: '100%', color: '#1A3353' }}
-                                        component='form'
-                                        noValidate
-                                        autoComplete='off'
-                                    >
-                                        <div className='DescriptionDetail'>
-                                            <div className='descriptionSubContainer'>
-                                                <div className='descriptionTitle'>Signature</div>
-                                                <TextareaAutosize
-                                                    aria-label='minimum height'
-                                                    name='description'
-                                                    minRows={8}
-                                                    // defaultValue={state.editData && state.editData.description ? state.editData.description : ''}
-                                                    // onChange={onChange} 
-                                                    style={{ width: '70%', padding: '5px' }}
-                                                    placeholder='Add Description'
-                                                />
-                                            </div>
-                                        </div>
-                                    </Box>
-                                </AccordionDetails>
-                            </Accordion>
-                        </div> */}
           </div>
         </form>
       </Box>
