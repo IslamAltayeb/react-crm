@@ -355,6 +355,10 @@ input[type=number] {
     height: 40px;
 }
 
+.MuiFormControl-root input[name="secondary_number"] ~ .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(0, 0, 0, 0.23) !important;
+}
+
 .custom-textfield .fieldHeight {
     height: 40px;
 }
