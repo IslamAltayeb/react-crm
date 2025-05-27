@@ -25,7 +25,7 @@ export function fetchData(
   };
 
   if (method !== 'GET' && data) {
-    options.body = JSON.stringify(data);
+    options.body = typeof data === 'string' ? data : JSON.stringify(data);
   }
 
   return fetch(`${SERVER}${url}`, options).then(async (response) => {
