@@ -417,16 +417,17 @@ function AddContacts() {
                       <div className='fieldSubContainer secondary-number'>
                         <div className='fieldTitle'>Secondary Number</div>
                         <Tooltip title="Number must start with + followed by country code (e.g. +1, +44, +91)">
-                          <RequiredTextField                            
+                          <TextField
                             name='secondary_number'
                             value={formData.secondary_number}
                             onChange={handleChange}
-                            style={{ width: '70%'}}
+                            style={{ width: '70%' }}
                             size='small'
                             error={!!errors?.secondary_number?.[0]}
-                            helperText={errors?.secondary_number?.[0] ? errors?.secondary_number[0] : ''}
+                            helperText={errors?.secondary_number?.[0] || ''}
                           />
                         </Tooltip>
+
                       </div>
                     </div>
                     <div className='fieldContainer2'>
