@@ -41,6 +41,7 @@ import {
 } from '../../styles/CssStyled';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
+import { countries } from '../../components/Countries';
 
 type FormErrors = {
   username?: string[];
@@ -541,12 +542,11 @@ export function AddUsers() {
                             onChange={handleChange}
                             error={!!profileErrors?.country?.[0]}
                           >
-                            {state?.countries?.length &&
-                              state?.countries.map((option: any) => (
-                                <MenuItem key={option[0]} value={option[0]}>
-                                  {option[1]}
-                                </MenuItem>
-                              ))}
+                            {countries.map(([code, name]) => (
+                              <MenuItem key={code} value={code}>
+                                {name}
+                              </MenuItem>
+                            ))}
                           </Select>
                           <FormHelperText>
                             {profileErrors?.country?.[0]
