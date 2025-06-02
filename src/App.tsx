@@ -16,6 +16,7 @@ import Company from './pages/company/Company';
 import AddCompany from './pages/company/AddCompany';
 import Users from './pages/users/Users';
 import Cases from './pages/cases/Cases';
+import ActivateUser from "./pages/auth/ActivateUser";
 
 function ProtectedRoutes() {
   const token = localStorage.getItem('accessToken');
@@ -45,6 +46,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/activate-user/:uid/:token" element={<ActivateUser />} />
         <Route path="/app/*" element={<ProtectedRoutes />}>
           <Route path="contacts" element={<Contacts />} />
           <Route path="leads" element={<Leads />} />
