@@ -380,7 +380,7 @@ function EditContact() {
                     <div className='fieldContainer2'>
                       <div className='fieldSubContainer'>
                         <div className='fieldTitle'>Mobile Number</div>
-                        <Tooltip title="Number must starts with +91">
+                        <Tooltip title="Number must start with + followed by country code (e.g. +1, +44, +91)">
                           <RequiredTextField
                             name='mobile_number'
                             value={formData.mobile_number}
@@ -393,21 +393,21 @@ function EditContact() {
                           />
                         </Tooltip>
                       </div>
-                      <div className='fieldSubContainer'>
-                        <div className='fieldTitle'>Secondary Number</div>
-                        <Tooltip title="Number must starts with +91">
-                          <RequiredTextField
-                            required
-                            name='secondary_number'
-                            value={formData.secondary_number}
-                            onChange={handleChange}
-                            style={{ width: '70%' }}
-                            size='small'
-                            error={!!errors?.secondary_number?.[0]}
-                            helperText={errors?.secondary_number?.[0] ? errors?.secondary_number[0] : ''}
-                          />
-                        </Tooltip>
-                      </div>
+                      <div className='fieldSubContainer secondary-number'>
+                          <div className='fieldTitle'>Secondary Number</div>
+                            <Tooltip title="Number must start with + followed by country code (e.g. +1, +44, +91)">
+                              <TextField
+                                name='secondary_number'
+                                value={formData.secondary_number}
+                                onChange={handleChange}
+                                style={{ width: '70%' }}
+                                size='small'
+                                error={!!errors?.secondary_number?.[0]}
+                                helperText={errors?.secondary_number?.[0] || ''}
+                             />
+                          </Tooltip>
+                                            
+                     </div>
                     </div>
                     <div className='fieldContainer2'>
                       <div className='fieldSubContainer'>

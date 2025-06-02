@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { Button, css, Fab, IconButton, ListItem, ListItemButton, ListItemText, Select, Switch, Tab, TableCell, tableCellClasses, TableRow, TextField, Toolbar } from "@mui/material";
+import styled from '@emotion/styled';
+import { Button, css, Fab, IconButton, ListItem, ListItemButton, ListItemText, Select, Switch, Tab, TableCell, tableCellClasses, TableRow, TextField, Toolbar } from '@mui/material';
 // import css from "styled-jsx/css";
 
 export const GoogleButton = styled(Button)`
@@ -36,7 +36,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14
   }
-}))
+}));
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
@@ -46,7 +46,7 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:last-child td, &:last-child th': {
     border: 0
   }
-}))
+}));
 
 export const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 28,
@@ -88,7 +88,7 @@ export const AntSwitch = styled(Switch)(({ theme }) => ({
       'rgba(0,0,0,.25)',
     boxSizing: 'border-box'
   }
-}))
+}));
 export const StyledListItem = styled(ListItem)`
   
 `;
@@ -248,8 +248,8 @@ export const FabLeft = styled(Fab)({
   minWidth: '20px',
   borderRadius: '7px 0px 0px 7px',
   backgroundColor: 'whitesmoke',
-  marginRight:'7px',
-  boxShadow:`0px 1px 1px -1px rgba(0,0,0,0.2), 0px 0px 3px 0px rgba(0,0,0,0.14), 0px 1px 0px 0px rgba(0,0,0,0.12)`
+  marginRight: '7px',
+  boxShadow: '0px 1px 1px -1px rgba(0,0,0,0.2), 0px 0px 3px 0px rgba(0,0,0,0.14), 0px 1px 0px 0px rgba(0,0,0,0.12)'
 });
 export const FabRight = styled(Fab)({
   height: '40px',
@@ -258,8 +258,8 @@ export const FabRight = styled(Fab)({
   minWidth: '20px',
   borderRadius: '0px 7px 7px 0px',
   backgroundColor: 'whitesmoke',
-  marginLeft:'7px',
-  boxShadow:`0px 1px 1px -1px rgba(0,0,0,0.2), 0px 0px 3px 0px rgba(0,0,0,0.14), 0px 1px 0px 0px rgba(0,0,0,0.12)`
+  marginLeft: '7px',
+  boxShadow: '0px 1px 1px -1px rgba(0,0,0,0.2), 0px 0px 3px 0px rgba(0,0,0,0.14), 0px 1px 0px 0px rgba(0,0,0,0.12)'
 });
 export const CustomPopupIcon = styled(IconButton)`
   cursor: pointer !important;
@@ -279,13 +279,13 @@ export const CustomPopupIcon = styled(IconButton)`
 `;
 export const CustomInputBoxWrapper = styled('div')({
   // width: '200px',
-  borderBottom:'none',
+  borderBottom: 'none',
   height: '150px',
-  borderTopLeftRadius:'10px',
-  borderTopRightRadius:'10px',
+  borderTopLeftRadius: '10px',
+  borderTopRightRadius: '10px',
   border: '1px solid #ccc',
   overflowY: 'auto',
   padding: '8px',
   outline: 'none',
-  position: 'relative',
+  position: 'relative'
 });
