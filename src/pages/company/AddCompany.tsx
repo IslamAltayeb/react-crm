@@ -44,7 +44,7 @@ function AddCompany() {
         const Header = {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: localStorage.getItem('Token'),
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
             org: localStorage.getItem('org')
           }
         // console.log('Form data:', data);
@@ -106,14 +106,19 @@ function AddCompany() {
                                             <div className='fieldSubContainer'>
                                                 <div className='fieldTitle'>Name</div>
                                                 <RequiredTextField
-                                                    name='name'
-                                                    value={formData.name}
-                                                    onChange={handleChange}
-                                                    style={{ width: '70%' }}
-                                                    size='small'
-                                                    helperText={errors?.name?.[0] ? errors?.name[0] : ''}
-                                                    error={!!errors?.name?.[0]}
-
+                                                        type="text"
+                                                        name='name'
+                                                        value={formData.name}
+                                                        onChange={handleChange}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter') {
+                                                              e.preventDefault();
+                                                              submitForm();
+                                                            }
+                                                        }}
+                                                        size='small'
+                                                        helperText={errors?.name?.[0] ? errors?.name[0] : ''}
+                                                        error={!!errors?.name?.[0]}
                                                 />
                                             </div>
                                         </div>
