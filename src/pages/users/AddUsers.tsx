@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   TextField,
   AccordionDetails,
@@ -7,14 +7,8 @@ import {
   AccordionSummary,
   Typography,
   Box,
-  TextareaAutosize,
   MenuItem,
   Tooltip,
-  Button,
-  Input,
-  Avatar,
-  IconButton,
-  Stack,
   Divider,
   Select,
   FormControl,
@@ -25,18 +19,11 @@ import {
 
 import '../../styles/style.css';
 import { UsersUrl } from '../../services/ApiUrls';
-import { fetchData, Header } from '../../components/FetchData';
+import { fetchData } from '../../components/FetchData';
 import { CustomAppBar } from '../../components/CustomAppBar';
+
+
 import {
-  FaArrowAltCircleDown,
-  FaArrowDown,
-  FaTimes,
-  FaUpload,
-} from 'react-icons/fa';
-import {
-  AntSwitch,
-  CustomSelectField,
-  CustomSelectTextField,
   RequiredTextField,
 } from '../../styles/CssStyled';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
@@ -80,17 +67,17 @@ interface FormData {
   is_organization_admin: boolean;
 }
 export function AddUsers() {
-  const { state } = useLocation();
+  // const { state } = useLocation();
   const navigate = useNavigate();
 
   const [roleSelectOpen, setRoleSelectOpen] = useState(false);
   const [countrySelectOpen, setCountrySelectOpen] = useState(false);
-  const [error, setError] = useState(false);
-  const [msg, setMsg] = useState('');
-  const [responceError, setResponceError] = useState(false);
+  const [_error, setError] = useState(false);
+  const [_msg, setMsg] = useState('');
+  // const [responceError, setResponceError] = useState(false);
 
   const handleChange = (e: any) => {
-    const { name, value, files, type, checked } = e.target;
+    const { name, value, _files, type, checked } = e.target;
     if (type === 'file') {
       setFormData({ ...formData, [name]: e.target.files?.[0] || null });
     }
@@ -99,10 +86,6 @@ export function AddUsers() {
     } else {
       setFormData({ ...formData, [name]: value });
     }
-    // setValidationErrors(({ ...validationErrors, [name]: '' }));
-    // setErrors({});
-    // const newValue = type === 'checkbox' ? checked : value;
-    // setFormData({ ...formData, [name]: newValue });
   };
 
   const backbtnHandle = () => {
@@ -113,7 +96,7 @@ export function AddUsers() {
     e.preventDefault();
     submitForm();
   };
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, _setErrors] = useState<FormErrors>({});
   const [profileErrors, setProfileErrors] = useState<FormErrors>({});
   const [userErrors, setUserErrors] = useState<FormErrors>({});
   const [formData, setFormData] = useState<FormData>({
@@ -135,16 +118,16 @@ export function AddUsers() {
     is_organization_admin: false,
   });
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setFormData({ ...formData, profile_pic: reader.result as string });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0] || null;
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       setFormData({ ...formData, profile_pic: reader.result as string });
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const submitForm = () => {
     const Header = {

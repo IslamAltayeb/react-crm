@@ -13,10 +13,9 @@ import Leads from './pages/leads/Leads';
 import Opportunities from './pages/opportunities/Opportunities';
 import Accounts from './pages/accounts/Accounts';
 import Company from './pages/company/Company';
-import AddCompany from './pages/company/AddCompany';
 import Users from './pages/users/Users';
 import Cases from './pages/cases/Cases';
-import ActivateUser from "./pages/auth/ActivateUser";
+import ActivateUser from './pages/auth/ActivateUser';
 
 function ProtectedRoutes() {
   const token = localStorage.getItem('accessToken');

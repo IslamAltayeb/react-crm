@@ -1,28 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
   Card,
-  Link,
-  Button,
   Avatar,
-  Divider,
-  TextField,
   Box,
-  AvatarGroup,
 } from '@mui/material';
-import {
-  Fa500Px,
-  FaAccusoft,
-  FaAd,
-  FaAddressCard,
-  FaEnvelope,
-  FaRegAddressCard,
-  FaStar,
-} from 'react-icons/fa';
+
+
 import { CustomAppBar } from '../../components/CustomAppBar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AntSwitch } from '../../styles/CssStyled';
-import { ContactUrl, UserUrl } from '../../services/ApiUrls';
-import { fetchData, Header } from '../../components/FetchData';
+import { UserUrl } from '../../services/ApiUrls';
+import { fetchData } from '../../components/FetchData';
 
 type response = {
   user_details: {
@@ -303,14 +291,6 @@ export default function UserDetails() {
                     {userDetails?.date_of_joining || '---'}
                   </div>
                 </div>
-                {/* <div style={{ width: '32%' }}>
-                                    <div className='title2'>Do Not Call</div>
-                                    <div className='title3'>
-                                        <AntSwitch
-                                            checked={contactDetails?.do_not_call}
-                                            inputProps={{ 'aria-label': 'ant design' }} />
-                                    </div>
-                                </div> */}
               </div>
               {/* Address details */}
               <div style={{ marginTop: '15px' }}>

@@ -3,25 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
-  Card,
   Stack,
-  Tab,
   Table,
   TableBody,
   TableContainer,
-  TableHead,
-  TablePagination,
   TableRow,
   Tabs,
-  Toolbar,
   Typography,
   Paper,
   TableCell,
   IconButton,
-  Checkbox,
-  Tooltip,
-  TableSortLabel,
-  alpha,
   Select,
   MenuItem,
   Container,
@@ -35,7 +26,7 @@ import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft';
 import { FiChevronRight } from '@react-icons/all-files/fi/FiChevronRight';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
-import { FaAd, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { fetchData } from '../../components/FetchData';
 import { UsersUrl, UserUrl } from '../../services/ApiUrls';
 import {
@@ -118,21 +109,21 @@ export default function Users() {
 
   // const [selectedId, setSelectedId] = useState([])
   // const [isSelectedId, setIsSelectedId] = useState([])
-  const [deleteItems, setDeleteItems] = useState([]);
-  const [page, setPage] = useState(0);
-  const [values, setValues] = useState(10);
-  const [dense] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [usersData, setUsersData] = useState([]);
-  const [deleteItemId, setDeleteItemId] = useState('');
-  const [loader, setLoader] = useState(true);
-  const [isDelete, setIsDelete] = useState(false);
+  // const [deleteItems, setDeleteItems] = useState([]);
+  // const [_page, _setPage] = useState(0);
+  // const [values, setValues] = useState(10);
+  // const [dense] = useState(false);
+  // const [_rowsPerPage, _setRowsPerPage] = useState(10);
+  // const [usersData, setUsersData] = useState([]);
+  // const [deleteItemId, setDeleteItemId] = useState('');
+  // const [loader, setLoader] = useState(true);
+  // const [isDelete, setIsDelete] = useState(false);
   const [activeUsers, setActiveUsers] = useState<Item[]>([]);
-  const [activeUsersCount, setActiveUsersCount] = useState(0);
-  const [activeUsersOffset, setActiveUsersOffset] = useState(0);
+  // const [activeUsersCount, setActiveUsersCount] = useState(0);
+  const [_activeUsersOffset, setActiveUsersOffset] = useState(0);
   const [inactiveUsers, setInactiveUsers] = useState([]);
-  const [InactiveUsersCount, setInactiveUsersCount] = useState(0);
-  const [inactiveUsersOffset, setInactiveUsersOffset] = useState(0);
+  // const [InactiveUsersCount, setInactiveUsersCount] = useState(0);
+  const [_inactiveUsersOffset, setInactiveUsersOffset] = useState(0);
   const [deleteRowModal, setDeleteRowModal] = useState(false);
   // const [selectedId, setSelectedId] = useState('')
 
@@ -144,13 +135,13 @@ export default function Users() {
   const [activeCurrentPage, setActiveCurrentPage] = useState<number>(1);
   const [activeRecordsPerPage, setActiveRecordsPerPage] = useState<number>(10);
   const [activeTotalPages, setActiveTotalPages] = useState<number>(0);
-  const [activeLoading, setActiveLoading] = useState(true);
+  const [_activeLoading, setActiveLoading] = useState(true);
 
   const [inactiveCurrentPage, setInactiveCurrentPage] = useState<number>(1);
   const [inactiveRecordsPerPage, setInactiveRecordsPerPage] =
     useState<number>(10);
   const [inactiveTotalPages, setInactiveTotalPages] = useState<number>(0);
-  const [inactiveLoading, setInactiveLoading] = useState(true);
+  const [_inactiveLoading, setInactiveLoading] = useState(true);
 
   useEffect(() => {
     getUsers();
@@ -165,9 +156,9 @@ export default function Users() {
     setTab(val);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
+  // const handleChangePage = (event: unknown, newPage: number) => {
+  //   setPage(newPage);
+  // };
 
   const getUsers = async () => {
     const Header = {
@@ -231,7 +222,7 @@ export default function Users() {
   };
 
   const userDetail = (userId: any) => {
-    navigate(`/app/users/user-details`, { state: { userId, detail: true } });
+    navigate('/app/users/user-details', { state: { userId, detail: true } });
   };
   const handleRecordsPerPage = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -284,58 +275,58 @@ export default function Users() {
   //   setSelected([]);
   // }
   // const selected: string[] = [...];1
-  const handleClick = (event: React.MouseEvent<unknown>, name: any) => {
-    // const selectedIndex = selected.indexOf(name as string);
-    // let newSelected: string[] = [];
-    // if (selectedIndex === -1) {
-    //     newSelected = newSelected.concat(selected, name);
-    // } else if (selectedIndex === 0) {
-    //     newSelected = newSelected.concat(selected.slice(1));
-    // } else if (selectedIndex === selected.length - 1) {
-    //     newSelected = newSelected.concat(selected.slice(0, -1));
-    // } else if (selectedIndex > 0) {
-    //     newSelected = newSelected.concat(
-    //         selected.slice(0, selectedIndex),
-    //         selected.slice(selectedIndex + 1),
-    //     );
-    // }
-    // setSelected(newSelected);
-  };
+  // const handleClick = (event: React.MouseEvent<unknown>, name: any) => {
+  //   // const selectedIndex = selected.indexOf(name as string);
+  //   // let newSelected: string[] = [];
+  //   // if (selectedIndex === -1) {
+  //   //     newSelected = newSelected.concat(selected, name);
+  //   // } else if (selectedIndex === 0) {
+  //   //     newSelected = newSelected.concat(selected.slice(1));
+  //   // } else if (selectedIndex === selected.length - 1) {
+  //   //     newSelected = newSelected.concat(selected.slice(0, -1));
+  //   // } else if (selectedIndex > 0) {
+  //   //     newSelected = newSelected.concat(
+  //   //         selected.slice(0, selectedIndex),
+  //   //         selected.slice(selectedIndex + 1),
+  //   //     );
+  //   // }
+  //   // setSelected(newSelected);
+  // };
 
   // const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
-  type SelectedItem = string[];
-  const isSelected = (name: string, selected: SelectedItem): boolean => {
-    return selected.indexOf(name) !== -1;
-  };
+  // type SelectedItem = string[];
+  // const isSelected = (name: string, selected: SelectedItem): boolean => {
+  //   return selected.indexOf(name) !== -1;
+  // };
 
-  const deleteItemBox = (deleteId: any) => {
-    setDeleteItemId(deleteId);
-    setIsDelete(!isDelete);
-  };
+  // const deleteItemBox = (deleteId: any) => {
+  //   setDeleteItemId(deleteId);
+  //   setIsDelete(!isDelete);
+  // };
 
-  const onclose = () => {
-    setIsDelete(!isDelete);
-  };
+  // const onclose = () => {
+  //   setIsDelete(!isDelete);
+  // };
 
-  const onDelete = (id: any) => {
-    const Header = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      org: localStorage.getItem('org'),
-    };
-    fetchData(`${UsersUrl}/${id}/`, 'delete', null as any, Header)
-      .then((data) => {
-        if (!data.error) {
-          getUsers();
-          setIsDelete(false);
-        }
-      })
-      .catch(() => {});
-  };
+  // const onDelete = (id: any) => {
+  //   const Header = {
+  //     Accept: 'application/json',
+  //     'Content-Type': 'application/json',
+  //     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+  //     org: localStorage.getItem('org'),
+  //   };
+  //   fetchData(`${UsersUrl}/${id}/`, 'delete', null as any, Header)
+  //     .then((data) => {
+  //       if (!data.error) {
+  //         getUsers();
+  //         setIsDelete(false);
+  //       }
+  //     })
+  //     .catch(() => {});
+  // };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 7) : 0;
+  // const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 7) : 0;
   // (tab === 0 ? accountData.accountLength : accountData.closed_accounts_length)
 
   const onAddUser = () => {
@@ -444,29 +435,29 @@ export default function Users() {
     }
   };
 
-  const handleRowSelect = (userId: string) => {
-    const selectedIndex = selected.indexOf(userId);
-    let newSelected: string[] = [...selected];
-    let newSelectedIds: string[] = [...selectedId];
-    let newIsSelectedId: boolean[] = [...isSelectedId];
+  // const handleRowSelect = (userId: string) => {
+  //   const selectedIndex = selected.indexOf(userId);
+  //   let newSelected: string[] = [...selected];
+  //   let newSelectedIds: string[] = [...selectedId];
+  //   let newIsSelectedId: boolean[] = [...isSelectedId];
 
-    if (selectedIndex === -1) {
-      newSelected.push(userId);
-      newSelectedIds.push(userId);
-      newIsSelectedId.push(true);
-    } else {
-      newSelected.splice(selectedIndex, 1);
-      newSelectedIds.splice(selectedIndex, 1);
-      newIsSelectedId.splice(selectedIndex, 1);
-    }
+  //   if (selectedIndex === -1) {
+  //     newSelected.push(userId);
+  //     newSelectedIds.push(userId);
+  //     newIsSelectedId.push(true);
+  //   } else {
+  //     newSelected.splice(selectedIndex, 1);
+  //     newSelectedIds.splice(selectedIndex, 1);
+  //     newIsSelectedId.splice(selectedIndex, 1);
+  //   }
 
-    setSelected(newSelected);
-    setSelectedId(newSelectedIds);
-    setIsSelectedId(newIsSelectedId);
-  };
-  const handleDelete = (id: any) => {
-    console.log(id, 's;ected');
-  };
+  //   setSelected(newSelected);
+  //   setSelectedId(newSelectedIds);
+  //   setIsSelectedId(newIsSelectedId);
+  // };
+  // const handleDelete = (id: any) => {
+  //   console.log(id, 's;ected');
+  // };
   const modalDialog = 'Are You Sure You want to delete this User?';
   const modalTitle = 'Delete User';
 
@@ -513,7 +504,7 @@ export default function Users() {
             open={selectOpen}
             onOpen={() => setSelectOpen(true)}
             onClose={() => setSelectOpen(false)}
-            className={`custom-select`}
+            className={'custom-select'}
             onClick={() => setSelectOpen(!selectOpen)}
             IconComponent={() => (
               <div
@@ -601,38 +592,6 @@ export default function Users() {
           <Paper
             sx={{ width: 'cal(100%-15px)', mb: 2, p: '0px 15px 15px 15px' }}
           >
-            {/* <Toolbar sx={{pl: { sm: 2 },pr: { xs: 1, sm: 1 }}}>
-                            <Tooltip title='Delete'>
-                                <Button
-                                    variant='outlined'
-                                    onClick={() => !!(selectedId?.length !== 0) && handleDelete(selectedId)}
-                                    startIcon={<FaTrashAlt color='red' style={{ width: '12px' }} />}
-                                    size='small'
-                                    color='error'
-                                    sx={{
-                                        // opacity: 0.7,
-                                        fontWeight: 'bold',
-                                        textTransform: 'capitalize',
-                                        color: 'red',
-                                        borderColor: 'darkgrey',
-                                    }}
-                                >
-                                    Delete
-                                </Button>
-                            </Tooltip>
-                            {selected.length > 0 ? (
-                                <Typography
-                                    sx={{ flex: '1 1 100%', margin: '5px' }}
-                                    color='inherit'
-                                    variant='subtitle1'
-                                    component='div'
-                                >
-                                    {selected.length} selected
-                                </Typography>
-                            ) : (
-                                ''
-                            )}
-                        </Toolbar> */}
             <TableContainer>
               <Table>
                 <EnhancedTableHead
@@ -656,8 +615,8 @@ export default function Users() {
                       ).map((item: any, index: any) => {
                         // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: any, index: any) => {
                         // const isItemSelected = isSelected(item?.user_details?.email,item)
-                        const labelId = `enhanced-table-checkbox-${index}`;
-                        const rowIndex = selectedId.indexOf(item.id);
+                        // const labelId = `enhanced-table-checkbox-${index}`;
+                        // const rowIndex = selectedId.indexOf(item.id);
                         return (
                           <TableRow
                             tabIndex={-1}
@@ -759,10 +718,6 @@ export default function Users() {
                         inactiveUsers,
                         getComparator(order, orderBy)
                       ).map((item: any, index: any) => {
-                        // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: any, index: any) => {
-                        // const isItemSelected = isSelected(item?.user_details?.email,item)
-                        const labelId = `enhanced-table-checkbox-${index}`;
-                        const rowIndex = selectedId.indexOf(item.id);
                         return (
                           <TableRow
                             tabIndex={-1}

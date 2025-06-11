@@ -22,7 +22,7 @@ declare global {
 
 export default function Login() {
   const navigate = useNavigate();
-  const [token, setToken] = useState(false);
+  // const [token, setToken] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [googleEnabled, setGoogleEnabled] = useState(false);
 

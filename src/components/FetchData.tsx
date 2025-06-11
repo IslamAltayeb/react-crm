@@ -19,7 +19,7 @@ export function fetchData(
   data: object | string = '',
   header: any
 ) {
-  const options: RequestInit = {
+  const options: any = {
     method,
     headers: header,
   };

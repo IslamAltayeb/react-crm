@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   TextField,
@@ -14,17 +14,17 @@ import {
   Select,
   FormHelperText,
   Button
-} from '@mui/material'
+} from '@mui/material';
 import { useQuill } from 'react-quilljs';
 import 'quill/dist/quill.snow.css';
 import { ContactUrl } from '../../services/ApiUrls';
 import { CustomAppBar } from '../../components/CustomAppBar';
-import { fetchData, Header } from '../../components/FetchData';
+import { fetchData } from '../../components/FetchData';
 import { AntSwitch, RequiredTextField } from '../../styles/CssStyled';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-import '../../styles/style.css'
+import '../../styles/style.css';
 
 // interface FormErrors {
 //   [key: string]: string;
@@ -54,23 +54,13 @@ type FormErrors = {
   twitter_username?: string[];
 };
 
-// interface FormData {
-//   salutation: string;
-//   // Add other form fields as needed
-// }
 function AddContacts() {
-  const navigate = useNavigate()
-  const { state } = useLocation()
+  const navigate = useNavigate();
+  const { state } = useLocation();
   const { quill, quillRef } = useQuill();
   const initialContentRef = useRef(null);
-  // const currentPage = new URLSearchParams(location.search).get('page')
 
-  // useEffect(() => {
-  //   // Save the current location to localStorage or any other storage mechanism
-  //   localStorage.setItem('currentPage', location.pathname);
-  // }, [location.pathname]);
-
-  const [error, setError] = useState(false)
+  const [_error, setError] = useState(false);
   const [formData, setFormData] = useState({
     salutation: '',
     first_name: '',
@@ -95,17 +85,17 @@ function AddContacts() {
     linked_in_url: '',
     facebook_url: '',
     twitter_username: ''
-  })
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [countrySelectOpen, setCountrySelectOpen] = useState(false)
-
-  const [validationErrors, setValidationErrors] = useState({
-    first_name: '',
-    last_name: '',
-    primary_email: '',
-    mobile_number: '',
-    secondary_number: ''
   });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [countrySelectOpen, setCountrySelectOpen] = useState(false);
+
+  // const [validationErrors, setValidationErrors] = useState({
+  //   first_name: '',
+  //   last_name: '',
+  //   primary_email: '',
+  //   mobile_number: '',
+  //   secondary_number: ''
+  // });
 
   useEffect(() => {
     if (quill) {
@@ -114,42 +104,20 @@ function AddContacts() {
     }
   }, [quill]);
 
-  // useEffect(() => {
-  //   if (quill) {
-  //     // quill.on('text-change', (delta: any, oldDelta: any, source: any) => {
-  //     quill.on('text-change', () => {
-  //       setFormData({ ...formData, description: quillRef.current.firstChild.innerHTML });
-  //       // console.log('Text change!');
-  //       // console.log(quill.getText()); // Get text only
-  //       // console.log(quill.getContents()); // Get delta contents
-  //       // console.log(quill.root.innerHTML); // Get innerHTML using quill
-  //       // console.log(quillRef.current.firstChild.innerHTML); // Get innerHTML using quillRef
-  //     });
-  //   }
-  // }, [quill]);
-
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
-    // if (name === 'file') {
-    //   setFormData({ ...formData, file: files[0] });
-    // }
     if (type === 'checkbox') {
       setFormData({ ...formData, [name]: checked });
     }
     else {
       setFormData({ ...formData, [name]: value });
     }
-    // setValidationErrors(({ ...validationErrors, [name]: '' }));
-    // setErrors({});
-    // const newValue = type === 'checkbox' ? checked : value;
-    // setFormData({ ...formData, [name]: newValue });
   };
 
 
   const resetQuillToInitialState = () => {
     // Reset the Quill editor to its initial state
-    setFormData({ ...formData, description: '' })
+    setFormData({ ...formData, description: '' });
     if (quill && initialContentRef.current !== null) {
       quill.clipboard.dangerouslyPasteHTML(initialContentRef.current);
     }
@@ -157,23 +125,16 @@ function AddContacts() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    // if (quill) {
-    //   if (quillRef.current.firstChild.innerHTML !== "" && quillRef.current.firstChild.innerHTML === formData.description) {
-    //     submitForm();
-    //   } else
-    //     onDescriptionChange(quillRef.current.firstChild.innerHTML)
-    // } else {
     submitForm();
-    // }
   };
 
-  const isValidEmail = (email: any) => {
-    return /^\S+@\S+\.\S+$/.test(email);
-  };
+  // const isValidEmail = (email: any) => {
+  //   return /^\S+@\S+\.\S+$/.test(email);
+  // };
 
-  const isValidPhoneNumber = (phoneNumber: any) => {
-    return /^\+91\d{10}$/.test(phoneNumber);
-  };
+  // const isValidPhoneNumber = (phoneNumber: any) => {
+  //   return /^\+91\d{10}$/.test(phoneNumber);
+  // };
 
   const submitForm = () => {
     const Header = {
@@ -181,7 +142,7 @@ function AddContacts() {
       'Content-Type': 'application/json',
       Authorization: localStorage.getItem('Token'),
       org: localStorage.getItem('org')
-    }
+    };
     // console.log(formData.description, 'des')
     const data = {
       salutation: formData.salutation,
@@ -205,22 +166,22 @@ function AddContacts() {
       linked_in_url: formData.linked_in_url,
       facebook_url: formData.facebook_url,
       twitter_username: formData.twitter_username
-    }
+    };
     fetchData(`${ContactUrl}/`, 'POST', JSON.stringify(data), Header)
       .then((res: any) => {
         // console.log('Form data:', res);
         if (!res.error) {
           // setResponceError(data.error)
-          navigate('/app/contacts')
-          resetForm()
+          navigate('/app/contacts');
+          resetForm();
         }
         if (res.error) {
-          setError(true)
-          setErrors(res?.errors?.contact_errors)
+          setError(true);
+          setErrors(res?.errors?.contact_errors);
         }
       })
       .catch(() => {
-      })
+      });
   };
 
   const resetForm = () => {
@@ -250,23 +211,23 @@ function AddContacts() {
       twitter_username: ''
     });
     setErrors({});
-  }
+  };
   const backbtnHandle = () => {
-    navigate('/app/contacts')
-  }
-  const module = 'Contacts'
-  const crntPage = 'Add Contacts'
-  const backBtn = 'Back To Contacts'
+    navigate('/app/contacts');
+  };
+  const module = 'Contacts';
+  const crntPage = 'Add Contacts';
+  const backBtn = 'Back To Contacts';
 
   const onCancel = () => {
-    resetForm()
-  }
+    resetForm();
+  };
 
   // console.log(errors, 'err')
   return (
     <Box sx={{ mt: '60px' }}>
       <CustomAppBar backbtnHandle={backbtnHandle} module={module} backBtn={backBtn} crntPage={crntPage} onCancel={onCancel} onSubmit={handleSubmit} />
-      <Box sx={{ mt: "120px" }}>
+      <Box sx={{ mt: '120px' }}>
         <form onSubmit={handleSubmit}>
           {/* contact details */}
           <div style={{ padding: '10px' }}>
@@ -406,7 +367,7 @@ function AddContacts() {
                             value={formData.mobile_number}
                             onChange={handleChange}
                             required
-                            inputProps={{ pattern: "^\\+\\d{8,15}$", title: "Enter a valid international number, e.g. +14155552671" }}
+                            inputProps={{ pattern: '^\\+\\d{8,15}$', title: 'Enter a valid international number, e.g. +14155552671' }}
                             style={{ width: '70%' }}
                             size='small'
                             error={!!errors?.mobile_number?.[0]}
@@ -446,19 +407,11 @@ function AddContacts() {
                       </div>
                       <div className='fieldSubContainer'>
                         <div className='fieldTitle'>Do Not Call</div>
-                        {/* <FormControlLabel
-                          control={<AntSwitch
-                            name='do_not_call'
-                            checked={formData.do_not_call}
-                            onChange={handleChange}
-                            sx={{ mt: '1%' }}
-                          />}
-                        /> */}
                         <AntSwitch
                           name='do_not_call'
                           checked={formData.do_not_call}
                           // onChange={handleChange}
-                          onChange={(e: any) => { setFormData((prevData) => ({ ...prevData, do_not_call: e.target.checked })) }}
+                          onChange={(e: any) => { setFormData((prevData) => ({ ...prevData, do_not_call: e.target.checked })); }}
                           sx={{ mt: '1%' }}
                         />
                       </div>
@@ -584,21 +537,6 @@ function AddContacts() {
                           </Select>
                           <FormHelperText>{errors?.country?.[0] ? errors?.country[0] : ''}</FormHelperText>
                         </FormControl>
-                        {/* <TextField
-                          name='country'
-                          // error={error && !!errors?.country?.[0]}
-                          value={formData.country}
-                          onChange={handleChange}
-                          // InputProps={{
-                          //   classes: {
-                          //     root: textFieldClasses.fieldHeight
-                          //   }
-                          // }}
-                          style={{ width: '70%' }}
-                          size='small'
-                          error={!!errors.country || !!errors?.country?.[0]}
-                          helperText={errors.country || errors?.country?.[0] || ''}
-                        /> */}
                       </div>
                     </div>
                   </Box>
@@ -623,17 +561,6 @@ function AddContacts() {
                   >
                     <div className='DescriptionDetail'>
                       <div className='descriptionTitle'>Description</div>
-                      {/* <TextareaAutosize
-                          aria-label='minimum height'
-                          name='description'
-                          minRows={8}
-                          value={formData.description}
-                          onChange={handleChange}
-                          style={{ width: '80%', padding: '5px' }}
-                          placeholder='Add Description'
-                        // error={error && !!errors?.description?.[0]}
-                        // helperText={error && errors?.description?.[0] ? errors?.d   escription[0] : ''}
-                        /> */}
                       <div style={{ width: '100%', marginBottom: '3%' }}>
                         <div ref={quillRef} />
                       </div>
@@ -733,7 +660,7 @@ function AddContacts() {
       </Box>
 
     </Box>
-  )
+  );
 }
 
-export default AddContacts
+export default AddContacts;

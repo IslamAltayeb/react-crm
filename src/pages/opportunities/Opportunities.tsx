@@ -1,42 +1,29 @@
 import {
   Avatar,
-  AvatarGroup,
   Box,
   Button,
-  Card,
-  List,
   Stack,
-  Tab,
-  TablePagination,
-  Tabs,
-  Toolbar,
   Typography,
-  Link,
   Select,
   MenuItem,
   TableContainer,
   Table,
-  TableSortLabel,
   TableCell,
   TableRow,
-  TableHead,
   Paper,
   TableBody,
   IconButton,
   Container,
 } from '@mui/material';
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Spinner } from '../../components/Spinner';
 import { FiPlus } from '@react-icons/all-files/fi/FiPlus';
 import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft';
 import { FiChevronRight } from '@react-icons/all-files/fi/FiChevronRight';
 import {
-  CustomTab,
   CustomToolbar,
   FabLeft,
   FabRight,
-  StyledTableCell,
-  StyledTableRow,
 } from '../../styles/CssStyled';
 import { useNavigate } from 'react-router-dom';
 import { fetchData } from '../../components/FetchData';
@@ -112,23 +99,23 @@ const headCells: readonly HeadCell[] = [
   },
 ];
 
-type Item = {
-  id: string;
-};
+// type Item = {
+//   id: string;
+// };
 
-export default function Opportunities(props: any) {
+export default function Opportunities(_props: any) {
   const navigate = useNavigate();
-  const [tab, setTab] = useState('open');
+  // const [tab, setTab] = useState('open');
   const [loading, setLoading] = useState(true);
 
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [page, setPage] = useState(0);
 
   const [opportunities, setOpportunities] = useState([]);
-  const [openOpportunities, setOpenOpportunities] = useState([]);
-  const [openOpportunitiesCount, setOpenOpportunitiesCount] = useState(0);
-  const [closedOpportunities, setClosedOpportunities] = useState([]);
-  const [closedOpportunitiesCount, setClosedOpportunitiesCount] = useState(0);
+  // const [openOpportunities, setOpenOpportunities] = useState([]);
+  // const [openOpportunitiesCount, setOpenOpportunitiesCount] = useState(0);
+  // const [closedOpportunities, setClosedOpportunities] = useState([]);
+  // const [closedOpportunitiesCount, setClosedOpportunitiesCount] = useState(0);
   const [contacts, setContacts] = useState([]);
   const [tags, setTags] = useState([]);
   const [currency, setCurrency] = useState([]);
@@ -146,9 +133,9 @@ export default function Opportunities(props: any) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
 
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, _setSelected] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>([]);
-  const [isSelectedId, setIsSelectedId] = useState<boolean[]>([]);
+  const [isSelectedId, _setIsSelectedId] = useState<boolean[]>([]);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [recordsPerPage, setRecordsPerPage] = useState<number>(10);
@@ -175,13 +162,8 @@ export default function Opportunities(props: any) {
       )
         // fetchData(`${OpportunityUrl}/`, 'GET', null as any, Header)
         .then((res) => {
-          // console.log(res, 'Opportunity')
           if (!res.error) {
             setOpportunities(res?.opportunities);
-            // setOpenOpportunities(res?.open_leads?.open_leads)
-            // setOpenOpportunitiesCount(res?.open_leads?.leads_count)
-            // setClosedOpportunities(res?.close_leads?.close_leads)
-            // setClosedOpportunitiesCount(res?.close_leads?.leads_count)
             setTotalPages(Math.ceil(res?.opportunities_count / recordsPerPage));
             setContacts(res?.contacts_list);
             setAccount(res?.accounts_list);
@@ -200,9 +182,9 @@ export default function Opportunities(props: any) {
     }
   };
 
-  const handleChangeTab = (e: SyntheticEvent, val: any) => {
-    setTab(val);
-  };
+  // const handleChangeTab = (e: SyntheticEvent, val: any) => {
+  //   setTab(val);
+  // };
 
   const onAddOpportunity = () => {
     if (!loading) {
@@ -228,14 +210,14 @@ export default function Opportunities(props: any) {
     setOrderBy(property);
   };
 
-  type SelectedItem = string[];
+  // type SelectedItem = string[];
 
-  const isSelected = (name: string, selected: SelectedItem): boolean => {
-    return selected.indexOf(name) !== -1;
-  };
+  // const isSelected = (name: string, selected: SelectedItem): boolean => {
+  //   return selected.indexOf(name) !== -1;
+  // };
 
   const opportunityDetail = (opportunityId: any) => {
-    navigate(`/app/opportunities/opportunity-details`, {
+    navigate('/app/opportunities/opportunity-details', {
       state: {
         opportunityId,
         detail: true,
@@ -295,53 +277,27 @@ export default function Opportunities(props: any) {
     setRecordsPerPage(parseInt(event.target.value));
     setCurrentPage(1);
   };
-  // const handleSelectAllClick = () => {
-  //   if (tab === 'open') {
-  //     if (selected.length === openOpportunities.length) {
-  //       setSelected([]);
-  //       setSelectedId([]);
-  //       setIsSelectedId([]);
-  //     } else {
-  //       const newSelectedIds = openOpportunities.map((opportunities) => opportunities?.id);
-  //       setSelected(newSelectedIds);
-  //       setSelectedId(newSelectedIds);
-  //       setIsSelectedId(newSelectedIds.map(() => true));
-  //     }
+
+  // const handleRowSelect = (accountId: string) => {
+  //   const selectedIndex = selected.indexOf(accountId);
+  //   let newSelected: string[] = [...selected];
+  //   let newSelectedIds: string[] = [...selectedId];
+  //   let newIsSelectedId: boolean[] = [...isSelectedId];
+
+  //   if (selectedIndex === -1) {
+  //     newSelected.push(accountId);
+  //     newSelectedIds.push(accountId);
+  //     newIsSelectedId.push(true);
   //   } else {
-  //     if (selected.length === closedOpportunities.length) {
-  //       setSelected([]);
-  //       setSelectedId([]);
-  //       setIsSelectedId([]);
-  //     } else {
-  //       const newSelectedIds = closedOpportunities.map((opportunities) => opportunities?.id);
-  //       setSelected(newSelectedIds);
-  //       setSelectedId(newSelectedIds);
-  //       setIsSelectedId(newSelectedIds.map(() => true));
-  //     }
+  //     newSelected.splice(selectedIndex, 1);
+  //     newSelectedIds.splice(selectedIndex, 1);
+  //     newIsSelectedId.splice(selectedIndex, 1);
   //   }
 
+  //   setSelected(newSelected);
+  //   setSelectedId(newSelectedIds);
+  //   setIsSelectedId(newIsSelectedId);
   // };
-
-  const handleRowSelect = (accountId: string) => {
-    const selectedIndex = selected.indexOf(accountId);
-    let newSelected: string[] = [...selected];
-    let newSelectedIds: string[] = [...selectedId];
-    let newIsSelectedId: boolean[] = [...isSelectedId];
-
-    if (selectedIndex === -1) {
-      newSelected.push(accountId);
-      newSelectedIds.push(accountId);
-      newIsSelectedId.push(true);
-    } else {
-      newSelected.splice(selectedIndex, 1);
-      newSelectedIds.splice(selectedIndex, 1);
-      newIsSelectedId.splice(selectedIndex, 1);
-    }
-
-    setSelected(newSelected);
-    setSelectedId(newSelectedIds);
-    setIsSelectedId(newIsSelectedId);
-  };
   const modalDialog = 'Are You Sure You want to delete selected Opportunity?';
   const modalTitle = 'Delete Opportunity';
 
@@ -352,53 +308,38 @@ export default function Opportunities(props: any) {
     [40, '40 Records per page'],
     [50, '50 Records per page'],
   ];
-  const tag = [
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'leading',
-    'account',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-  ];
+  // const tag = [
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'leading',
+  //   'account',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  // ];
   return (
     <Box sx={{ mt: '60px' }}>
       <CustomToolbar sx={{ flexDirection: 'row-reverse' }}>
-        {/* <Tabs defaultValue={tab} onChange={handleChangeTab} sx={{ mt: '26px' }}>
-          <CustomTab value="open" label="Open"
-            sx={{
-              backgroundColor: tab === 'open' ? '#F0F7FF' : '#284871',
-              color: tab === 'open' ? '#3f51b5' : 'white',
-            }} />
-          <CustomTab value="closed" label="Closed"
-            sx={{
-              backgroundColor: tab === 'closed' ? '#F0F7FF' : '#284871',
-              color: tab === 'closed' ? '#3f51b5' : 'white',
-              ml: '5px',
-            }}
-          />
-        </Tabs> */}
-
         <Stack
           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
         >
@@ -408,7 +349,7 @@ export default function Opportunities(props: any) {
             open={selectOpen}
             onOpen={() => setSelectOpen(true)}
             onClose={() => setSelectOpen(false)}
-            className={`custom-select`}
+            className={'custom-select'}
             onClick={() => setSelectOpen(!selectOpen)}
             IconComponent={() => (
               <div
@@ -484,27 +425,6 @@ export default function Opportunities(props: any) {
           <Paper
             sx={{ width: 'cal(100%-15px)', mb: 2, p: '0px 15px 15px 15px' }}
           >
-            {/* <Toolbar sx={{ pl: { sm: 2 }, pr: { xs: 1, sm: 1 } }}>
-                            <Tooltip title='Delete'>
-                                <Button
-                                    variant='outlined'
-                                    onClick={() => !!(selectedId?.length !== 0) && handleDelete(selectedId)}
-                                    startIcon={<FaTrashAlt color='red' style={{ width: '12px' }} />}
-                                    size='small'
-                                    color='error'
-                                    sx={{ fontWeight: 'bold', textTransform: 'capitalize', color: 'red', borderColor: 'darkgrey' }}
-                                >
-                                    Delete
-                                </Button>
-                            </Tooltip>
-                            {selected.length > 0 ? (
-                                <Typography sx={{ flex: '1 1 100%', margin: '5px' }} color='inherit' variant='subtitle1' component='div'>
-                                    {selected.length} selected
-                                </Typography>
-                            ) : (
-                                ''
-                            )}
-                        </Toolbar> */}
             <TableContainer>
               <Table>
                 <EnhancedTableHead
@@ -526,8 +446,8 @@ export default function Opportunities(props: any) {
                       getComparator(order, orderBy)
                     ).map((item: any, index: any) => {
                       // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: any, index: any) => {
-                      const labelId = `enhanced-table-checkbox-${index}`;
-                      const rowIndex = selectedId.indexOf(item.id);
+                      // const labelId = `enhanced-table-checkbox-${index}`;
+                      // const rowIndex = selectedId.indexOf(item.id);
                       return (
                         <TableRow
                           tabIndex={-1}
@@ -541,20 +461,6 @@ export default function Opportunities(props: any) {
                             textTransform: 'capitalize',
                           }}
                         >
-                          {/* <TableCell
-                                                                    padding='checkbox'
-                                                                    sx={{ border: 0, color: 'inherit' }}
-                                                                    align='left'
-                                                                >
-                                                                    <Checkbox
-                                                                        checked={isSelectedId[rowIndex] || false}
-                                                                        onChange={() => handleRowSelect(item.id)}
-                                                                        inputProps={{
-                                                                            'aria-labelledby': labelId,
-                                                                        }}
-                                                                        sx={{ border: 0, color: 'inherit' }}
-                                                                    />
-                                                                </TableCell> */}
                           <TableCell
                             className="tableCell-link"
                             onClick={() => opportunityDetail(item.id)}
@@ -573,9 +479,6 @@ export default function Opportunities(props: any) {
                             ) : (
                               '----'
                             )}
-                            {/* <Stack style={{ display: 'flex', flexDirection: 'row', alignItems: "center" }}>
-                                  <Avatar src={item?.lead?.created_by?.profile_pic} alt={item?.lead?.created_by?.email} /><Stack sx={{ ml: 1 }}>{item?.lead?.account_name ? item?.lead?.account_name : '---'}</Stack>
-                                </Stack> */}
                           </TableCell>
                           <TableCell className="tableCell">
                             {item?.stage ? item?.stage : '---'}
@@ -587,24 +490,18 @@ export default function Opportunities(props: any) {
                           </TableCell>
                           <TableCell className="tableCell">
                             {item?.tags?.length
-                              ? item?.tags.map((tag: any, i: any) => (
-                                  <Stack sx={{ mr: 0.5 }}>
-                                    {' '}
-                                    <Label tags={tag} />
-                                  </Stack>
-                                ))
+                              ? item?.tags.map((tag: any, _i: any) => (
+                                <Stack sx={{ mr: 0.5 }}>
+                                  {' '}
+                                  <Label tags={tag} />
+                                </Stack>
+                              ))
                               : '---'}
                           </TableCell>
                           <TableCell className="tableCell">
                             {item?.lead_source ? item?.lead_source : '---'}
                           </TableCell>
                           <TableCell className="tableCell">
-                            {/* <IconButton>
-                                                                        <FaEdit
-                                                                            onClick={() => EditItem(item?.id)}
-                                                                            style={{ fill: '#1A3353', cursor: 'pointer', width: '18px' }}
-                                                                        />
-                                                                    </IconButton> */}
                             <IconButton>
                               <FaTrashAlt
                                 onClick={() => deleteRow(item?.id)}
@@ -635,18 +532,6 @@ export default function Opportunities(props: any) {
                       </TableCell>
                     </TableRow>
                   )}
-                  {/* {
-                    emptyRows > 0 && (
-                        <TableRow
-                            style={{
-                                height: (dense ? 33 : 53) * emptyRows
-                            }}
-                        >
-                            <TableCell colSpan={6} />
-                        </TableRow>
-                    )
-                  }
- */}
                 </TableBody>
               </Table>
             </TableContainer>

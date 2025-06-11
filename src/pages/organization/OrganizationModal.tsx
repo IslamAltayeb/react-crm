@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -199,7 +199,7 @@ export default function OrganizationModal(props: any) {
                 onKeyDown={handleKeyDown}
                 error={!!error}
                 helperText={error !== '' ? error : ''}
-                sx={{ mt: !!error ? 2 : '0px' }}
+                sx={{ mt: error ? 2 : '0px' }}
               />
               <IconButton
                 onClick={addOrganization}

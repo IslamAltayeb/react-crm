@@ -1,9 +1,8 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   TextField,
   FormControl,
-  TextareaAutosize,
   AccordionDetails,
   Accordion,
   AccordionSummary,
@@ -26,10 +25,7 @@ import { LeadUrl } from '../../services/ApiUrls';
 import { fetchData, Header } from '../../components/FetchData';
 import { CustomAppBar } from '../../components/CustomAppBar';
 import {
-  FaArrowDown,
   FaCheckCircle,
-  FaFileUpload,
-  FaPalette,
   FaPercent,
   FaPlus,
   FaTimes,
@@ -38,9 +34,7 @@ import {
 } from 'react-icons/fa';
 import {
   CustomPopupIcon,
-  CustomSelectField,
   RequiredTextField,
-  StyledSelect,
 } from '../../styles/CssStyled';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
@@ -154,13 +148,13 @@ export function EditLead() {
 
   const [hasInitialFocus, setHasInitialFocus] = useState(false);
 
-  const autocompleteRef = useRef<any>(null);
+  // const autocompleteRef = useRef<any>(null);
   const [reset, setReset] = useState(false);
-  const [error, setError] = useState(false);
+  const [_error, setError] = useState(false);
   const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
   const [selectedAssignTo, setSelectedAssignTo] = useState<any[]>([]);
   const [selectedTags, setSelectedTags] = useState<any[]>([]);
-  const [selectedCountry, setSelectedCountry] = useState<any[]>([]);
+  // const [selectedCountry, setSelectedCountry] = useState<any[]>([]);
   const [sourceSelectOpen, setSourceSelectOpen] = useState(false);
   const [statusSelectOpen, setStatusSelectOpen] = useState(false);
   const [countrySelectOpen, setCountrySelectOpen] = useState(false);
@@ -240,37 +234,6 @@ export function EditLead() {
     }
   }, [quill, formData.description]);
 
-  // useEffect(() => {
-  //     if (quill && initialContentRef.current === null) {
-  //       // Save the initial state (HTML content) of the Quill editor only if not already saved
-  //       initialContentRef.current = quillRef.current.firstChild.innerHTML;
-  //     }
-  //   }, [quill]);
-  // useEffect(() => {
-  //     if (quill) {
-  //         // Save the initial state (HTML content) of the Quill editor
-  //         initialContentRef.current = quillRef.current.firstChild.innerHTML;
-  //     }
-  // }, [quill]);
-
-  // useEffect(() => {
-  //     if (quill) {
-  //       quill.clipboard.dangerouslyPasteHTML(formData.description);
-  //     }
-  //   }, [quill]);
-
-  // const changeHandler = (event: any) => {
-  //   if (event.target.files[0]) {
-  //     // setLogo(event.target.files[0])
-  //     const reader = new FileReader()
-  //     reader.addEventListener('load', () => {
-  //       // setImgData(reader.result)
-  //       // setLogot(true)
-  //     })
-  //     val.lead_attachment = event.target.files[0]
-  //   }
-  // }
-
   const handleChange2 = (title: any, val: any) => {
     // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     // console.log('nd', val)
@@ -293,19 +256,12 @@ export function EditLead() {
       });
       setSelectedTags(val);
     }
-    // else if (title === 'country') {
-    //   setFormData({ ...formData, country: val || [] })
-    //   setSelectedCountry(val);
-    // }
     else {
       setFormData({ ...formData, [title]: val });
     }
   };
   const handleChange = (e: any) => {
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    // console.log('e.target',e)
-    const { name, value, files, type, checked, id } = e.target;
-    // console.log('auto', val)
+    const { name, value, _files, type, checked, _id } = e.target;
     if (type === 'file') {
       setFormData({ ...formData, [name]: e.target.files?.[0] || null });
     } else if (type === 'checkbox') {
@@ -317,9 +273,6 @@ export function EditLead() {
   const resetQuillToInitialState = () => {
     // Reset the Quill editor to its initial state
     setFormData({ ...formData, description: '' });
-    // if (quill && initialContentRef.current !== null) {
-    //     quill.clipboard.dangerouslyPasteHTML(initialContentRef.current);
-    // }
     if (quill) {
       quill.clipboard.dangerouslyPasteHTML('');
     }
@@ -357,15 +310,11 @@ export function EditLead() {
       industry: formData.industry,
       skype_ID: formData.skype_ID,
     };
-    // console.log(data, 'edit')
+
     fetchData(`${LeadUrl}/${state?.id}/`, 'PUT', JSON.stringify(data), Header)
       .then((res: any) => {
-        // console.log('Form data:', res);
         if (!res.error) {
           backbtnHandle();
-          // setResponceError(data.error)
-          // navigate('/contacts')
-          // resetForm()
         }
         if (res.error) {
           setError(true);
@@ -374,46 +323,46 @@ export function EditLead() {
       })
       .catch(() => {});
   };
-  const resetForm = () => {
-    setFormData({
-      title: '',
-      first_name: '',
-      last_name: '',
-      account_name: '',
-      phone: '',
-      email: '',
-      lead_attachment: null,
-      opportunity_amount: '',
-      website: '',
-      description: '',
-      teams: '',
-      assigned_to: [],
-      contacts: [],
-      status: 'assigned',
-      source: 'call',
-      address_line: '',
-      street: '',
-      city: '',
-      state: '',
-      postcode: '',
-      country: '',
-      tags: [],
-      company: '',
-      probability: 1,
-      industry: 'ADVERTISING',
-      skype_ID: '',
-      file: null,
-    });
-    setErrors({});
-    setSelectedContacts([]);
-    setSelectedAssignTo([]);
-    setSelectedTags([]);
-    // setSelectedCountry([])
-    // if (autocompleteRef.current) {
-    //   console.log(autocompleteRef.current,'ccc')
-    //   autocompleteRef.current.defaultValue([]);
-    // }
-  };
+  // const resetForm = () => {
+  //   setFormData({
+  //     title: '',
+  //     first_name: '',
+  //     last_name: '',
+  //     account_name: '',
+  //     phone: '',
+  //     email: '',
+  //     lead_attachment: null,
+  //     opportunity_amount: '',
+  //     website: '',
+  //     description: '',
+  //     teams: '',
+  //     assigned_to: [],
+  //     contacts: [],
+  //     status: 'assigned',
+  //     source: 'call',
+  //     address_line: '',
+  //     street: '',
+  //     city: '',
+  //     state: '',
+  //     postcode: '',
+  //     country: '',
+  //     tags: [],
+  //     company: '',
+  //     probability: 1,
+  //     industry: 'ADVERTISING',
+  //     skype_ID: '',
+  //     file: null,
+  //   });
+  //   setErrors({});
+  //   setSelectedContacts([]);
+  //   setSelectedAssignTo([]);
+  //   setSelectedTags([]);
+  //   // setSelectedCountry([])
+  //   // if (autocompleteRef.current) {
+  //   //   console.log(autocompleteRef.current,'ccc')
+  //   //   autocompleteRef.current.defaultValue([]);
+  //   // }
+  // };
   const onCancel = () => {
     // resetForm()
     setReset(true);
@@ -725,17 +674,17 @@ export function EditLead() {
                           >
                             {state?.industries?.length
                               ? state?.industries.map((option: any) => (
+                                <MenuItem key={option[0]} value={option[1]}>
+                                  {option[1]}
+                                </MenuItem>
+                              ))
+                              : [['ADVERTISING', 'ADVERTISING']].map(
+                                (option: any) => (
                                   <MenuItem key={option[0]} value={option[1]}>
                                     {option[1]}
                                   </MenuItem>
-                                ))
-                              : [['ADVERTISING', 'ADVERTISING']].map(
-                                  (option: any) => (
-                                    <MenuItem key={option[0]} value={option[1]}>
-                                      {option[1]}
-                                    </MenuItem>
-                                  )
-                                )}
+                                )
+                              )}
                           </Select>
                           <FormHelperText>
                             {errors?.industry?.[0] ? errors?.industry[0] : ''}
