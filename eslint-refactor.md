@@ -1,3 +1,6 @@
+For the sake of learning, these are the steps that I followed 
+to clean the previous eslint configuration and setup a new eslint configuration.
+
 1. Remove any file configuration for eslint and prettier
 .eslinter.json
 .prettierrc
