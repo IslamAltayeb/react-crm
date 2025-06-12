@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   TextField,
@@ -14,17 +14,17 @@ import {
   Divider,
   FormHelperText,
   Button
-} from '@mui/material'
+} from '@mui/material';
 import { useQuill } from 'react-quilljs';
 import 'quill/dist/quill.snow.css';
 import { ContactUrl } from '../../services/ApiUrls';
 import { CustomAppBar } from '../../components/CustomAppBar';
-import { fetchData, Header } from '../../components/FetchData';
-import { AntSwitch, CustomSelectField, RequiredTextField } from '../../styles/CssStyled';
+import { fetchData } from '../../components/FetchData';
+import { AntSwitch, RequiredTextField } from '../../styles/CssStyled';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-import '../../styles/style.css'
+import '../../styles/style.css';
 
 // interface FormErrors {
 //   [key: string]: string;
@@ -59,7 +59,7 @@ type FormErrors = {
 //   // Add other form fields as needed
 // }
 function EditContact() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
   const { quill, quillRef } = useQuill();
@@ -69,8 +69,8 @@ function EditContact() {
 
   const [hasInitialFocus, setHasInitialFocus] = useState(false);
 
-  const [reset, setReset] = useState(false)
-  const [error, setError] = useState(false)
+  const [reset, setReset] = useState(false);
+  const [_error, setError] = useState(false);
   const [formData, setFormData] = useState({
     salutation: '',
     first_name: '',
@@ -95,9 +95,9 @@ function EditContact() {
     linked_in_url: '',
     facebook_url: '',
     twitter_username: ''
-  })
+  });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [countrySelectOpen, setCountrySelectOpen] = useState(false)
+  const [countrySelectOpen, setCountrySelectOpen] = useState(false);
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
@@ -120,20 +120,20 @@ function EditContact() {
   }, [quill, hasInitialFocus]);
 
   useEffect(() => {
-    setFormData(state?.value)
-  }, [state?.id])
+    setFormData(state?.value);
+  }, [state?.id]);
 
   useEffect(() => {
     if (reset) {
-      setFormData(state?.value)
+      setFormData(state?.value);
       if (quill && initialContentRef.current !== null) {
         quill.clipboard.dangerouslyPasteHTML(initialContentRef.current);
       }
     }
     return () => {
-      setReset(false)
-    }
-  }, [reset, quill, state?.value])
+      setReset(false);
+    };
+  }, [reset, quill, state?.value]);
 
   useEffect(() => {
     if (quill && initialContentRef.current === null) {
@@ -144,7 +144,7 @@ function EditContact() {
   }, [quill, formData.description]);
 
   const handleChange = (e: any) => {
-    const { name, value, files, type, checked } = e.target;
+    const { name, value, _files, type, checked } = e.target;
     if (type === 'checkbox') {
       setFormData({ ...formData, [name]: checked });
     }
@@ -161,7 +161,7 @@ function EditContact() {
   //   }
   // };
   const emptyDescription = () => {
-    setFormData({ ...formData, description: '' })
+    setFormData({ ...formData, description: '' });
     if (quill) {
       quill.clipboard.dangerouslyPasteHTML('');
     }
@@ -172,13 +172,13 @@ function EditContact() {
     submitForm();
   };
 
-  const isValidEmail = (email: any) => {
-    return /^\S+@\S+\.\S+$/.test(email);
-  };
+  // const isValidEmail = (email: any) => {
+  //   return /^\S+@\S+\.\S+$/.test(email);
+  // };
 
-  const isValidPhoneNumber = (phoneNumber: any) => {
-    return /^\+91\d{10}$/.test(phoneNumber);
-  };
+  // const isValidPhoneNumber = (phoneNumber: any) => {
+  //   return /^\+91\d{10}$/.test(phoneNumber);
+  // };
 
   const submitForm = () => {
     const Header = {
@@ -186,7 +186,7 @@ function EditContact() {
       'Content-Type': 'application/json',
       Authorization: localStorage.getItem('Token'),
       org: localStorage.getItem('org')
-    }
+    };
     // console.log('Form data:', data);
     const data = {
       salutation: formData.salutation,
@@ -210,42 +210,42 @@ function EditContact() {
       linked_in_url: formData.linked_in_url,
       facebook_url: formData.facebook_url,
       twitter_username: formData.twitter_username
-    }
+    };
     // console.log(data, 'edit')
     fetchData(`${ContactUrl}/${state?.id}/`, 'PUT', JSON.stringify(data), Header)
       .then((res: any) => {
         console.log('Form data:', res);
         if (!res.error) {
-          backbtnHandle()
+          backbtnHandle();
           // setResponceError(data.error)
           // navigate('/contacts')
           // resetForm()
         }
         if (res.error) {
-          setError(true)
-          setErrors(res?.errors?.contact_errors)
+          setError(true);
+          setErrors(res?.errors?.contact_errors);
         }
       })
       .catch(() => {
-      })
+      });
   };
 
   const backbtnHandle = () => {
-    navigate('/app/contacts/contact-details', { state: { contactId: { id: state?.id }, detail: true } })
-  }
-  const module = 'Contacts'
-  const crntPage = 'Edit Contact'
-  const backBtn = 'Back to Contact Detail'
+    navigate('/app/contacts/contact-details', { state: { contactId: { id: state?.id }, detail: true } });
+  };
+  const module = 'Contacts';
+  const crntPage = 'Edit Contact';
+  const backBtn = 'Back to Contact Detail';
 
   const onCancel = () => {
-    setReset(true)
+    setReset(true);
     // resetForm()
-  }
+  };
   // console.log(formData, 'editform')
   return (
     <Box sx={{ mt: '60px' }}>
       <CustomAppBar backbtnHandle={backbtnHandle} module={module} crntPage={crntPage} backBtn={backBtn} onCancel={onCancel} onSubmit={handleSubmit} />
-      <Box sx={{ mt: "120px" }}>
+      <Box sx={{ mt: '120px' }}>
         <form onSubmit={handleSubmit}>
           {/* lead details */}
           <div style={{ padding: '10px' }}>
@@ -394,20 +394,20 @@ function EditContact() {
                         </Tooltip>
                       </div>
                       <div className='fieldSubContainer secondary-number'>
-                          <div className='fieldTitle'>Secondary Number</div>
-                            <Tooltip title="Number must start with + followed by country code (e.g. +1, +44, +91)">
-                              <TextField
-                                name='secondary_number'
-                                value={formData.secondary_number}
-                                onChange={handleChange}
-                                style={{ width: '70%' }}
-                                size='small'
-                                error={!!errors?.secondary_number?.[0]}
-                                helperText={errors?.secondary_number?.[0] || ''}
-                             />
-                          </Tooltip>
+                        <div className='fieldTitle'>Secondary Number</div>
+                        <Tooltip title="Number must start with + followed by country code (e.g. +1, +44, +91)">
+                          <TextField
+                            name='secondary_number'
+                            value={formData.secondary_number}
+                            onChange={handleChange}
+                            style={{ width: '70%' }}
+                            size='small'
+                            error={!!errors?.secondary_number?.[0]}
+                            helperText={errors?.secondary_number?.[0] || ''}
+                          />
+                        </Tooltip>
                                             
-                     </div>
+                      </div>
                     </div>
                     <div className='fieldContainer2'>
                       <div className='fieldSubContainer'>
@@ -677,7 +677,7 @@ function EditContact() {
       </Box>
 
     </Box>
-  )
+  );
 }
 
-export default EditContact
+export default EditContact;

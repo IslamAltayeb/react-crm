@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button, css, Fab, IconButton, ListItem, ListItemButton, ListItemText, Select, Switch, Tab, TableCell, tableCellClasses, TableRow, TextField, Toolbar } from '@mui/material';
+import { Button, css, Fab, IconButton, ListItem, ListItemButton, ListItemText, Select, Switch, Tab, TextField, Toolbar } from '@mui/material';
 // import css from "styled-jsx/css";
 
 export const GoogleButton = styled(Button)`
@@ -28,27 +28,7 @@ export const CustomTab = styled(Tab)`
   border-radius: 5px 5px 0px 0px;
 `;
 
-export const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: 'white',
-    color: '#1A3353'
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14
-  }
-}));
-
-export const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(even)': {
-    backgroundColor: '#F2F2F7'
-  },
-  color: '#1A3353',
-  '&:last-child td, &:last-child th': {
-    border: 0
-  }
-}));
-
-export const AntSwitch = styled(Switch)(({ theme }) => ({
+export const AntSwitch = styled(Switch)(({ theme:_theme }) => ({
   width: 28,
   height: 16,
   padding: 0,

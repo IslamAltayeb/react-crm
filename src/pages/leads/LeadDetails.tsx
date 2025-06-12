@@ -1,10 +1,8 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Card,
   Link,
   Button,
   Avatar,
-  Divider,
   TextField,
   Box,
   MenuItem,
@@ -25,7 +23,6 @@ import {
   FaEllipsisV,
   FaPaperclip,
   FaPlus,
-  FaRegAddressCard,
   FaStar,
   FaTimes,
 } from 'react-icons/fa';
@@ -37,7 +34,6 @@ import { Label } from '../../components/Label';
 import {
   AntSwitch,
   CustomInputBoxWrapper,
-  CustomSelectField,
   CustomSelectField1,
   StyledListItemButton,
   StyledListItemText,
@@ -103,11 +99,11 @@ type response = {
   created_from_site: boolean;
   id: string;
 };
-function LeadDetails(props: any) {
+function LeadDetails(_props: any) {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [leadDetails, setLeadDetails] = useState<response | null>(null);
-  const [usersDetails, setUsersDetails] = useState<
+  const [usersDetails, _setUsersDetails] = useState<
     Array<{
       user_details: {
         email: string;
@@ -232,7 +228,7 @@ function LeadDetails(props: any) {
         Array.isArray(country) &&
         country.includes(leadDetails?.country || '')
       ) {
-        const firstElement = country[0];
+        // const firstElement = country[0];
         break;
       }
     }
@@ -452,13 +448,13 @@ function LeadDetails(props: any) {
 
                     {usersDetails?.length
                       ? usersDetails.map((val: any, i: any) => (
-                          <Avatar
-                            key={i}
-                            alt={val?.user_details?.email}
-                            src={val?.user_details?.profile_pic}
-                            sx={{ mr: 1 }}
-                          />
-                        ))
+                        <Avatar
+                          key={i}
+                          alt={val?.user_details?.email}
+                          src={val?.user_details?.profile_pic}
+                          sx={{ mr: 1 }}
+                        />
+                      ))
                       : ''}
                   </Stack>
                 </div>
@@ -472,8 +468,8 @@ function LeadDetails(props: any) {
                 >
                   {leadDetails?.tags?.length
                     ? leadDetails?.tags.map((tagData: any) => (
-                        <Label tags={tagData} />
-                      ))
+                      <Label tags={tagData} />
+                    ))
                     : ''}
                 </Stack>
               </div>
@@ -506,8 +502,6 @@ function LeadDetails(props: any) {
                 <div style={{ width: '32%' }}>
                   <div className="title2">Created from site</div>
                   <div className="title3">
-                    {/* {lead.pipeline ? lead.pipeline : '------'} */}
-                    {/* {leadDetails?.created_from_site} */}
                     <AntSwitch checked={leadDetails?.created_from_site} />
                   </div>
                 </div>
@@ -827,49 +821,49 @@ function LeadDetails(props: any) {
                 >
                   {attachmentList?.length
                     ? attachmentList.map((pic: any, i: any) => (
+                      <Box
+                        key={i}
+                        sx={{
+                          width: '45%',
+                          height: '35%',
+                          border: '0.5px solid #ccc',
+                          borderRadius: '3px',
+                          overflow: 'hidden',
+                          alignSelf: 'auto',
+                          flexShrink: 1,
+                          mr: 2.5,
+                          mb: 2,
+                        }}
+                      >
+                        <img
+                          src={URL.createObjectURL(pic)}
+                          alt={pic?.name}
+                          style={{ width: '100%', height: '50%' }}
+                        />
                         <Box
-                          key={i}
                           sx={{
-                            width: '45%',
-                            height: '35%',
-                            border: '0.5px solid #ccc',
-                            borderRadius: '3px',
-                            overflow: 'hidden',
-                            alignSelf: 'auto',
-                            flexShrink: 1,
-                            mr: 2.5,
-                            mb: 2,
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
                           }}
                         >
-                          <img
-                            src={URL.createObjectURL(pic)}
-                            alt={pic?.name}
-                            style={{ width: '100%', height: '50%' }}
-                          />
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'flex-start',
-                            }}
-                          >
-                            <Box sx={{ ml: 1 }}>
-                              <Typography sx={{ overflow: 'hidden' }}>
-                                {pic?.name}
-                              </Typography>
-                              <br />
-                              <Typography sx={{ color: 'gray' }}>
-                                {formatFileSize(pic?.size)}
-                              </Typography>
-                            </Box>
-                            <IconButton
-                              onClick={(e: any) => handleClickFile(e, i)}
-                            >
-                              <FaEllipsisV />
-                            </IconButton>
+                          <Box sx={{ ml: 1 }}>
+                            <Typography sx={{ overflow: 'hidden' }}>
+                              {pic?.name}
+                            </Typography>
+                            <br />
+                            <Typography sx={{ color: 'gray' }}>
+                              {formatFileSize(pic?.size)}
+                            </Typography>
                           </Box>
+                          <IconButton
+                            onClick={(e: any) => handleClickFile(e, i)}
+                          >
+                            <FaEllipsisV />
+                          </IconButton>
                         </Box>
-                      ))
+                      </Box>
+                    ))
                     : ''}
                   {/* {attachments?.length ? attachments.map((pic: any, i: any) => <img src={pic} />) : ''} */}
                 </Box>
@@ -932,72 +926,72 @@ function LeadDetails(props: any) {
               </div>
               <List sx={{ maxWidth: '500px' }}>
                 {comments?.length
-                  ? comments.map((val: any, i: any) => (
-                      <ListItem alignItems="flex-start">
-                        <ListItemAvatar>
-                          <Avatar alt="testing" src="test" />
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={
+                  ? comments.map((val: any, _i: any) => (
+                    <ListItem alignItems="flex-start">
+                      <ListItemAvatar>
+                        <Avatar alt="testing" src="test" />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={
+                          <Stack
+                            sx={{ display: 'flex', flexDirection: 'column' }}
+                          >
+                            <Typography>{val.comment}</Typography>
+                            <Avatar
+                              alt="testing"
+                              src="test"
+                              sx={{ mt: 1, mb: 1 }}
+                            />
+                          </Stack>
+                        }
+                        secondary={
+                          <React.Fragment>
                             <Stack
-                              sx={{ display: 'flex', flexDirection: 'column' }}
+                              sx={{
+                                mt: 3,
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'flex-start',
+                              }}
                             >
-                              <Typography>{val.comment}</Typography>
-                              <Avatar
-                                alt="testing"
-                                src="test"
-                                sx={{ mt: 1, mb: 1 }}
-                              />
-                            </Stack>
-                          }
-                          secondary={
-                            <React.Fragment>
-                              <Stack
+                              <Typography>
+                                {val?.lead}
+                                  test &nbsp;-&nbsp;
+                                {val?.commented_by}
+                                  test &nbsp;-&nbsp;
+                                <span style={{ textDecoration: 'underline' }}>
+                                    reply
+                                </span>
+                              </Typography>
+                              <Typography
                                 sx={{
-                                  mt: 3,
                                   display: 'flex',
                                   flexDirection: 'row',
-                                  justifyContent: 'space-between',
                                   alignItems: 'flex-start',
                                 }}
                               >
-                                <Typography>
-                                  {val?.lead}
-                                  test &nbsp;-&nbsp;
-                                  {val?.commented_by}
-                                  test &nbsp;-&nbsp;
-                                  <span style={{ textDecoration: 'underline' }}>
-                                    reply
-                                  </span>
-                                </Typography>
-                                <Typography
-                                  sx={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'flex-start',
-                                  }}
-                                >
-                                  {FormateTime(val?.commented_on)}
+                                {FormateTime(val?.commented_on)}
                                   &nbsp;-&nbsp;test
-                                  {val?.commented_by}
-                                </Typography>
-                              </Stack>
-                            </React.Fragment>
-                          }
-                        />
-                        <Stack
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            mr: -1.5,
-                          }}
-                        >
-                          <IconButton aria-label="comments">
-                            <FaEllipsisV style={{ width: '7px' }} />
-                          </IconButton>
-                        </Stack>
-                      </ListItem>
-                    ))
+                                {val?.commented_by}
+                              </Typography>
+                            </Stack>
+                          </React.Fragment>
+                        }
+                      />
+                      <Stack
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          mr: -1.5,
+                        }}
+                      >
+                        <IconButton aria-label="comments">
+                          <FaEllipsisV style={{ width: '7px' }} />
+                        </IconButton>
+                      </Stack>
+                    </ListItem>
+                  ))
                   : ''}
               </List>
               {/* <div style={{ padding: '10px', marginTop: '15px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>

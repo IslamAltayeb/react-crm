@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -6,10 +6,10 @@ import {
   Button,
   DialogContent,
   DialogContentText
-} from '@mui/material'
+} from '@mui/material';
 
 export const DialogModal = (props: any) => {
-  const { onClose, isDelete, modalDialog } = props
+  const { onClose, isDelete, modalDialog } = props;
   return (
     <Dialog
       onClose={() => onClose()}
@@ -42,5 +42,5 @@ export const DialogModal = (props: any) => {
         </Button>
       </DialogActions>
     </Dialog>
-  )
-}
+  );
+};
