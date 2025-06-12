@@ -20,7 +20,7 @@ export const ActivateUser: React.FC = () => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      alert("New passwords don't match.");
+      alert('New passwords don\'t match.');
       return;
     }
 

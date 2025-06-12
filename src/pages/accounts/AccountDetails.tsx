@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
-  Card,
   Link,
   Avatar,
   Box,
@@ -14,12 +13,10 @@ import {
 
 import { fetchData } from '../../components/FetchData';
 import { AccountsUrl } from '../../services/ApiUrls';
-import { Tags } from '../../components/Tags';
 import { CustomAppBar } from '../../components/CustomAppBar';
-import { FaPlus, FaStar } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
 import FormateTime from '../../components/FormateTime';
 import { Label } from '../../components/Label';
-import { AntSwitch } from '../../styles/CssStyled';
 
 export const formatDate = (dateString: any) => {
   const options: Intl.DateTimeFormatOptions = {
@@ -90,12 +87,12 @@ type response = {
   teams: [];
   leads: string;
 };
-export const AccountDetails = (props: any) => {
+export const AccountDetails = (_props: any) => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
   const [accountDetails, setAccountDetails] = useState<response | null>(null);
-  const [usersDetails, setUsersDetails] = useState<
+  const [usersDetails, _setUsersDetails] = useState<
     Array<{
       user_details: {
         email: string;
@@ -104,20 +101,20 @@ export const AccountDetails = (props: any) => {
       };
     }>
   >([]);
-  const [selectedCountry, setSelectedCountry] = useState([]);
-  const [attachments, setAttachments] = useState([]);
-  const [tags, setTags] = useState([]);
+  // const [selectedCountry, setSelectedCountry] = useState([]);
+  // const [attachments, setAttachments] = useState([]);
+  const [_tags, setTags] = useState([]);
   const [countries, setCountries] = useState<string[][]>([]);
-  const [source, setSource] = useState([]);
-  const [status, setStatus] = useState([]);
-  const [industries, setIndustries] = useState([]);
-  const [contacts, setContacts] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [teams, setTeams] = useState([]);
-  const [leads, setLeads] = useState([]);
-  const [comments, setComments] = useState([]);
-  const [commentList, setCommentList] = useState('Recent Last');
-  const [note, setNote] = useState('');
+  // const [source, setSource] = useState([]);
+  const [_status, setStatus] = useState([]);
+  const [_industries, setIndustries] = useState([]);
+  const [_contacts, setContacts] = useState([]);
+  const [_users, setUsers] = useState([]);
+  const [_teams, setTeams] = useState([]);
+  const [_leads, setLeads] = useState([]);
+  // const [comments, setComments] = useState([]);
+  // const [commentList, setCommentList] = useState('Recent Last');
+  // const [note, setNote] = useState('');
 
   useEffect(() => {
     getAccountDetails(state.accountId);
@@ -176,7 +173,7 @@ export const AccountDetails = (props: any) => {
     let countryName: string[] | undefined;
     for (countryName of countries) {
       if (Array.isArray(countryName) && countryName.includes(country)) {
-        const ele = countryName;
+        // const ele = countryName;
         break;
       }
     }
@@ -190,7 +187,7 @@ export const AccountDetails = (props: any) => {
         Array.isArray(country) &&
         country.includes(accountDetails?.country || '')
       ) {
-        const firstElement = country[0];
+        // const firstElement = country[0];
         break;
       }
     }
@@ -338,13 +335,13 @@ export const AccountDetails = (props: any) => {
                                                     ? */}
                     {usersDetails?.length
                       ? usersDetails.map((val: any, i: any) => (
-                          <Avatar
-                            key={i}
-                            alt={val?.user_details?.email}
-                            src={val?.user_details?.profile_pic}
-                            sx={{ mr: 1 }}
-                          />
-                        ))
+                        <Avatar
+                          key={i}
+                          alt={val?.user_details?.email}
+                          src={val?.user_details?.profile_pic}
+                          sx={{ mr: 1 }}
+                        />
+                      ))
                       : ''}
                   </Stack>
                 </div>
@@ -358,8 +355,8 @@ export const AccountDetails = (props: any) => {
                 >
                   {accountDetails?.tags?.length
                     ? accountDetails?.tags.map((tagData: any) => (
-                        <Label tags={tagData} />
-                      ))
+                      <Label tags={tagData} />
+                    ))
                     : ''}
                 </Stack>
               </div>
@@ -415,11 +412,11 @@ export const AccountDetails = (props: any) => {
                   <div className="title3">
                     {accountDetails?.teams?.length
                       ? accountDetails?.teams.map((team: any) => (
-                          <Chip
-                            label={team}
-                            sx={{ height: '20px', borderRadius: '4px' }}
-                          />
-                        ))
+                        <Chip
+                          label={team}
+                          sx={{ height: '20px', borderRadius: '4px' }}
+                        />
+                      ))
                       : '----'}
                   </div>
                 </div>
@@ -624,20 +621,20 @@ export const AccountDetails = (props: any) => {
                 {/* {lead && lead.lead_attachment} */}
                 {accountDetails?.account_attachment?.length
                   ? accountDetails?.account_attachment.map(
-                      (pic: any, i: any) => (
-                        <Box
-                          key={i}
-                          sx={{
-                            width: '100px',
-                            height: '100px',
-                            border: '0.5px solid gray',
-                            borderRadius: '5px',
-                          }}
-                        >
-                          <img src={pic} alt={pic} />
-                        </Box>
-                      )
+                    (pic: any, i: any) => (
+                      <Box
+                        key={i}
+                        sx={{
+                          width: '100px',
+                          height: '100px',
+                          border: '0.5px solid gray',
+                          borderRadius: '5px',
+                        }}
+                      >
+                        <img src={pic} alt={pic} />
+                      </Box>
                     )
+                  )
                   : ''}
               </div>
             </Box>

@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   TextField,
   AccordionDetails,
@@ -7,38 +7,20 @@ import {
   AccordionSummary,
   Typography,
   Box,
-  TextareaAutosize,
   MenuItem,
   Tooltip,
-  Button,
-  Input,
-  Avatar,
-  IconButton,
-  Stack,
   Divider,
   Select,
   FormControl,
   FormHelperText,
 } from '@mui/material';
-// import { makeStyles } from '@mui/styles'
-// import isEmail from 'validator/lib/isEmail'
 
 import '../../styles/style.css';
 import { UsersUrl } from '../../services/ApiUrls';
-import { fetchData, Header } from '../../components/FetchData';
+import { fetchData } from '../../components/FetchData';
 import { CustomAppBar } from '../../components/CustomAppBar';
-import {
-  FaArrowAltCircleDown,
-  FaArrowDown,
-  FaTimes,
-  FaUpload,
-} from 'react-icons/fa';
-import {
-  AntSwitch,
-  CustomSelectField,
-  CustomSelectTextField,
-  RequiredTextField,
-} from '../../styles/CssStyled';
+
+import { RequiredTextField } from '../../styles/CssStyled';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
 import { countries } from '../../components/Countries';
@@ -80,17 +62,15 @@ interface FormData {
   is_organization_admin: boolean;
 }
 export function AddUsers() {
-  const { state } = useLocation();
   const navigate = useNavigate();
 
   const [roleSelectOpen, setRoleSelectOpen] = useState(false);
   const [countrySelectOpen, setCountrySelectOpen] = useState(false);
-  const [error, setError] = useState(false);
-  const [msg, setMsg] = useState('');
-  const [responceError, setResponceError] = useState(false);
+  const [_error, setError] = useState(false);
+  const [_msg, setMsg] = useState('');
 
   const handleChange = (e: any) => {
-    const { name, value, files, type, checked } = e.target;
+    const { name, value, _files, type, checked } = e.target;
     if (type === 'file') {
       setFormData({ ...formData, [name]: e.target.files?.[0] || null });
     }
@@ -99,10 +79,6 @@ export function AddUsers() {
     } else {
       setFormData({ ...formData, [name]: value });
     }
-    // setValidationErrors(({ ...validationErrors, [name]: '' }));
-    // setErrors({});
-    // const newValue = type === 'checkbox' ? checked : value;
-    // setFormData({ ...formData, [name]: newValue });
   };
 
   const backbtnHandle = () => {
@@ -113,7 +89,7 @@ export function AddUsers() {
     e.preventDefault();
     submitForm();
   };
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, _setErrors] = useState<FormErrors>({});
   const [profileErrors, setProfileErrors] = useState<FormErrors>({});
   const [userErrors, setUserErrors] = useState<FormErrors>({});
   const [formData, setFormData] = useState<FormData>({
@@ -134,17 +110,6 @@ export function AddUsers() {
     has_marketing_access: false,
     is_organization_admin: false,
   });
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setFormData({ ...formData, profile_pic: reader.result as string });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const submitForm = () => {
     const Header = {
@@ -187,14 +152,53 @@ export function AddUsers() {
           // profile_errors
           // user_errors
           setError(true);
-          setProfileErrors(res?.errors?.profile_errors);
-          setUserErrors(res?.errors?.user_errors);
+          setMsg(res?.error || 'An error occurred while suabmitting the form.');
+          setProfileErrors(res?.errors?.profile_errors || {});
+          setUserErrors(res?.errors?.user_errors || {});
+          _setErrors({
+            ...(res?.errors?.user_errors || {}),
+            ...(res?.errors?.profile_errors || {}),
+          });
         }
       })
       .catch((err) => {
-        console.error('Error during fetch:', err); // ✅ Log any fetch errors
+        console.error('Error during fetch:', err);
+
+        let errorMessage = 'An error occurred while submitting the form.';
+
+        try {
+          const jsonPart = err.message.split(' - ')[1];
+          if (jsonPart) {
+            const errorObj = JSON.parse(jsonPart);
+
+            const userErrors = errorObj.errors?.user_errors || {};
+            const profileErrors = errorObj.errors?.profile_errors || {};
+
+            // Create an array of strings like "field: error message"
+            const formatErrors = (
+              errors: { [s: string]: unknown } | ArrayLike<unknown>
+            ) =>
+              Object.entries(errors).flatMap(([field, messages]) =>
+                (Array.isArray(messages) ? messages : []).map(
+                  (msg) => `${field}: ${msg}`
+                )
+              );
+
+            const allErrors = [
+              ...formatErrors(userErrors),
+              ...formatErrors(profileErrors),
+            ];
+
+            if (allErrors.length) {
+              errorMessage = allErrors.join('\n');
+            }
+          }
+        } catch (parseError) {
+          console.error('Failed to parse error message JSON:', parseError);
+        }
+
         setError(true);
-        setMsg('An error occurred while submitting the form.');
+        setMsg(errorMessage);
       });
   };
   const resetForm = () => {
@@ -238,6 +242,9 @@ export function AddUsers() {
       />
       <Box sx={{ mt: '120px' }}>
         <form onSubmit={handleSubmit}>
+          {_error && _msg && (
+            <Box sx={{ color: 'red', mb: 2, textAlign: 'center' }}>{_msg}</Box>
+          )}
           <div style={{ padding: '10px' }}>
             <div className="leadContainer">
               <Accordion defaultExpanded style={{ width: '98%' }}>
