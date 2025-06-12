@@ -1,20 +1,21 @@
 'use client';
-
+ 
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
 import { Button, Paper, Stack, Typography } from '@mui/material';
-
+ 
 export const LoginForm: React.FC<{ toggleForm: () => void }> = ({
   toggleForm,
 }) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-
+ 
   const navigate = useNavigate();
+ 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+ 
     try {
       const response = await fetch('http://localhost:8000/api/api/token/', {
         method: 'POST',
@@ -23,16 +24,15 @@ export const LoginForm: React.FC<{ toggleForm: () => void }> = ({
         },
         body: JSON.stringify({ email, password }),
       });
-
+ 
       const data = await response.json();
-
+ 
       if (response.ok) {
-        // Save the access and refresh token
         localStorage.setItem('accessToken', data.access);
         localStorage.setItem('refreshToken', data.refresh);
-
+ 
         alert('Login successful!');
-        navigate('/app'); // or navigate('/') as you prefer
+        navigate('/app');
       } else {
         alert('Login failed: ' + (data.detail || 'Invalid credentials'));
       }
@@ -41,9 +41,39 @@ export const LoginForm: React.FC<{ toggleForm: () => void }> = ({
       console.error('Login error:', error);
     }
   };
-
+ 
+  const handleForgotPassword = async () => {
+    if (!email) {
+      alert('Please enter your email first.');
+      return;
+    }
+ 
+    try {
+      const response = await fetch(
+        'http://localhost:8000/api/reset-password/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+ 
+      if (response.ok) {
+        alert('Password reset email has been sent!');
+      } else {
+        const data = await response.json();
+        alert('Error: ' + (data.detail || 'Could not send email.'));
+      }
+    } catch (error) {
+      alert('An error occurred while sending the reset email.');
+      console.error('Reset error:', error);
+    }
+  };
+ 
   return (
-    <Paper
+<Paper
       elevation={4}
       sx={{
         width: { xs: '90%', sm: '80%', md: '60%', lg: '50%' },
@@ -55,23 +85,22 @@ export const LoginForm: React.FC<{ toggleForm: () => void }> = ({
         borderRadius: 4,
         autoComplete: 'off',
       }}
-    >
-      <Stack
+>
+<Stack
         spacing={5}
         sx={{ pt: 25, pb: 5 }}
         component="form"
         onSubmit={handleSubmit}
-      >
-        <Typography
+>
+<Typography
           variant="h4"
           fontWeight="bold"
           gutterBottom
           justifyContent={'center'}
-        >
-          {' '}
-          Sign-in{' '}
-        </Typography>
-
+>
+          Sign-in
+</Typography>
+ 
         <TextField
           id="email-id"
           label="Email"
@@ -79,7 +108,7 @@ export const LoginForm: React.FC<{ toggleForm: () => void }> = ({
           value={email}
           onChange={(event: any) => setEmail(event.target.value)}
         />
-        <TextField
+<TextField
           id="password-id"
           label="Password"
           type="password"
@@ -87,16 +116,32 @@ export const LoginForm: React.FC<{ toggleForm: () => void }> = ({
           value={password}
           onChange={(event: any) => setPassword(event.target.value)}
         />
-
+ 
+        {/* Forgot Password Link */}
+<Typography
+          variant="body2"
+          align="right"
+          sx={{
+            cursor: 'pointer',
+            color: 'primary.main',
+            textDecoration: 'underline',
+            '&:hover': { color: 'primary.dark' },
+            mt: -2,
+          }}
+          onClick={handleForgotPassword}
+>
+          Forgot your password?
+</Typography>
+ 
         <Button variant="contained" type="submit">
           Login
-        </Button>
-
+</Button>
+ 
         <Typography variant="body2" align="center" sx={{ mt: 2 }}>
           Don't have an account?{' '}
-          <Button onClick={toggleForm}>Signup Here</Button>
-        </Typography>
-      </Stack>
-    </Paper>
+<Button onClick={toggleForm}>Signup Here</Button>
+</Typography>
+</Stack>
+</Paper>
   );
 };
