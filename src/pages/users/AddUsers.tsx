@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   TextField,
   AccordionDetails,
@@ -13,19 +13,17 @@ import {
   Select,
   FormControl,
   FormHelperText,
-} from "@mui/material";
-// import { makeStyles } from '@mui/styles'
-// import isEmail from 'validator/lib/isEmail'
+} from '@mui/material';
 
-import "../../styles/style.css";
-import { UsersUrl } from "../../services/ApiUrls";
-import { fetchData } from "../../components/FetchData";
-import { CustomAppBar } from "../../components/CustomAppBar";
+import '../../styles/style.css';
+import { UsersUrl } from '../../services/ApiUrls';
+import { fetchData } from '../../components/FetchData';
+import { CustomAppBar } from '../../components/CustomAppBar';
 
-import { RequiredTextField } from "../../styles/CssStyled";
-import { FiChevronDown } from "@react-icons/all-files/fi/FiChevronDown";
-import { FiChevronUp } from "@react-icons/all-files/fi/FiChevronUp";
-import { countries } from "../../components/Countries";
+import { RequiredTextField } from '../../styles/CssStyled';
+import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
+import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
+import { countries } from '../../components/Countries';
 
 type FormErrors = {
   username?: string[];
@@ -64,21 +62,19 @@ interface FormData {
   is_organization_admin: boolean;
 }
 export function AddUsers() {
-  // const { state } = useLocation();
   const navigate = useNavigate();
 
   const [roleSelectOpen, setRoleSelectOpen] = useState(false);
   const [countrySelectOpen, setCountrySelectOpen] = useState(false);
   const [_error, setError] = useState(false);
-  const [_msg, setMsg] = useState("");
-  // const [responceError, setResponceError] = useState(false);
+  const [_msg, setMsg] = useState('');
 
   const handleChange = (e: any) => {
     const { name, value, _files, type, checked } = e.target;
-    if (type === "file") {
+    if (type === 'file') {
       setFormData({ ...formData, [name]: e.target.files?.[0] || null });
     }
-    if (type === "checkbox") {
+    if (type === 'checkbox') {
       setFormData({ ...formData, [name]: checked });
     } else {
       setFormData({ ...formData, [name]: value });
@@ -86,10 +82,10 @@ export function AddUsers() {
   };
 
   const backbtnHandle = () => {
-    navigate("/app/users");
+    navigate('/app/users');
   };
   const handleSubmit = (e: any) => {
-    console.log("Payload being submitted:", formData);
+    console.log('Payload being submitted:', formData);
     e.preventDefault();
     submitForm();
   };
@@ -97,41 +93,30 @@ export function AddUsers() {
   const [profileErrors, setProfileErrors] = useState<FormErrors>({});
   const [userErrors, setUserErrors] = useState<FormErrors>({});
   const [formData, setFormData] = useState<FormData>({
-    username: "",
-    password: "",
-    email: "",
-    role: "ADMIN",
-    phone: "",
-    alternate_phone: "",
-    address_line: "",
-    street: "",
-    city: "",
-    state: "",
-    postcode: "",
-    country: "",
+    username: '',
+    password: '',
+    email: '',
+    role: 'ADMIN',
+    phone: '',
+    alternate_phone: '',
+    address_line: '',
+    street: '',
+    city: '',
+    state: '',
+    postcode: '',
+    country: '',
     profile_pic: null,
     has_sales_access: false,
     has_marketing_access: false,
     is_organization_admin: false,
   });
 
-  // const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0] || null;
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       setFormData({ ...formData, profile_pic: reader.result as string });
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
-
   const submitForm = () => {
     const Header = {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      org: localStorage.getItem("org"),
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      org: localStorage.getItem('org'),
     };
 
     const data = {
@@ -153,21 +138,21 @@ export function AddUsers() {
       is_organization_admin: formData.is_organization_admin,
     };
 
-    fetchData(`${UsersUrl}/`, "POST", JSON.stringify(data), Header)
+    fetchData(`${UsersUrl}/`, 'POST', JSON.stringify(data), Header)
       .then((res: any) => {
-        console.log("Full response:", res); // ✅ Log full response
+        console.log('Full response:', res); // ✅ Log full response
         if (!res.error) {
           // setResponceError(data.error)
           // navigate('/contacts')profile_errors
 
           resetForm();
-          navigate("/app/users");
+          navigate('/app/users');
         }
         if (res.error) {
           // profile_errors
           // user_errors
           setError(true);
-          setMsg(res?.error || "An error occurred while suabmitting the form.");
+          setMsg(res?.error || 'An error occurred while suabmitting the form.');
           setProfileErrors(res?.errors?.profile_errors || {});
           setUserErrors(res?.errors?.user_errors || {});
           _setErrors({
@@ -177,12 +162,12 @@ export function AddUsers() {
         }
       })
       .catch((err) => {
-        console.error("Error during fetch:", err);
+        console.error('Error during fetch:', err);
 
-        let errorMessage = "An error occurred while submitting the form.";
+        let errorMessage = 'An error occurred while submitting the form.';
 
         try {
-          const jsonPart = err.message.split(" - ")[1];
+          const jsonPart = err.message.split(' - ')[1];
           if (jsonPart) {
             const errorObj = JSON.parse(jsonPart);
 
@@ -205,11 +190,11 @@ export function AddUsers() {
             ];
 
             if (allErrors.length) {
-              errorMessage = allErrors.join("\n");
+              errorMessage = allErrors.join('\n');
             }
           }
         } catch (parseError) {
-          console.error("Failed to parse error message JSON:", parseError);
+          console.error('Failed to parse error message JSON:', parseError);
         }
 
         setError(true);
@@ -218,18 +203,18 @@ export function AddUsers() {
   };
   const resetForm = () => {
     setFormData({
-      username: "",
-      password: "",
-      email: "",
-      role: "ADMIN",
-      phone: "",
-      alternate_phone: "",
-      address_line: "",
-      street: "",
-      city: "",
-      state: "",
-      postcode: "",
-      country: "",
+      username: '',
+      password: '',
+      email: '',
+      role: 'ADMIN',
+      phone: '',
+      alternate_phone: '',
+      address_line: '',
+      street: '',
+      city: '',
+      state: '',
+      postcode: '',
+      country: '',
       profile_pic: null,
       has_sales_access: false,
       has_marketing_access: false,
@@ -241,12 +226,12 @@ export function AddUsers() {
   const onCancel = () => {
     resetForm();
   };
-  const module = "Users";
-  const crntPage = "Add Users";
-  const backBtn = "Back To Users";
+  const module = 'Users';
+  const crntPage = 'Add Users';
+  const backBtn = 'Back To Users';
 
   return (
-    <Box sx={{ mt: "60px" }}>
+    <Box sx={{ mt: '60px' }}>
       <CustomAppBar
         backbtnHandle={backbtnHandle}
         module={module}
@@ -255,16 +240,16 @@ export function AddUsers() {
         onCancel={onCancel}
         onSubmit={handleSubmit}
       />
-      <Box sx={{ mt: "120px" }}>
+      <Box sx={{ mt: '120px' }}>
         <form onSubmit={handleSubmit}>
           {_error && _msg && (
-            <Box sx={{ color: "red", mb: 2, textAlign: "center" }}>{_msg}</Box>
+            <Box sx={{ color: 'red', mb: 2, textAlign: 'center' }}>{_msg}</Box>
           )}
-          <div style={{ padding: "10px" }}>
+          <div style={{ padding: '10px' }}>
             <div className="leadContainer">
-              <Accordion defaultExpanded style={{ width: "98%" }}>
+              <Accordion defaultExpanded style={{ width: '98%' }}>
                 <AccordionSummary
-                  expandIcon={<FiChevronDown style={{ fontSize: "25px" }} />}
+                  expandIcon={<FiChevronDown style={{ fontSize: '25px' }} />}
                 >
                   <Typography className="accordion-header">
                     User Information
@@ -273,7 +258,7 @@ export function AddUsers() {
                 <Divider className="divider" />
                 <AccordionDetails>
                   <Box
-                    sx={{ width: "98%", color: "#1A3353", mb: 1 }}
+                    sx={{ width: '98%', color: '#1A3353', mb: 1 }}
                     component="form"
                     noValidate
                     autoComplete="off"
@@ -286,10 +271,10 @@ export function AddUsers() {
                           name="username"
                           value={formData.username}
                           onChange={handleChange}
-                          style={{ width: "70%" }}
+                          style={{ width: '70%' }}
                           size="small"
                           error={!!userErrors?.username?.[0]}
-                          helperText={userErrors?.username?.[0] || ""}
+                          helperText={userErrors?.username?.[0] || ''}
                         />
                       </div>
 
@@ -301,10 +286,10 @@ export function AddUsers() {
                           name="password"
                           value={formData.password}
                           onChange={handleChange}
-                          style={{ width: "70%" }}
+                          style={{ width: '70%' }}
                           size="small"
                           error={!!userErrors?.password?.[0]}
-                          helperText={userErrors?.password?.[0] || ""}
+                          helperText={userErrors?.password?.[0] || ''}
                         />
                       </div>
                     </div>
@@ -316,7 +301,7 @@ export function AddUsers() {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
-                          style={{ width: "70%" }}
+                          style={{ width: '70%' }}
                           size="small"
                           error={
                             !!profileErrors?.email?.[0] ||
@@ -325,13 +310,13 @@ export function AddUsers() {
                           helperText={
                             profileErrors?.email?.[0] ||
                             userErrors?.email?.[0] ||
-                            ""
+                            ''
                           }
                         />
                       </div>
                       <div className="fieldSubContainer">
                         <div className="fieldTitle">Role</div>
-                        <FormControl sx={{ width: "70%" }}>
+                        <FormControl sx={{ width: '70%' }}>
                           <Select
                             name="role"
                             value={formData.role}
@@ -351,11 +336,11 @@ export function AddUsers() {
                                 )}
                               </div>
                             )}
-                            className={"select"}
+                            className={'select'}
                             onChange={handleChange}
                             error={!!errors?.role?.[0]}
                           >
-                            {["ADMIN", "USER"].map((option) => (
+                            {['ADMIN', 'USER'].map((option) => (
                               <MenuItem key={option} value={option}>
                                 {option}
                               </MenuItem>
@@ -375,7 +360,7 @@ export function AddUsers() {
                             value={formData.phone}
                             onChange={handleChange}
                             required
-                            style={{ width: "70%" }}
+                            style={{ width: '70%' }}
                             size="small"
                             error={
                               !!profileErrors?.phone?.[0] ||
@@ -384,7 +369,7 @@ export function AddUsers() {
                             helperText={
                               profileErrors?.phone?.[0] ||
                               userErrors?.phone?.[0] ||
-                              ""
+                              ''
                             }
                           />
                         </Tooltip>
@@ -396,7 +381,7 @@ export function AddUsers() {
                             name="alternate_phone"
                             value={formData.alternate_phone}
                             onChange={handleChange}
-                            style={{ width: "70%" }}
+                            style={{ width: '70%' }}
                             size="small"
                             error={
                               !!profileErrors?.alternate_phone?.[0] ||
@@ -405,7 +390,7 @@ export function AddUsers() {
                             helperText={
                               profileErrors?.alternate_phone?.[0] ||
                               userErrors?.alternate_phone?.[0] ||
-                              ""
+                              ''
                             }
                           />
                         </Tooltip>
@@ -417,16 +402,16 @@ export function AddUsers() {
             </div>
             {/* Address Details */}
             <div className="leadContainer">
-              <Accordion defaultExpanded style={{ width: "98%" }}>
+              <Accordion defaultExpanded style={{ width: '98%' }}>
                 <AccordionSummary
-                  expandIcon={<FiChevronDown style={{ fontSize: "25px" }} />}
+                  expandIcon={<FiChevronDown style={{ fontSize: '25px' }} />}
                 >
                   <Typography className="accordion-header">Address</Typography>
                 </AccordionSummary>
                 <Divider className="divider" />
                 <AccordionDetails>
                   <Box
-                    sx={{ width: "98%", color: "#1A3353", mb: 1 }}
+                    sx={{ width: '98%', color: '#1A3353', mb: 1 }}
                     component="form"
                     noValidate
                     autoComplete="off"
@@ -439,7 +424,7 @@ export function AddUsers() {
                           name="address_line"
                           value={formData.address_line}
                           onChange={handleChange}
-                          style={{ width: "70%" }}
+                          style={{ width: '70%' }}
                           size="small"
                           error={
                             !!profileErrors?.address_line?.[0] ||
@@ -448,7 +433,7 @@ export function AddUsers() {
                           helperText={
                             profileErrors?.address_line?.[0] ||
                             userErrors?.address_line?.[0] ||
-                            ""
+                            ''
                           }
                         />
                       </div>
@@ -459,7 +444,7 @@ export function AddUsers() {
                           name="street"
                           value={formData.street}
                           onChange={handleChange}
-                          style={{ width: "70%" }}
+                          style={{ width: '70%' }}
                           size="small"
                           error={
                             !!profileErrors?.street?.[0] ||
@@ -468,7 +453,7 @@ export function AddUsers() {
                           helperText={
                             profileErrors?.street?.[0] ||
                             userErrors?.street?.[0] ||
-                            ""
+                            ''
                           }
                         />
                       </div>
@@ -481,7 +466,7 @@ export function AddUsers() {
                           name="city"
                           value={formData.city}
                           onChange={handleChange}
-                          style={{ width: "70%" }}
+                          style={{ width: '70%' }}
                           size="small"
                           error={
                             !!profileErrors?.city?.[0] ||
@@ -490,7 +475,7 @@ export function AddUsers() {
                           helperText={
                             profileErrors?.city?.[0] ||
                             userErrors?.city?.[0] ||
-                            ""
+                            ''
                           }
                         />
                       </div>
@@ -501,7 +486,7 @@ export function AddUsers() {
                           name="state"
                           value={formData.state}
                           onChange={handleChange}
-                          style={{ width: "70%" }}
+                          style={{ width: '70%' }}
                           size="small"
                           error={
                             !!profileErrors?.state?.[0] ||
@@ -510,7 +495,7 @@ export function AddUsers() {
                           helperText={
                             profileErrors?.state?.[0] ||
                             userErrors?.state?.[0] ||
-                            ""
+                            ''
                           }
                         />
                       </div>
@@ -523,7 +508,7 @@ export function AddUsers() {
                           name="postcode"
                           value={formData.postcode}
                           onChange={handleChange}
-                          style={{ width: "70%" }}
+                          style={{ width: '70%' }}
                           size="small"
                           error={
                             !!profileErrors?.postcode?.[0] ||
@@ -532,13 +517,13 @@ export function AddUsers() {
                           helperText={
                             profileErrors?.postcode?.[0] ||
                             userErrors?.postcode?.[0] ||
-                            ""
+                            ''
                           }
                         />
                       </div>
                       <div className="fieldSubContainer">
                         <div className="fieldTitle">Country</div>
-                        <FormControl sx={{ width: "70%" }}>
+                        <FormControl sx={{ width: '70%' }}>
                           <Select
                             name="country"
                             value={formData.country}
@@ -560,7 +545,7 @@ export function AddUsers() {
                                 )}
                               </div>
                             )}
-                            className={"select"}
+                            className={'select'}
                             onChange={handleChange}
                             error={!!profileErrors?.country?.[0]}
                           >
@@ -573,7 +558,7 @@ export function AddUsers() {
                           <FormHelperText>
                             {profileErrors?.country?.[0]
                               ? profileErrors?.country?.[0]
-                              : ""}
+                              : ''}
                           </FormHelperText>
                         </FormControl>
                       </div>
