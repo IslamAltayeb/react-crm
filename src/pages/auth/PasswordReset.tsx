@@ -8,8 +8,8 @@ import {
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 
-export const ActivateUser: React.FC = () => {
-  const [oldPassword, setOldPassword] = useState('');
+export const PasswordReset: React.FC = () => {
+ 
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
@@ -20,12 +20,12 @@ export const ActivateUser: React.FC = () => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      alert('New passwords don\'t match.');
+      alert("New passwords don't match.");
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/activate-user/', {
+      const response = await fetch('http://localhost:8000/api/reset-password-confirm/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +33,6 @@ export const ActivateUser: React.FC = () => {
         body: JSON.stringify({
           uid,
           token,
-          old_password: oldPassword,
           new_password: newPassword,
         }),
       });
@@ -70,15 +69,6 @@ export const ActivateUser: React.FC = () => {
         </Typography>
 
         <TextField
-          label="Current Password"
-          type="password"
-          variant="outlined"
-          value={oldPassword}
-          onChange={(e) => setOldPassword(e.target.value)}
-          required
-        />
-
-        <TextField
           label="New Password"
           type="password"
           variant="outlined"
@@ -104,4 +94,4 @@ export const ActivateUser: React.FC = () => {
   );
 };
 
-export default ActivateUser;
+export default PasswordReset;

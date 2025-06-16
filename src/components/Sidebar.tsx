@@ -10,7 +10,6 @@ import {
   ListItemIcon,
   Popover,
   Toolbar,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import {
@@ -18,13 +17,10 @@ import {
   FaBars,
   FaBriefcase,
   FaBuilding,
-  FaChartLine,
-  FaCog,
   FaDiceD6,
   FaHandshake,
   FaIndustry,
   FaSignOutAlt,
-  FaTachometerAlt,
   FaUserFriends,
   FaUsers,
 } from 'react-icons/fa';
@@ -64,17 +60,12 @@ import { CaseDetails } from '../pages/cases/CaseDetails';
 import logo from '../assets/images/auth/img_logo.png';
 import { StyledListItemButton, StyledListItemText } from '../styles/CssStyled';
 import { useMyContext } from '../context/Context';
-// declare global {
-//     interface Window {
-//         drawer: any;
-//     }
-// }
 
-export default function Sidebar(props: any) {
+export default function Sidebar(_props: any) {
   const navigate = useNavigate();
   const location = useLocation();
   const [screen, setScreen] = useState('contacts');
-  const [userDetail, setUserDetail] = useState('');
+  const [_userDetail, setUserDetail] = useState('');
   const [organizationModal, setOrganizationModal] = useState(false);
   const organizationModalClose = () => {
     setOrganizationModal(false);
@@ -110,7 +101,6 @@ export default function Sidebar(props: any) {
   const userProfile = () => {
     fetchData(`${ProfileUrl}/`, 'GET', null as any, Header1)
       .then((res: any) => {
-        // console.log(res, 'user')
         if (res?.user_obj) {
           setUserDetail(res?.user_obj);
         }
@@ -131,48 +121,46 @@ export default function Sidebar(props: any) {
   ];
   const navIcons = (text: any, screen: any): React.ReactNode => {
     switch (text) {
-      case 'leads':
-        return screen === 'leads' ? <FaUsers fill="#3e79f7" /> : <FaUsers />;
-      case 'contacts':
-        return screen === 'contacts' ? (
-          <FaAddressBook fill="#3e79f7" />
-        ) : (
-          <FaAddressBook />
-        );
-      case 'opportunities':
-        return screen === 'opportunities' ? (
-          <FaHandshake fill="#3e79f7" />
-        ) : (
-          <FaHandshake />
-        );
-      case 'accounts':
-        return screen === 'accounts' ? (
-          <FaBuilding fill="#3e79f7" />
-        ) : (
-          <FaBuilding />
-        );
-      case 'companies':
-        return screen === 'companies' ? (
-          <FaIndustry fill="#3e79f7" />
-        ) : (
-          <FaIndustry />
-        );
-      // case 'analytics':
-      //     return screen === 'analytics' ? <FaChartLine fill='#3e79f7' /> : <FaChartLine />
-      case 'users':
-        return screen === 'users' ? (
-          <FaUserFriends fill="#3e79f7" />
-        ) : (
-          <FaUserFriends />
-        );
-      case 'cases':
-        return screen === 'cases' ? (
-          <FaBriefcase fill="#3e79f7" />
-        ) : (
-          <FaBriefcase />
-        );
-      default:
-        return <FaDiceD6 fill="#3e79f7" />;
+    case 'leads':
+      return screen === 'leads' ? <FaUsers fill="#3e79f7" /> : <FaUsers />;
+    case 'contacts':
+      return screen === 'contacts' ? (
+        <FaAddressBook fill="#3e79f7" />
+      ) : (
+        <FaAddressBook />
+      );
+    case 'opportunities':
+      return screen === 'opportunities' ? (
+        <FaHandshake fill="#3e79f7" />
+      ) : (
+        <FaHandshake />
+      );
+    case 'accounts':
+      return screen === 'accounts' ? (
+        <FaBuilding fill="#3e79f7" />
+      ) : (
+        <FaBuilding />
+      );
+    case 'companies':
+      return screen === 'companies' ? (
+        <FaIndustry fill="#3e79f7" />
+      ) : (
+        <FaIndustry />
+      );
+    case 'users':
+      return screen === 'users' ? (
+        <FaUserFriends fill="#3e79f7" />
+      ) : (
+        <FaUserFriends />
+      );
+    case 'cases':
+      return screen === 'cases' ? (
+        <FaBriefcase fill="#3e79f7" />
+      ) : (
+        <FaBriefcase />
+      );
+    default:
+      return <FaDiceD6 fill="#3e79f7" />;
     }
   };
 
@@ -189,8 +177,7 @@ export default function Sidebar(props: any) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  // console.log(screen, 'sidebar');
-  const context = { drawerWidth: drawerWidth, screen: screen };
+  // const context = { drawerWidth: drawerWidth, screen: screen };
   return (
     <>
       <Box>
@@ -203,8 +190,6 @@ export default function Sidebar(props: any) {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            // boxShadow: 'none',
-            // borderBottom: `0.5px solid #0000001f`
             boxShadow: '1px',
           }}
         >
@@ -255,10 +240,8 @@ export default function Sidebar(props: any) {
               alignItems: 'center',
             }}
           >
-            {/* <IconButton onClick={userProfile} sx={{ mr: 2 }}><FaCog /></IconButton> */}
             <IconButton onClick={handleClick} sx={{ mr: 3 }}>
               <Avatar
-                // src='hj'
                 sx={{ height: '27px', width: '27px' }}
               />
             </IconButton>
@@ -309,11 +292,6 @@ export default function Sidebar(props: any) {
                   </StyledListItemButton>
                 </ListItem>
               </List>
-              {/* <Tooltip title='logout' sx={{ ml: '15px' }}>
-                                <IconButton
-                                    >
-                                </IconButton>
-                            </Tooltip> */}
             </Popover>
           </Box>
         </AppBar>
@@ -323,7 +301,7 @@ export default function Sidebar(props: any) {
           sx={{
             width: drawerWidth,
             flexShrink: 0,
-            [`& .MuiDrawer-paper`]: {
+            ['& .MuiDrawer-paper']: {
               width: drawerWidth,
               boxSizing: 'border-box',
             },
@@ -331,7 +309,7 @@ export default function Sidebar(props: any) {
         >
           <Box>
             <List sx={{ pt: '65px' }}>
-              {navList.map((text, index) => (
+              {navList.map((text, _index) => (
                 <ListItem key={text} disablePadding>
                   <StyledListItemButton
                     sx={{ pt: '6px', pb: '6px' }}
@@ -354,7 +332,6 @@ export default function Sidebar(props: any) {
             </List>
           </Box>
         </Drawer>
-        {/* <Box sx={{ width: drawerWidth === 60 ? '1380px' : '1240px', ml: drawerWidth === 60 ? '60px' : '200px', overflowX: 'hidden' }}> */}
         <Box
           sx={{
             width: 'auto',
@@ -362,14 +339,6 @@ export default function Sidebar(props: any) {
             overflowX: 'hidden',
           }}
         >
-          {/* {location.pathname.split('/')[1] === '' && <Contacts />}
-                {location.pathname.split('/')[1] === 'contacts' && <Contacts />}
-                {location.pathname.split('/')[2] === 'add-leads' && <AddLeads />} */}
-          {/* {location.pathname === 'leads' && <LeadList />}
-                        {screen === 'contacts' && <Contacts />} */}
-          {/* <Routes>
-                            <Route index element={<Navigate to="/contacts" replace />} />
-                            </Routes> */}
           <Routes>
             <Route index element={<Leads />} />
             {/* <Route path='/' element={<Contacts />} /> */}
