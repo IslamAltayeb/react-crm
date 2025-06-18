@@ -5,8 +5,6 @@ import {
   AvatarGroup,
   Box,
   Button,
-  Card,
-  List,
   Stack,
   Tab,
   TablePagination,
@@ -24,7 +22,6 @@ import { Label } from '../../components/Label';
 import { fetchData } from '../../components/FetchData';
 import { Spinner } from '../../components/Spinner';
 import FormateTime from '../../components/FormateTime';
-import { getComparator, stableSort } from '../../components/Sorting';
 import { FaTrashAlt } from 'react-icons/fa';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
@@ -39,15 +36,6 @@ import {
 } from '../../styles/CssStyled';
 import '../../styles/style.css';
 
-// import css from './css';
-// import emotionStyled from '@emotion/styled';
-// import { styled } from '@mui/system';
-// import { css } from '@emotion/react';
-
-// margin-bottom: -15px;
-//   display: flex;
-//   justify-content: space-between;
-//   background-color: #1A3353;
 export const CustomTablePagination = styled(TablePagination)`
   .MuiToolbar-root {
     min-width: 100px;
@@ -118,31 +106,25 @@ export const ToolbarNew = styled(Toolbar)({
     },
   },
 });
-// export const formatDate = (dateString: any) => {
-//   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' }
-//   return new Date(dateString).toLocaleDateString(undefined, options)
-// }
-// interface LeadList {
-//   drawer: number;
-// }
-export default function Leads(props: any) {
+
+export default function Leads(_props: any) {
   // const {drawer}=props
   const navigate = useNavigate();
   const [tab, setTab] = useState('open');
   const [loading, setLoading] = useState(true);
 
-  const [leads, setLeads] = useState([]);
-  const [valued, setValued] = useState(10);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [page, setPage] = useState(0);
-  const [initial, setInitial] = useState(true);
-  const [order] = useState('asc');
-  const [orderBy] = useState('calories');
+  // const [leads, setLeads] = useState([]);
+  // const [valued, setValued] = useState(10);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [page, setPage] = useState(0);
+  // const [initial, setInitial] = useState(true);
+  // const [order] = useState('asc');
+  // const [orderBy] = useState('calories');
 
   const [openLeads, setOpenLeads] = useState([]);
-  const [openLeadsCount, setOpenLeadsCount] = useState(0);
+  const [_openLeadsCount, setOpenLeadsCount] = useState(0);
   const [closedLeads, setClosedLeads] = useState([]);
-  const [openClosedCount, setClosedLeadsCount] = useState(0);
+  const [_openClosedCount, setClosedLeadsCount] = useState(0);
   const [contacts, setContacts] = useState([]);
   const [status, setStatus] = useState([]);
   const [source, setSource] = useState([]);
@@ -153,9 +135,9 @@ export default function Leads(props: any) {
   const [industries, setIndustries] = useState([]);
 
   const [selectOpen, setSelectOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [recordsPerPage, setRecordsPerPage] = useState<number>(10);
-  const [totalPages, setTotalPages] = useState<number>(0);
+  // const [currentPage, setCurrentPage] = useState<number>(1);
+  // const [recordsPerPage, setRecordsPerPage] = useState<number>(10);
+  // const [totalPages, setTotalPages] = useState<number>(0);
 
   const [openCurrentPage, setOpenCurrentPage] = useState<number>(1);
   const [openRecordsPerPage, setOpenRecordsPerPage] = useState<number>(10);
@@ -165,13 +147,13 @@ export default function Leads(props: any) {
   const [closedCurrentPage, setClosedCurrentPage] = useState<number>(1);
   const [closedRecordsPerPage, setClosedRecordsPerPage] = useState<number>(10);
   const [closedTotalPages, setClosedTotalPages] = useState<number>(0);
-  const [closedLoading, setClosedLoading] = useState(true);
+  const [_closedLoading, setClosedLoading] = useState(true);
 
   const [deleteLeadModal, setDeleteLeadModal] = useState(false);
   const [selectedId, setSelectedId] = useState('');
 
   useEffect(() => {
-    if (!!localStorage.getItem('org')) {
+    if (localStorage.getItem('org')) {
       getLeads();
     }
   }, [!!localStorage.getItem('org')]);
@@ -226,16 +208,7 @@ export default function Leads(props: any) {
           setLoading(false);
           setOpenLoading(false);
           setClosedLoading(false);
-          // setLeadsList();
-          // setInitial(false)
         }
-        // else {
-        //     // setContactList(Object.assign([], contacts, [data.contact_obj_list]))
-        //     setContactList(prevContactList => prevContactList.concat(data.contact_obj_list));
-        //     // setContactList(...contactList,data.contact_obj_list)
-        //     setLoading(false)
-        // }
-        // }
       });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -292,14 +265,13 @@ export default function Leads(props: any) {
           users: users || [],
           countries: countries || [],
           industries: industries || [],
-          // status: leads.status, source: leads.source, industry: leads.industries, users: leads.users, tags: leads.tags, contacts: leads.contacts
         },
       });
     }
   };
 
   const selectLeadList = (leadId: any) => {
-    navigate(`/app/leads/lead-details`, {
+    navigate('/app/leads/lead-details', {
       state: {
         leadId,
         detail: true,
@@ -313,7 +285,6 @@ export default function Leads(props: any) {
         industries: industries || [],
       },
     });
-    // navigate('/app/leads/lead-details', { state: { leadId: leadItem.id, edit: storeData, value } })
   };
   const deleteLead = (deleteId: any) => {
     setDeleteLeadModal(true);
@@ -345,42 +316,42 @@ export default function Leads(props: any) {
       .catch(() => {});
   };
 
-  const formatDate = (inputDate: string): string => {
-    const currentDate = new Date();
-    const targetDate = new Date(inputDate);
-    const timeDifference = currentDate.getTime() - targetDate.getTime();
+  // const formatDate = (inputDate: string): string => {
+  //   const currentDate = new Date();
+  //   const targetDate = new Date(inputDate);
+  //   const timeDifference = currentDate.getTime() - targetDate.getTime();
 
-    const secondsDifference = Math.floor(timeDifference / 1000);
-    const minutesDifference = Math.floor(secondsDifference / 60);
-    const hoursDifference = Math.floor(minutesDifference / 60);
-    const daysDifference = Math.floor(hoursDifference / 24);
-    const monthsDifference = Math.floor(daysDifference / 30);
+  //   const secondsDifference = Math.floor(timeDifference / 1000);
+  //   const minutesDifference = Math.floor(secondsDifference / 60);
+  //   const hoursDifference = Math.floor(minutesDifference / 60);
+  //   const daysDifference = Math.floor(hoursDifference / 24);
+  //   const monthsDifference = Math.floor(daysDifference / 30);
 
-    if (monthsDifference >= 12) {
-      const yearsDifference = Math.floor(monthsDifference / 12);
-      return `${yearsDifference} ${
-        yearsDifference === 1 ? 'year' : 'years'
-      } ago`;
-    } else if (monthsDifference >= 1) {
-      return `${monthsDifference} ${
-        monthsDifference === 1 ? 'month' : 'months'
-      } ago`;
-    } else if (daysDifference >= 1) {
-      return `${daysDifference} ${daysDifference === 1 ? 'day' : 'days'} ago`;
-    } else if (hoursDifference >= 1) {
-      return `${hoursDifference} ${
-        hoursDifference === 1 ? 'hour' : 'hours'
-      } ago`;
-    } else if (minutesDifference >= 1) {
-      return `${minutesDifference} ${
-        minutesDifference === 1 ? 'minute' : 'minutes'
-      } ago`;
-    } else {
-      return `${secondsDifference} ${
-        secondsDifference === 1 ? 'second' : 'seconds'
-      } ago`;
-    }
-  };
+  //   if (monthsDifference >= 12) {
+  //     const yearsDifference = Math.floor(monthsDifference / 12);
+  //     return `${yearsDifference} ${
+  //       yearsDifference === 1 ? 'year' : 'years'
+  //     } ago`;
+  //   } else if (monthsDifference >= 1) {
+  //     return `${monthsDifference} ${
+  //       monthsDifference === 1 ? 'month' : 'months'
+  //     } ago`;
+  //   } else if (daysDifference >= 1) {
+  //     return `${daysDifference} ${daysDifference === 1 ? 'day' : 'days'} ago`;
+  //   } else if (hoursDifference >= 1) {
+  //     return `${hoursDifference} ${
+  //       hoursDifference === 1 ? 'hour' : 'hours'
+  //     } ago`;
+  //   } else if (minutesDifference >= 1) {
+  //     return `${minutesDifference} ${
+  //       minutesDifference === 1 ? 'minute' : 'minutes'
+  //     } ago`;
+  //   } else {
+  //     return `${secondsDifference} ${
+  //       secondsDifference === 1 ? 'second' : 'seconds'
+  //     } ago`;
+  //   }
+  // };
   const recordsList = [
     [10, '10 Records per page'],
     [20, '20 Records per page'],
@@ -388,35 +359,35 @@ export default function Leads(props: any) {
     [40, '40 Records per page'],
     [50, '50 Records per page'],
   ];
-  const tag = [
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'leading',
-    'account',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-  ];
+  // const tag = [
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'leading',
+  //   'account',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  // ];
   return (
     <Box
       sx={{
@@ -454,7 +425,7 @@ export default function Leads(props: any) {
             open={selectOpen}
             onOpen={() => setSelectOpen(true)}
             onClose={() => setSelectOpen(false)}
-            className={`custom-select`}
+            className={'custom-select'}
             onClick={() => setSelectOpen(!selectOpen)}
             IconComponent={() => (
               <div
@@ -539,9 +510,6 @@ export default function Leads(props: any) {
       {tab === 'open' ? (
         <Box sx={{ p: '10px', mt: '5px' }}>
           {
-            // leads.open && leads.open
-            //   ? stableSort(leads.open && leads.open, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
-            // stableSort(openLeads, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: any, index: any) => (
             openLeads?.length ? (
               openLeads.map((item: any, index: any) => (
                 <Box key={index}>
@@ -607,33 +575,15 @@ export default function Leads(props: any) {
                                 // total={2}
                                 max={3}
                               >
-                                {/* <Tooltip title={con.user.username}> */}
-                                {/* {tag.map((tagData: any, index: any) => ( */}
                                 {item?.team &&
-                                  item?.team?.map((team: any, index: any) => (
+                                  item?.team?.map((team: any, _: any) => (
                                     <Avatar alt={team} src={team}>
                                       {team}
                                     </Avatar>
                                   ))}
-                                {/* </Tooltip> */}
-                                {/* )} */}
                               </AvatarGroup>
                             </div>
                           </Box>
-                          {/* {
-                          item.assigned_to.map((assignItem: any, index: any) => (
-                            assignItem.user_details.profile_pic
-                              ? <Avatar alt='Remy Sharp'
-                                src={assignItem.user_details.profile_pic}
-                              />
-                              : <Avatar alt='Remy Sharp'
-                                size='small'
-                              // sx={{ backgroundColor: 'deepOrange', color: 'white', textTransform: 'capitalize', mt: '-20px', ml: '10px' }}
-                              >
-                                {assignItem.user_details.first_name.charAt(0)}
-                              </Avatar>
-                          ))
-                        } */}
                         </div>
                         <div className="lead-row2-col2">
                           {/* created on {formatDate(item.created_on)} by   &nbsp;<span> */}
@@ -642,10 +592,6 @@ export default function Leads(props: any) {
                             alt={item?.first_name}
                             src={item?.created_by?.profile_pic}
                             sx={{ ml: 1 }}
-                            // style={{
-                            //   height: '20px',
-                            //   width: '20px'
-                            // }}
                           />{' '}
                           &nbsp;&nbsp;{item?.first_name}&nbsp;{item?.last_name}
                         </div>
@@ -730,7 +676,7 @@ export default function Leads(props: any) {
                                 {/* {con.map((con) => */}
                                 {/* <Tooltip title={con.user.username}> */}
                                 {item?.team &&
-                                  item?.team?.map((team: any, index: any) => (
+                                  item?.team?.map((team: any, _: any) => (
                                     <Avatar alt={team} src={team}>
                                       {team}
                                     </Avatar>
@@ -765,15 +711,6 @@ export default function Leads(props: any) {
           }
         </Box>
       )}
-      {/* {loading &&
-        <Spinner />} */}
-      {/* <DeleteModal
-        onClose={deleteLeadModalClose}
-        open={deleteLeadModal}
-        id={selectedId}
-        modalDialog={modalDialog}
-        modalTitle={modalTitle}
-      /> */}
       <DeleteModal
         onClose={deleteLeadModalClose}
         open={deleteLeadModal}

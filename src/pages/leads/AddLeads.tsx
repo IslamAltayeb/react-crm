@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import {
   TextField,
   FormControl,
-  TextareaAutosize,
   AccordionDetails,
   Accordion,
   AccordionSummary,
@@ -29,27 +28,24 @@ import { LeadUrl } from '../../services/ApiUrls';
 import { fetchData, Header } from '../../components/FetchData';
 import { CustomAppBar } from '../../components/CustomAppBar';
 import {
-  FaArrowDown,
   FaCheckCircle,
-  FaFileUpload,
-  FaPalette,
   FaPercent,
   FaPlus,
   FaTimes,
   FaTimesCircle,
   FaUpload,
 } from 'react-icons/fa';
-import { useForm } from '../../components/UseForm';
 import {
   CustomPopupIcon,
-  CustomSelectField,
   RequiredTextField,
-  StyledSelect,
 } from '../../styles/CssStyled';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
 
+<<<<<<< add-leads
 
+=======
+>>>>>>> sprint-5
 type FormErrors = {
   title?: string[];
   first_name?: string[];
@@ -114,12 +110,18 @@ export function AddLeads() {
   const { state } = useLocation();
   const { quill, quillRef } = useQuill();
   const initialContentRef = useRef(null);
+<<<<<<< add-leads
   const autocompleteRef = useRef<any>(null);
   const [error, setError] = useState(false);
+=======
+
+  // const autocompleteRef = useRef<any>(null);
+  const [_error, setError] = useState(false);
+>>>>>>> sprint-5
   const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
   const [selectedAssignTo, setSelectedAssignTo] = useState<any[]>([]);
   const [selectedTags, setSelectedTags] = useState<any[]>([]);
-  const [selectedCountry, setSelectedCountry] = useState<any[]>([]);
+  // const [selectedCountry, setSelectedCountry] = useState<any[]>([]);
   const [sourceSelectOpen, setSourceSelectOpen] = useState(false);
   const [statusSelectOpen, setStatusSelectOpen] = useState(false);
   const [countrySelectOpen, setCountrySelectOpen] = useState(false);
@@ -194,8 +196,16 @@ export function AddLeads() {
     }
   };
 
+<<<<<<< add-leads
   const handleChange = (e: any) => {    
     const { name, value, files, type, checked, id } = e.target;
+=======
+  const handleChange = (e: any) => {
+    // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    // console.log('e.target',e)
+    const { name, value, _files, type, checked, _id } = e.target;
+    // console.log('auto', val)
+>>>>>>> sprint-5
     if (type === 'file') {
       setFormData({ ...formData, [name]: e.target.files?.[0] || null });
     } else if (type === 'checkbox') {
@@ -582,10 +592,10 @@ export function AddLeads() {
                           >
                             {state?.industries?.length
                               ? state?.industries.map((option: any) => (
-                                  <MenuItem key={option[0]} value={option[1]}>
-                                    {option[1]}
-                                  </MenuItem>
-                                ))
+                                <MenuItem key={option[0]} value={option[1]}>
+                                  {option[1]}
+                                </MenuItem>
+                              ))
                               : ''}
                           </Select>
                           <FormHelperText>
@@ -626,10 +636,10 @@ export function AddLeads() {
                           >
                             {state?.status?.length
                               ? state?.status.map((option: any) => (
-                                  <MenuItem key={option[0]} value={option[1]}>
-                                    {option[1]}
-                                  </MenuItem>
-                                ))
+                                <MenuItem key={option[0]} value={option[1]}>
+                                  {option[1]}
+                                </MenuItem>
+                              ))
                               : ''}
                           </Select>
                           <FormHelperText>
@@ -683,10 +693,10 @@ export function AddLeads() {
                           >
                             {state?.source?.length
                               ? state?.source.map((option: any) => (
-                                  <MenuItem key={option[0]} value={option[0]}>
-                                    {option[1]}
-                                  </MenuItem>
-                                ))
+                                <MenuItem key={option[0]} value={option[0]}>
+                                  {option[1]}
+                                </MenuItem>
+                              ))
                               : ''}
                           </Select>
                           <FormHelperText>
@@ -1090,10 +1100,10 @@ export function AddLeads() {
                           >
                             {state?.countries?.length
                               ? state?.countries.map((option: any) => (
-                                  <MenuItem key={option[0]} value={option[0]}>
-                                    {option[1]}
-                                  </MenuItem>
-                                ))
+                                <MenuItem key={option[0]} value={option[0]}>
+                                  {option[1]}
+                                </MenuItem>
+                              ))
                               : ''}
                           </Select>
                           <FormHelperText>

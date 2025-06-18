@@ -1,47 +1,32 @@
 import {
-  Avatar,
-  AvatarGroup,
   Box,
   Button,
-  Card,
-  List,
   Stack,
-  Tab,
-  TablePagination,
-  Tabs,
-  Toolbar,
   Typography,
-  Link,
   Select,
   MenuItem,
   TableContainer,
   Table,
-  TableSortLabel,
   TableCell,
   TableRow,
-  TableHead,
   Paper,
   TableBody,
   IconButton,
   Container,
 } from '@mui/material';
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Spinner } from '../../components/Spinner';
 import { FiPlus } from '@react-icons/all-files/fi/FiPlus';
 import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft';
 import { FiChevronRight } from '@react-icons/all-files/fi/FiChevronRight';
 import {
-  CustomTab,
   CustomToolbar,
   FabLeft,
   FabRight,
-  StyledTableCell,
-  StyledTableRow,
 } from '../../styles/CssStyled';
 import { useNavigate } from 'react-router-dom';
 import { fetchData } from '../../components/FetchData';
 import { getComparator, stableSort } from '../../components/Sorting';
-import { Label } from '../../components/Label';
 import { FaTrashAlt } from 'react-icons/fa';
 import { CasesUrl } from '../../services/ApiUrls';
 import { DeleteModal } from '../../components/DeleteModal';
@@ -57,12 +42,6 @@ interface HeadCell {
   numeric: boolean;
 }
 const headCells: readonly HeadCell[] = [
-  // {
-  //   id: '',
-  //   numeric: false,
-  //   disablePadding: false,
-  //   label: ''
-  // },
   {
     id: 'name',
     numeric: false,
@@ -101,23 +80,23 @@ const headCells: readonly HeadCell[] = [
   },
 ];
 
-type Item = {
-  id: string;
-};
+// type Item = {
+//   id: string;
+// };
 
-export default function Cases(props: any) {
+export default function Cases(_props: any) {
   const navigate = useNavigate();
-  const [tab, setTab] = useState('Active');
+  // const [tab, setTab] = useState('Active');
   const [loading, setLoading] = useState(true);
 
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [page, setPage] = useState(0);
 
   const [cases, setCases] = useState([]);
-  const [openCases, setOpenCases] = useState([]);
-  const [openCasesCount, setOpenCasesCount] = useState(0);
-  const [closedCases, setClosedCases] = useState([]);
-  const [closedCasesCount, setClosedCasesCount] = useState(0);
+  // const [openCases, setOpenCases] = useState([]);
+  // const [openCasesCount, setOpenCasesCount] = useState(0);
+  // const [closedCases, setClosedCases] = useState([]);
+  // const [closedCasesCount, setClosedCasesCount] = useState(0);
   const [contacts, setContacts] = useState([]);
   const [priority, setPriority] = useState([]);
   const [status, setStatus] = useState([]);
@@ -131,9 +110,9 @@ export default function Cases(props: any) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
 
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, _setSelected] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string[]>([]);
-  const [isSelectedId, setIsSelectedId] = useState<boolean[]>([]);
+  const [isSelectedId, _setIsSelectedId] = useState<boolean[]>([]);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [recordsPerPage, setRecordsPerPage] = useState<number>(10);
@@ -158,16 +137,10 @@ export default function Cases(props: any) {
         null as any,
         Header
       )
-        // fetchData(`${CasesUrl}/`, 'GET', null as any, Header)
         .then((res) => {
-          // console.log(res, 'cases')
           if (!res.error) {
             setCases(res?.cases);
             setTotalPages(Math.ceil(res?.cases_count / recordsPerPage));
-            // setOpenCases(res?.open_leads?.open_leads)
-            // setOpenCasesCount(res?.open_leads?.leads_count)
-            // setClosedCases(res?.close_leads?.close_leads)
-            // setClosedCasesCount(res?.close_leads?.leads_count)
             setStatus(res?.status);
             setPriority(res?.priority);
             setTypeOfCases(res?.type_of_case);
@@ -181,9 +154,9 @@ export default function Cases(props: any) {
     }
   };
 
-  const handleChangeTab = (e: SyntheticEvent, val: any) => {
-    setTab(val);
-  };
+  // const handleChangeTab = (e: SyntheticEvent, val: any) => {
+  //   setTab(val);
+  // };
 
   const onAddCases = () => {
     if (!loading) {
@@ -205,16 +178,16 @@ export default function Cases(props: any) {
     setOrderBy(property);
   };
 
-  type SelectedItem = string[];
+  // type SelectedItem = string[];
 
-  const isSelected = (name: string, selected: SelectedItem): boolean => {
-    return selected.indexOf(name) !== -1;
-  };
+  // const isSelected = (name: string, selected: SelectedItem): boolean => {
+  //   return selected.indexOf(name) !== -1;
+  // };
 
   const caseDetail = (caseId: any) => {
     // console.log(contacts,priority,typeOfCases,account,'list');
 
-    navigate(`/app/cases/case-details`, {
+    navigate('/app/cases/case-details', {
       state: {
         caseId,
         detail: true,
@@ -270,53 +243,27 @@ export default function Cases(props: any) {
     setRecordsPerPage(parseInt(event.target.value));
     setCurrentPage(1);
   };
-  // const handleSelectAllClick = () => {
-  //   if (tab === 'open') {
-  //     if (selected.length === openCases.length) {
-  //       setSelected([]);
-  //       setSelectedId([]);
-  //       setIsSelectedId([]);
-  //     } else {
-  //       const newSelectedIds = openCases.map((cases) => cases?.id);
-  //       setSelected(newSelectedIds);
-  //       setSelectedId(newSelectedIds);
-  //       setIsSelectedId(newSelectedIds.map(() => true));
-  //     }
+
+  // const handleRowSelect = (casesId: string) => {
+  //   const selectedIndex = selected.indexOf(casesId);
+  //   let newSelected: string[] = [...selected];
+  //   let newSelectedIds: string[] = [...selectedId];
+  //   let newIsSelectedId: boolean[] = [...isSelectedId];
+
+  //   if (selectedIndex === -1) {
+  //     newSelected.push(casesId);
+  //     newSelectedIds.push(casesId);
+  //     newIsSelectedId.push(true);
   //   } else {
-  //     if (selected.length === closedCases.length) {
-  //       setSelected([]);
-  //       setSelectedId([]);
-  //       setIsSelectedId([]);
-  //     } else {
-  //       const newSelectedIds = closedCases.map((cases) => cases?.id);
-  //       setSelected(newSelectedIds);
-  //       setSelectedId(newSelectedIds);
-  //       setIsSelectedId(newSelectedIds.map(() => true));
-  //     }
+  //     newSelected.splice(selectedIndex, 1);
+  //     newSelectedIds.splice(selectedIndex, 1);
+  //     newIsSelectedId.splice(selectedIndex, 1);
   //   }
 
+  //   setSelected(newSelected);
+  //   setSelectedId(newSelectedIds);
+  //   setIsSelectedId(newIsSelectedId);
   // };
-
-  const handleRowSelect = (casesId: string) => {
-    const selectedIndex = selected.indexOf(casesId);
-    let newSelected: string[] = [...selected];
-    let newSelectedIds: string[] = [...selectedId];
-    let newIsSelectedId: boolean[] = [...isSelectedId];
-
-    if (selectedIndex === -1) {
-      newSelected.push(casesId);
-      newSelectedIds.push(casesId);
-      newIsSelectedId.push(true);
-    } else {
-      newSelected.splice(selectedIndex, 1);
-      newSelectedIds.splice(selectedIndex, 1);
-      newIsSelectedId.splice(selectedIndex, 1);
-    }
-
-    setSelected(newSelected);
-    setSelectedId(newSelectedIds);
-    setIsSelectedId(newIsSelectedId);
-  };
   const modalDialog = 'Are You Sure You want to delete selected Cases?';
   const modalTitle = 'Delete Cases';
 
@@ -327,52 +274,38 @@ export default function Cases(props: any) {
     [40, '40 Records per page'],
     [50, '50 Records per page'],
   ];
-  const tag = [
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'leading',
-    'account',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-    'account',
-    'leading',
-  ];
+  // const tag = [
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'leading',
+  //   'account',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  //   'account',
+  //   'leading',
+  // ];
   return (
     <Box sx={{ mt: '60px' }}>
       <CustomToolbar sx={{ flexDirection: 'row-reverse' }}>
-        {/* <Tabs defaultValue={tab} onChange={handleChangeTab} sx={{ mt: '26px' }}>
-          <CustomTab value="open" label="Open"
-            sx={{
-              backgroundColor: tab === 'open' ? '#F0F7FF' : '#284871',
-              color: tab === 'open' ? '#3f51b5' : 'white',
-            }} />
-          <CustomTab value="closed" label="Closed"
-            sx={{
-              backgroundColor: tab === 'closed' ? '#F0F7FF' : '#284871',
-              color: tab === 'closed' ? '#3f51b5' : 'white',
-              ml: '5px',
-            }}
-          />
-        </Tabs> */}
 
         <Stack
           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
@@ -383,7 +316,7 @@ export default function Cases(props: any) {
             open={selectOpen}
             onOpen={() => setSelectOpen(true)}
             onClose={() => setSelectOpen(false)}
-            className={`custom-select`}
+            className={'custom-select'}
             onClick={() => setSelectOpen(!selectOpen)}
             IconComponent={() => (
               <div
@@ -459,36 +392,13 @@ export default function Cases(props: any) {
           <Paper
             sx={{ width: 'cal(100%-15px)', mb: 2, p: '0px 15px 15px 15px' }}
           >
-            {/* <Toolbar sx={{ pl: { sm: 2 }, pr: { xs: 1, sm: 1 } }}>
-                            <Tooltip title='Delete'>
-                                <Button
-                                    variant='outlined'
-                                    onClick={() => !!(selectedId?.length !== 0) && handleDelete(selectedId)}
-                                    startIcon={<FaTrashAlt color='red' style={{ width: '12px' }} />}
-                                    size='small'
-                                    color='error'
-                                    sx={{ fontWeight: 'bold', textTransform: 'capitalize', color: 'red', borderColor: 'darkgrey' }}
-                                >
-                                    Delete
-                                </Button>
-                            </Tooltip>
-                            {selected.length > 0 ? (
-                                <Typography sx={{ flex: '1 1 100%', margin: '5px' }} color='inherit' variant='subtitle1' component='div'>
-                                    {selected.length} selected
-                                </Typography>
-                            ) : (
-                                ''
-                            )}
-                        </Toolbar> */}
             <TableContainer>
               <Table>
                 <EnhancedTableHead
                   numSelected={selected.length}
                   order={order}
                   orderBy={orderBy}
-                  // onSelectAllClick={handleSelectAllClick}
                   onRequestSort={handleRequestSort}
-                  // rowCount={tab === 'open' ? openCases?.length : closedCases?.length}
                   rowCount={cases?.length}
                   numSelectedId={selectedId}
                   isSelectedId={isSelectedId}
@@ -499,8 +409,8 @@ export default function Cases(props: any) {
                     stableSort(cases, getComparator(order, orderBy)).map(
                       (item: any, index: any) => {
                         // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: any, index: any) => {
-                        const labelId = `enhanced-table-checkbox-${index}`;
-                        const rowIndex = selectedId.indexOf(item.id);
+                        // const labelId = `enhanced-table-checkbox-${index}`;
+                        // const rowIndex = selectedId.indexOf(item.id);
                         return (
                           <TableRow
                             tabIndex={-1}
@@ -514,20 +424,6 @@ export default function Cases(props: any) {
                               textTransform: 'capitalize',
                             }}
                           >
-                            {/* <TableCell
-                                                                    padding='checkbox'
-                                                                    sx={{ border: 0, color: 'inherit' }}
-                                                                    align='left'
-                                                                >
-                                                                    <Checkbox
-                                                                        checked={isSelectedId[rowIndex] || false}
-                                                                        onChange={() => handleRowSelect(item.id)}
-                                                                        inputProps={{
-                                                                            'aria-labelledby': labelId,
-                                                                        }}
-                                                                        sx={{ border: 0, color: 'inherit' }}
-                                                                    />
-                                                                </TableCell> */}
                             <TableCell
                               className="tableCell-link"
                               onClick={() => caseDetail(item.id)}
@@ -553,12 +449,6 @@ export default function Cases(props: any) {
                                 : '---'}
                             </TableCell>
                             <TableCell className="tableCell">
-                              {/* <IconButton>
-                                                                        <FaEdit
-                                                                            onClick={() => EditItem(item?.id)}
-                                                                            style={{ fill: '#1A3353', cursor: 'pointer', width: '18px' }}
-                                                                        />
-                                                                    </IconButton> */}
                               <IconButton>
                                 <FaTrashAlt
                                   onClick={() => deleteRow(item?.id)}
@@ -590,18 +480,6 @@ export default function Cases(props: any) {
                       </TableCell>
                     </TableRow>
                   )}
-                  {/* {
-                    emptyRows > 0 && (
-                        <TableRow
-                            style={{
-                                height: (dense ? 33 : 53) * emptyRows
-                            }}
-                        >
-                            <TableCell colSpan={6} />
-                        </TableRow>
-                    )
-                  }
- */}
                 </TableBody>
               </Table>
             </TableContainer>

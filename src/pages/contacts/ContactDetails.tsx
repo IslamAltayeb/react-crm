@@ -4,18 +4,11 @@ import {
   Link,
   Button,
   Avatar,
-  Divider,
   TextField,
   Box,
-  AvatarGroup,
 } from '@mui/material';
 import {
-  Fa500Px,
-  FaAccusoft,
-  FaAd,
-  FaAddressCard,
   FaEnvelope,
-  FaRegAddressCard,
   FaStar,
 } from 'react-icons/fa';
 import { CustomAppBar } from '../../components/CustomAppBar';

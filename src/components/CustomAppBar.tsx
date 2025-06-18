@@ -1,22 +1,22 @@
-import React from 'react'
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Breadcrumbs,
   Link,
   Button
-} from '@mui/material'
+} from '@mui/material';
 import { useMyContext } from '../context/Context';
-import { FaCheckCircle, FaEdit, FaTimesCircle } from 'react-icons/fa'
+import { FaCheckCircle, FaEdit, FaTimesCircle } from 'react-icons/fa';
 import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft';
 
 export function CustomAppBar(props: any) {
   const location = useLocation();
   const sharedData = useMyContext();
-  const navigate = useNavigate()
-  const { backbtnHandle, editHandle, module, crntPage, backBtn, onCancel, onSubmit } = props
+  const navigate = useNavigate();
+  const { backbtnHandle, editHandle, module, crntPage, backBtn, onCancel, onSubmit } = props;
 
-  const Module = module.toLowerCase()
+  const Module = module.toLowerCase();
   
   return (
     <AppBar sx={{
@@ -26,7 +26,7 @@ export function CustomAppBar(props: any) {
       left: sharedData.drawerWidth === 200 ? '200px' : '60px',
       width: '-webkit-fill-available'
     }}
-      position='fixed'
+    position='fixed'
     >
       <div className='breadcomContainer'>
         <div role='presentation' style={{ marginLeft: '10px' }}>
@@ -118,5 +118,5 @@ export function CustomAppBar(props: any) {
         }
       </div>
     </AppBar>
-  )
+  );
 }

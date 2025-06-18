@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import OrganizationModal from './OrganizationModal';
 import '../../styles/style.css';
 
-interface Item {
-  org: {
-    id: any;
-    name: any;
-  };
-}
+// interface Item {
+//   org: {
+//     id: any;
+//     name: any;
+//   };
+// }
 
 export default function Organization() {
   const navigate = useNavigate();
@@ -41,21 +41,6 @@ export default function Organization() {
         }}
       >
         <OrganizationModal open={organizationModal} handleClose={handleClose} />
-        {/* <Card>
-                    <List>
-                        {
-                            organization?.length > 0 &&
-                            organization.map((item, i) => (
-                                <ListItem key={i}>
-                                    <StyledListItemButton onClick={() => selectedOrganization(item?.org?.id)}>
-                                        <StyledListItemText>
-                                            {item?.org?.name}
-                                        </StyledListItemText>
-                                    </StyledListItemButton>
-                                </ListItem>
-                            ))}
-                    </List>
-                </Card> */}
       </Container>
     </Box>
   );
