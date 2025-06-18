@@ -21,8 +21,10 @@ import { RequiredTextField } from '../../styles/CssStyled';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
 import '../../styles/style.css';
+import { countries } from '../../components/Countries';
 
 type FormErrors = {
+  username?: string[];
   email?: string[];
   role?: string[];
   phone?: string[];
@@ -39,6 +41,7 @@ type FormErrors = {
   // is_organization_admin?: string[];
 };
 interface FormData {
+  username: string;
   email: string;
   role: string;
   phone: string;
@@ -54,6 +57,12 @@ interface FormData {
   // has_marketing_access: boolean,
   // is_organization_admin: boolean
 }
+
+interface Role {
+  id: number;
+  name: string;
+}
+
 export function EditUser() {
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -65,7 +74,9 @@ export function EditUser() {
   const [userErrors, setUserErrors] = useState<FormErrors>({});
   const [roleSelectOpen, setRoleSelectOpen] = useState(false);
   const [countrySelectOpen, setCountrySelectOpen] = useState(false);
+  const [roles, setRoles] = useState<Role[]>([]);
   const [formData, setFormData] = useState<FormData>({
+    username: '',
     email: '',
     role: 'ADMIN',
     phone: '',
@@ -89,6 +100,36 @@ export function EditUser() {
       setReset(false);
     };
   }, [reset]);
+
+  // Fetch roles
+  const getRoles = async () => {
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    };
+
+    try {
+      const res = await fetch("http://localhost:8000/api/roles/", {
+        method: 'GET',
+        headers: headers,
+      });
+
+      if (!res.ok) {
+        alert('HTTP error! status: ${res.status}');
+      }
+
+      const data = await res.json();
+      setRoles(data);
+    } catch (error) {
+      alert('An error occurred please try again');
+      console.error("Failed to fetch roles:", error);
+    }
+  };
+
+  useEffect(() => {
+    getRoles(); //
+  }, []);
 
   const handleChange = (e: any) => {
     const { name, value, _files, type, checked } = e.target;
@@ -120,11 +161,12 @@ export function EditUser() {
     const Header = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('Token'),
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       org: localStorage.getItem('org'),
     };
     // console.log('Form data:', data);
     const data = {
+      username: formData.username,
       email: formData.email,
       role: formData.role,
       phone: formData.phone,
@@ -156,6 +198,7 @@ export function EditUser() {
   };
   const resetForm = () => {
     setFormData({
+      username: '',
       email: '',
       role: 'ADMIN',
       phone: '',
@@ -213,6 +256,19 @@ export function EditUser() {
                   >
                     <div className="fieldContainer">
                       <div className="fieldSubContainer">
+                        <div className="fieldTitle">Username</div>
+                        <RequiredTextField
+                          required
+                          name="username"
+                          value={formData.username}
+                          onChange={handleChange}
+                          style={{ width: '70%' }}
+                          size="small"
+                          error={!!userErrors?.username?.[0]}
+                          helperText={userErrors?.username?.[0] || ''}
+                        />
+                      </div>
+                      <div className="fieldSubContainer">
                         <div className="fieldTitle">Email</div>
                         <RequiredTextField
                           required
@@ -231,41 +287,6 @@ export function EditUser() {
                             ''
                           }
                         />
-                      </div>
-                      <div className="fieldSubContainer">
-                        <div className="fieldTitle">Role</div>
-                        <FormControl sx={{ width: '70%' }}>
-                          <Select
-                            name="role"
-                            value={formData.role}
-                            open={roleSelectOpen}
-                            onClick={() => setRoleSelectOpen(!roleSelectOpen)}
-                            IconComponent={() => (
-                              <div
-                                onClick={() =>
-                                  setRoleSelectOpen(!roleSelectOpen)
-                                }
-                                className="select-icon-background"
-                              >
-                                {roleSelectOpen ? (
-                                  <FiChevronUp className="select-icon" />
-                                ) : (
-                                  <FiChevronDown className="select-icon" />
-                                )}
-                              </div>
-                            )}
-                            className={'select'}
-                            onChange={handleChange}
-                            error={!!errors?.role?.[0]}
-                          >
-                            {['ADMIN', 'USER'].map((option) => (
-                              <MenuItem key={option} value={option}>
-                                {option}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                          {/* <FormHelperText>{errors?.[0] ? errors[0] : ''}</FormHelperText> */}
-                        </FormControl>
                       </div>
                     </div>
                     <div className="fieldContainer2">
@@ -311,6 +332,43 @@ export function EditUser() {
                             }
                           />
                         </Tooltip>
+                      </div>
+                    </div>
+                    <div className="fieldContainer">
+                      <div className="fieldSubContainer">
+                        <div className="fieldTitle">Role</div>
+                        <FormControl sx={{ width: '35%' }}>
+                          <Select
+                            name="role"
+                            value={formData.role}
+                            open={roleSelectOpen}
+                            onClick={() => setRoleSelectOpen(!roleSelectOpen)}
+                            IconComponent={() => (
+                              <div
+                                onClick={() =>
+                                  setRoleSelectOpen(!roleSelectOpen)
+                                }
+                                className="select-icon-background"
+                              >
+                                {roleSelectOpen ? (
+                                  <FiChevronUp className="select-icon" />
+                                ) : (
+                                  <FiChevronDown className="select-icon" />
+                                )}
+                              </div>
+                            )}
+                            className={'select'}
+                            onChange={handleChange}
+                            error={!!errors?.role?.[0]}
+                          >
+                            {roles.map((role) => (
+                              <MenuItem key={role.id} value={role.name}>
+                                {role.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          {/* <FormHelperText>{errors?.[0] ? errors[0] : ''}</FormHelperText> */}
+                        </FormControl>
                       </div>
                     </div>
                   </Box>
@@ -466,12 +524,11 @@ export function EditUser() {
                             onChange={handleChange}
                             error={!!profileErrors?.country?.[0]}
                           >
-                            {state?.countries?.length &&
-                              state?.countries.map((option: any) => (
-                                <MenuItem key={option[0]} value={option[0]}>
-                                  {option[1]}
-                                </MenuItem>
-                              ))}
+                            {countries.map(([code, name]) => (
+                              <MenuItem key={code} value={code}>
+                                {name}
+                              </MenuItem>
+                            ))}
                           </Select>
                           <FormHelperText>
                             {profileErrors?.country?.[0]
