@@ -89,7 +89,7 @@ export function CustomAppBar(props: any) {
                 {backBtn}
               </Button>
             </div>
-            <div style={{ marginRight: '10px' }}>
+            {/* <div style={{ marginRight: '10px' }}>
               <Button
                 // onClick={backbtnHandle}
                 className='header-button'
@@ -113,7 +113,7 @@ export function CustomAppBar(props: any) {
               >
                 Save
               </Button>
-            </div>
+            </div> */}
           </div>
         }
       </div>
