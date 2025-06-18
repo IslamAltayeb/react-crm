@@ -14,11 +14,15 @@ import { fetchData } from '../../components/FetchData';
 
 type response = {
   user_details: {
+    username: string;
     email: string;
     is_active: boolean;
     profile_pic: string;
   };
-  role: string;
+  role_details: {
+    name: string;
+    description: string;
+  };
   address: {
     address_line: string;
     street: string;
@@ -61,7 +65,7 @@ export default function UserDetails() {
     const Header = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('Token'),
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       org: localStorage.getItem('org'),
     };
     fetchData(`${UserUrl}/${id}/`, 'GET', null as any, Header).then((res) => {
@@ -101,8 +105,9 @@ export default function UserDetails() {
     navigate('/app/users/edit-user', {
       state: {
         value: {
+          username: userDetails?.user_details?.username,
           email: userDetails?.user_details?.email,
-          role: userDetails?.role,
+          role: userDetails?.role_details?.name,
           phone: userDetails?.phone,
           alternate_phone: userDetails?.alternate_phone,
           address_line: userDetails?.address?.address_line,
@@ -256,7 +261,7 @@ export default function UserDetails() {
                       marginTop: '5%',
                     }}
                   >
-                    {userDetails?.role || '---'}
+                    {userDetails?.role_details?.name || '---'}
                   </div>
                 </div>
                 <div style={{ width: '32%' }}>

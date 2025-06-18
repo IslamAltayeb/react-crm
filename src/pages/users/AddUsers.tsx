@@ -102,13 +102,13 @@ export function AddUsers() {
     }
   };
 
-    useEffect(() => {
-      getRoles(); //
-    }, []);
+  useEffect(() => {
+    getRoles(); //
+  }, []);
 
-    useEffect(() => {
-      console.log("Loaded roles:", roles);
-    }, [roles]);
+  useEffect(() => {
+    console.log("Loaded roles:", roles);
+  }, [roles]);
 
   const handleChange = (e: any) => {
     const { name, value, _files, type, checked } = e.target;

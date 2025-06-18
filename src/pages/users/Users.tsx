@@ -359,6 +359,7 @@ export default function Users() {
         navigate('/app/users/edit-user', {
           state: {
             value: {
+              username: data?.user_details?.username,
               email: data?.user_details?.email,
               role: data?.role_details?.name,
               phone: data?.phone,
