@@ -177,6 +177,7 @@ export default function Sidebar(_props: any) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+  const permissions = JSON.parse(localStorage.getItem("permissions") || "[]");
   // const context = { drawerWidth: drawerWidth, screen: screen };
   return (
     <>
@@ -309,7 +310,14 @@ export default function Sidebar(_props: any) {
         >
           <Box>
             <List sx={{ pt: '65px' }}>
-              {navList.map((text, _index) => (
+              {navList
+              .filter((text) => {
+                if (text === 'users') {
+                  return permissions.includes("View all users"); // permissions is now an array of strings
+                }
+                return true;
+              })
+              .map((text, _index) => (
                 <ListItem key={text} disablePadding>
                   <StyledListItemButton
                     sx={{ pt: '6px', pb: '6px' }}

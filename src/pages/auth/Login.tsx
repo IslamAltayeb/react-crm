@@ -39,6 +39,32 @@ export default function Login() {
       });
   }, []);
 
+  /*const getuserRole = async () => {
+      const headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      };
+  
+      try {
+        const res = await fetch("http://localhost:8000/api/auth/login/?email="+email, {
+          method: 'GET',
+          headers: headers,
+        });
+  
+        if (!res.ok) {
+          alert('HTTP error! status: ${res.status}');
+        }
+  
+        const userData = await res.json();
+        const permissionNames = userData.role.permissions.map((p: any) => p.name);
+        localStorage.setItem('permissions', JSON.stringify(permissionNames));
+      } catch (error) {
+        alert('An error occurred please try again');
+        console.error("Failed to fetch user details:", error);
+      }
+    };*/
+
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       const apiToken = { token: tokenResponse.access_token };
@@ -51,6 +77,7 @@ export default function Login() {
       fetchData(`${AuthUrl}/`, 'POST', JSON.stringify(apiToken), head)
         .then((res: any) => {
           localStorage.setItem('accessToken', `Bearer ${res.access_token}`);
+          //getuserRole(); //get user details to store user permissions
           navigate('/organization');
         })
         .catch((error: any) => {
