@@ -42,10 +42,6 @@ import {
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
 
-<<<<<<< add-leads
-
-=======
->>>>>>> sprint-5
 type FormErrors = {
   title?: string[];
   first_name?: string[];
@@ -110,14 +106,14 @@ export function AddLeads() {
   const { state } = useLocation();
   const { quill, quillRef } = useQuill();
   const initialContentRef = useRef(null);
-<<<<<<< add-leads
+
   const autocompleteRef = useRef<any>(null);
   const [error, setError] = useState(false);
-=======
+
 
   // const autocompleteRef = useRef<any>(null);
-  const [_error, setError] = useState(false);
->>>>>>> sprint-5
+  //const [_error, setError] = useState(false);
+
   const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
   const [selectedAssignTo, setSelectedAssignTo] = useState<any[]>([]);
   const [selectedTags, setSelectedTags] = useState<any[]>([]);
@@ -196,16 +192,16 @@ export function AddLeads() {
     }
   };
 
-<<<<<<< add-leads
+
   const handleChange = (e: any) => {    
     const { name, value, files, type, checked, id } = e.target;
-=======
-  const handleChange = (e: any) => {
+
+  /*const handleChange = (e: any) => {
     // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     // console.log('e.target',e)
     const { name, value, _files, type, checked, _id } = e.target;
-    // console.log('auto', val)
->>>>>>> sprint-5
+    // console.log('auto', val)*/
+
     if (type === 'file') {
       setFormData({ ...formData, [name]: e.target.files?.[0] || null });
     } else if (type === 'checkbox') {
