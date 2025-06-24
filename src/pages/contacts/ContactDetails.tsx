@@ -75,7 +75,7 @@ export default function ContactDetails() {
     const Header = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('Token'),
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       org: localStorage.getItem('org'),
     };
     fetchData(`${ContactUrl}/${id}/`, 'GET', null as any, Header).then(
@@ -538,7 +538,7 @@ export default function ContactDetails() {
                   }}
                 >
                   {/* Add Social #1E90FF */}
-                  <Button
+                  {/*<Button
                     type="submit"
                     variant="text"
                     size="small"
@@ -550,7 +550,7 @@ export default function ContactDetails() {
                     }}
                   >
                     Add Socials
-                  </Button>
+                  </Button>*/}
                 </div>
               </div>
               <div style={{ fontSize: '16px', marginTop: '15px' }}>
