@@ -28,6 +28,8 @@ export function fetchData(
     options.body = typeof data === 'string' ? data : JSON.stringify(data);
   }
 
+  console.log(`Fetching URL: ${SERVER}${url} with method: ${method}`, options);
+
   return fetch(`${SERVER}${url}`, options).then(async (response) => {
     // Optional: check for HTTP error codes before parsing json
     if (!response.ok) {

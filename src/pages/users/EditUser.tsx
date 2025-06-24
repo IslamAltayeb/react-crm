@@ -13,6 +13,7 @@ import {
   Select,
   FormControl,
   FormHelperText,
+  Avatar,
 } from '@mui/material';
 import { UserUrl } from '../../services/ApiUrls';
 import { fetchData } from '../../components/FetchData';
@@ -21,6 +22,7 @@ import { RequiredTextField } from '../../styles/CssStyled';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
 import '../../styles/style.css';
+import { json } from 'stream/consumers';
 
 type FormErrors = {
   email?: string[];
@@ -33,11 +35,8 @@ type FormErrors = {
   state?: string[];
   postcode?: string[];
   country?: string[];
-  // profile_pic?: string[];
-  // has_sales_access?: string[];
-  // has_marketing_access?: string[];
-  // is_organization_admin?: string[];
 };
+
 interface FormData {
   email: string;
   role: string;
@@ -49,11 +48,8 @@ interface FormData {
   state: string;
   postcode: string;
   country: string;
-  // profile_pic: string | null,
-  // has_sales_access: boolean,
-  // has_marketing_access: boolean,
-  // is_organization_admin: boolean
 }
+
 export function EditUser() {
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -77,7 +73,20 @@ export function EditUser() {
     postcode: '',
     country: '',
   });
+
   useEffect(() => {
+    // state:  {
+    //   "value": {
+    //     "email": "kmoradi.ai@gmail.com",
+    //     "role": "ADMIN",
+    //     "phone": "+31642922857",
+    //     "profile_pic": null,
+    //     "has_sales_access": false,
+    //     "has_marketing_access": false
+    //   },
+    //   "id": "f81bc953-004a-4d98-bb44-68ce6da8b069"
+    // }
+    console.log("state: ", JSON.stringify(state, null, 2));
     setFormData(state?.value);
   }, [state?.id]);
 
@@ -111,6 +120,7 @@ export function EditUser() {
       });
     }
   };
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     submitForm();
@@ -120,10 +130,10 @@ export function EditUser() {
     const Header = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('Token'),
+      Authorization: localStorage.getItem('accessToken'),
       org: localStorage.getItem('org'),
     };
-    // console.log('Form data:', data);
+
     const data = {
       email: formData.email,
       role: formData.role,
@@ -139,7 +149,6 @@ export function EditUser() {
 
     fetchData(`${UserUrl}/${state?.id}/`, 'PUT', JSON.stringify(data), Header)
       .then((res: any) => {
-        // console.log('editsubmit:', res);
         if (!res.error) {
           resetForm();
           navigate('/app/users');
@@ -152,8 +161,9 @@ export function EditUser() {
           setUserErrors(res?.errors?.user_errors || res?.user_errors[0]);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
+
   const resetForm = () => {
     setFormData({
       email: '',
@@ -170,16 +180,14 @@ export function EditUser() {
     setProfileErrors({});
     setUserErrors({});
   };
+
   const onCancel = () => {
     setReset(true);
   };
+
   const module = 'Users';
   const crntPage = 'Edit User';
   const backBtn = state?.edit ? 'Back To Users' : 'Back To UserDetails';
-
-  // const inputStyles = {
-  //   display: 'none',
-  // };
 
   return (
     <Box sx={{ mt: '60px' }}>
@@ -264,7 +272,6 @@ export function EditUser() {
                               </MenuItem>
                             ))}
                           </Select>
-                          {/* <FormHelperText>{errors?.[0] ? errors[0] : ''}</FormHelperText> */}
                         </FormControl>
                       </div>
                     </div>
@@ -294,7 +301,7 @@ export function EditUser() {
                       <div className="fieldSubContainer">
                         <div className="fieldTitle">Alternate Phone</div>
                         <Tooltip title="Number must start with + followed by country code (e.g. +1, +44, +91)">
-                          <TextField                          
+                          <TextField
                             name="alternate_phone"
                             value={formData.alternate_phone}
                             onChange={handleChange}
@@ -317,6 +324,7 @@ export function EditUser() {
                 </AccordionDetails>
               </Accordion>
             </div>
+
             {/* Address Details */}
             <div className="leadContainer">
               <Accordion defaultExpanded style={{ width: '98%' }}>
@@ -485,6 +493,33 @@ export function EditUser() {
                 </AccordionDetails>
               </Accordion>
             </div>
+
+            {/* Avatar */}
+            <div className="leadContainer">
+              <Accordion defaultExpanded style={{ width: '98%' }}>
+                <AccordionSummary
+                  expandIcon={<FiChevronDown style={{ fontSize: '25px' }} />}
+                >
+                  <Typography className="accordion-header">Avatar</Typography>
+                </AccordionSummary>
+                <Divider className="divider" />
+                <AccordionDetails>
+                  <Box
+                    sx={{ width: '98%', color: '#1A3353', mb: 1 }}
+                    component="form"
+                    noValidate
+                    autoComplete="off"
+                  >
+                    <Typography variant="h6">Profile pic</Typography>
+                    <Avatar alt={'sdf'}>
+                      {/* {userDetails?.user_details?.profile_pic} */}
+                    </Avatar>
+
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+
           </div>
         </form>
       </Box>

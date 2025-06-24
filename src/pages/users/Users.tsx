@@ -44,24 +44,6 @@ interface HeadCell {
 }
 
 const headCells: readonly HeadCell[] = [
-  // {
-  //     id: 'user_name',
-  //     numeric: false,
-  //     disablePadding: false,
-  //     label: 'User Name'
-  // },
-  // {
-  //     id: 'first_name',
-  //     numeric: false,
-  //     disablePadding: false,
-  //     label: 'First Name'
-  // },
-  // {
-  //     id: 'last_name',
-  //     numeric: true,
-  //     disablePadding: false,
-  //     label: 'Last Name'
-  // },
   {
     id: 'email',
     numeric: true,
@@ -80,12 +62,6 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'Role',
   },
-  // {
-  //     id: 'user_type',
-  //     numeric: true,
-  //     disablePadding: false,
-  //     label: 'User Type'
-  // },
   {
     id: 'actions',
     numeric: true,
@@ -96,36 +72,19 @@ const headCells: readonly HeadCell[] = [
 
 type Item = {
   id: string;
-  // Other properties
 };
+
 export default function Users() {
   const navigate = useNavigate();
   const [tab, setTab] = useState('active');
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('Website');
-  // const [selected, setSelected] = useState([])
-  // const [selected, setSelected] = useState<string[]>([]);
-
-  // const [selectedId, setSelectedId] = useState([])
-  // const [isSelectedId, setIsSelectedId] = useState([])
-  // const [deleteItems, setDeleteItems] = useState([]);
-  // const [_page, _setPage] = useState(0);
-  // const [values, setValues] = useState(10);
-  // const [dense] = useState(false);
-  // const [_rowsPerPage, _setRowsPerPage] = useState(10);
-  // const [usersData, setUsersData] = useState([]);
-  // const [deleteItemId, setDeleteItemId] = useState('');
-  // const [loader, setLoader] = useState(true);
-  // const [isDelete, setIsDelete] = useState(false);
   const [activeUsers, setActiveUsers] = useState<Item[]>([]);
-  // const [activeUsersCount, setActiveUsersCount] = useState(0);
   const [_activeUsersOffset, setActiveUsersOffset] = useState(0);
   const [inactiveUsers, setInactiveUsers] = useState([]);
-  // const [InactiveUsersCount, setInactiveUsersCount] = useState(0);
   const [_inactiveUsersOffset, setInactiveUsersOffset] = useState(0);
   const [deleteRowModal, setDeleteRowModal] = useState(false);
-  // const [selectedId, setSelectedId] = useState('')
 
   const [selectOpen, setSelectOpen] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
@@ -138,8 +97,7 @@ export default function Users() {
   const [_activeLoading, setActiveLoading] = useState(true);
 
   const [inactiveCurrentPage, setInactiveCurrentPage] = useState<number>(1);
-  const [inactiveRecordsPerPage, setInactiveRecordsPerPage] =
-    useState<number>(10);
+  const [inactiveRecordsPerPage, setInactiveRecordsPerPage] = useState<number>(10);
   const [inactiveTotalPages, setInactiveTotalPages] = useState<number>(0);
   const [_inactiveLoading, setInactiveLoading] = useState(true);
 
@@ -155,10 +113,6 @@ export default function Users() {
   const handleChangeTab = (e: SyntheticEvent, val: any) => {
     setTab(val);
   };
-
-  // const handleChangePage = (event: unknown, newPage: number) => {
-  //   setPage(newPage);
-  // };
 
   const getUsers = async () => {
     const Header = {
@@ -221,9 +175,10 @@ export default function Users() {
     }
   };
 
-  const userDetail = (userId: any) => {
+  const userDetail = (userId: string) => {
     navigate('/app/users/user-details', { state: { userId, detail: true } });
   };
+
   const handleRecordsPerPage = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -237,6 +192,7 @@ export default function Users() {
       setInactiveCurrentPage(1);
     }
   };
+
   const handlePreviousPage = () => {
     if (tab == 'active') {
       setActiveLoading(true);
@@ -260,74 +216,12 @@ export default function Users() {
       );
     }
   };
+
   const handleRequestSort = (event: any, property: any) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-
-  // const handleSelectAllClick = (event: any) => {
-  // if (event.target.checked) {
-  //     const newSelected = rows.map((n) => n.name);
-  //     setSelected(newSelected);
-  //     return;
-  //   }
-  //   setSelected([]);
-  // }
-  // const selected: string[] = [...];1
-  // const handleClick = (event: React.MouseEvent<unknown>, name: any) => {
-  //   // const selectedIndex = selected.indexOf(name as string);
-  //   // let newSelected: string[] = [];
-  //   // if (selectedIndex === -1) {
-  //   //     newSelected = newSelected.concat(selected, name);
-  //   // } else if (selectedIndex === 0) {
-  //   //     newSelected = newSelected.concat(selected.slice(1));
-  //   // } else if (selectedIndex === selected.length - 1) {
-  //   //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   // } else if (selectedIndex > 0) {
-  //   //     newSelected = newSelected.concat(
-  //   //         selected.slice(0, selectedIndex),
-  //   //         selected.slice(selectedIndex + 1),
-  //   //     );
-  //   // }
-  //   // setSelected(newSelected);
-  // };
-
-  // const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
-  // type SelectedItem = string[];
-  // const isSelected = (name: string, selected: SelectedItem): boolean => {
-  //   return selected.indexOf(name) !== -1;
-  // };
-
-  // const deleteItemBox = (deleteId: any) => {
-  //   setDeleteItemId(deleteId);
-  //   setIsDelete(!isDelete);
-  // };
-
-  // const onclose = () => {
-  //   setIsDelete(!isDelete);
-  // };
-
-  // const onDelete = (id: any) => {
-  //   const Header = {
-  //     Accept: 'application/json',
-  //     'Content-Type': 'application/json',
-  //     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-  //     org: localStorage.getItem('org'),
-  //   };
-  //   fetchData(`${UsersUrl}/${id}/`, 'delete', null as any, Header)
-  //     .then((data) => {
-  //       if (!data.error) {
-  //         getUsers();
-  //         setIsDelete(false);
-  //       }
-  //     })
-  //     .catch(() => {});
-  // };
-
-  // const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 7) : 0;
-  // (tab === 0 ? accountData.accountLength : accountData.closed_accounts_length)
 
   const onAddUser = () => {
     if (!loading) {
@@ -340,6 +234,7 @@ export default function Users() {
     //   }
     // })
   };
+
   const deleteRow = (id: any) => {
     setSelectedId(id);
     setDeleteRowModal(!deleteRowModal);
@@ -385,25 +280,12 @@ export default function Users() {
   const EditItem = (userId: any) => {
     getUserDetail(userId);
   };
-  // const [selectedRows, setSelectedRows] = useState([]);
-  // const [selectedRowId, setSelectedRowId] = useState(null);
 
-  // const handleCheckboxClick = (rowId) => {
-  //     const isSelected = selectedRows.includes(rowId);
-  //     let updatedSelectedRows;
-
-  //     if (isSelected) {
-  //       updatedSelectedRows = selectedRows.filter((id) => id !== rowId);
-  //     } else {
-  //       updatedSelectedRows = [...selectedRows, rowId];
-  //     }
-
-  //     setSelectedRows(updatedSelectedRows);
-  //   };
   const deleteRowModalClose = () => {
     setDeleteRowModal(false);
     setSelectedId([]);
   };
+
   const DeleteItem = () => {
     const Header = {
       Accept: 'application/json',
@@ -435,29 +317,6 @@ export default function Users() {
     }
   };
 
-  // const handleRowSelect = (userId: string) => {
-  //   const selectedIndex = selected.indexOf(userId);
-  //   let newSelected: string[] = [...selected];
-  //   let newSelectedIds: string[] = [...selectedId];
-  //   let newIsSelectedId: boolean[] = [...isSelectedId];
-
-  //   if (selectedIndex === -1) {
-  //     newSelected.push(userId);
-  //     newSelectedIds.push(userId);
-  //     newIsSelectedId.push(true);
-  //   } else {
-  //     newSelected.splice(selectedIndex, 1);
-  //     newSelectedIds.splice(selectedIndex, 1);
-  //     newIsSelectedId.splice(selectedIndex, 1);
-  //   }
-
-  //   setSelected(newSelected);
-  //   setSelectedId(newSelectedIds);
-  //   setIsSelectedId(newIsSelectedId);
-  // };
-  // const handleDelete = (id: any) => {
-  //   console.log(id, 's;ected');
-  // };
   const modalDialog = 'Are You Sure You want to delete this User?';
   const modalTitle = 'Delete User';
 
@@ -468,7 +327,6 @@ export default function Users() {
     [40, '40 Records per page'],
     [50, '50 Records per page'],
   ];
-  // console.log(!!(selectedId?.length === 0), 'asd');
 
   return (
     <Box sx={{ mt: '60px' }}>
@@ -613,10 +471,6 @@ export default function Users() {
                         activeUsers,
                         getComparator(order, orderBy)
                       ).map((item: any, index: any) => {
-                        // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: any, index: any) => {
-                        // const isItemSelected = isSelected(item?.user_details?.email,item)
-                        // const labelId = `enhanced-table-checkbox-${index}`;
-                        // const rowIndex = selectedId.indexOf(item.id);
                         return (
                           <TableRow
                             tabIndex={-1}
@@ -630,29 +484,6 @@ export default function Users() {
                               textTransform: 'capitalize',
                             }}
                           >
-                            {/* <TableCell
-                                                                    padding='checkbox'
-                                                                    sx={{ border: 0, color: 'inherit' }}
-                                                                    align='left'
-                                                                >
-                                                                    <Checkbox
-                                                                        checked={isSelectedId[rowIndex] || false}
-                                                                        onChange={() => handleRowSelect(item.id)}
-                                                                        inputProps={{
-                                                                            'aria-labelledby': labelId,
-                                                                        }}
-                                                                        sx={{border: 0,color: 'inherit'}}
-                                                                    />
-                                                                </TableCell> */}
-                            {/* <TableCell
-                                                            align='left'
-                                                            sx={{ border: 0, color: 'rgb(26, 51, 83)' }}
-                                                        >
-                                                            {item.user_details.first_name ? item.user_details.first_name : '--'}
-                                                        </TableCell>
-                                                        <TableCell align='left' sx={{ border: 0, color: 'rgb(26, 51, 83)' }}>
-                                                            {item.user_details.last_name ? item.user_details.last_name : '---'}
-                                                        </TableCell> */}
                             <TableCell
                               className="tableCell-link"
                               onClick={() => userDetail(item.id)}
@@ -669,12 +500,6 @@ export default function Users() {
                             <TableCell className="tableCell">
                               {item?.role ? item.role : '---'}
                             </TableCell>
-                            {/* <TableCell
-                                                            align='left'
-                                                            sx={{ border: 0, color: 'rgb(26, 51, 83)' }}
-                                                        >
-                                                            {item.user_type ? item.user_type : '---'}
-                                                        </TableCell> */}
                             <TableCell className="tableCell">
                               <IconButton onClick={() => EditItem(item.id)}>
                                 <FaEdit
@@ -731,29 +556,6 @@ export default function Users() {
                               textTransform: 'capitalize',
                             }}
                           >
-                            {/* <TableCell
-                                                                    padding='checkbox'
-                                                                    sx={{ border: 0, color: 'inherit' }}
-                                                                    align='left'
-                                                                >
-                                                                    <Checkbox
-                                                                        checked={isSelectedId[rowIndex] || false}
-                                                                        onChange={() => handleRowSelect(item.id)}
-                                                                        inputProps={{
-                                                                            'aria-labelledby': labelId,
-                                                                        }}
-                                                                        sx={{border: 0,color: 'inherit'}}
-                                                                    />
-                                                                </TableCell> */}
-                            {/* <TableCell
-                                                            align='left'
-                                                            sx={{ border: 0, color: 'rgb(26, 51, 83)' }}
-                                                        >
-                                                            {item.user_details.first_name ? item.user_details.first_name : '--'}
-                                                        </TableCell>
-                                                        <TableCell align='left' sx={{ border: 0, color: 'rgb(26, 51, 83)' }}>
-                                                            {item.user_details.last_name ? item.user_details.last_name : '---'}
-                                                        </TableCell> */}
                             <TableCell
                               className="tableCell-link"
                               onClick={() => userDetail(item.id)}
@@ -770,12 +572,6 @@ export default function Users() {
                             <TableCell className="tableCell">
                               {item?.role ? item.role : '---'}
                             </TableCell>
-                            {/* <TableCell
-                                                            align='left'
-                                                            sx={{ border: 0, color: 'rgb(26, 51, 83)' }}
-                                                        >
-                                                            {item.user_type ? item.user_type : '---'}
-                                                        </TableCell> */}
                             <TableCell className="tableCell">
                               <IconButton>
                                 <FaEdit
@@ -786,10 +582,6 @@ export default function Users() {
                                     width: '18px',
                                   }}
                                 />
-                                {/* <FaAd
-                                                                    onClick={() => EditItemBox(item)}
-                                                                    style={{ fill: '#1A3353', cursor: 'pointer' }}
-                                                                /> */}
                               </IconButton>
                               <IconButton>
                                 <FaTrashAlt
@@ -800,7 +592,6 @@ export default function Users() {
                                     width: '15px',
                                   }}
                                 />
-                                {/* <FaAd onClick={() => deleteItemBox(item)} style={{ fill: '#1A3353', cursor: 'pointer' }} /> */}
                               </IconButton>
                             </TableCell>
                           </TableRow>

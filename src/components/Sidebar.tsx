@@ -177,7 +177,7 @@ export default function Sidebar(_props: any) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  // const context = { drawerWidth: drawerWidth, screen: screen };
+
   return (
     <>
       <Box>
@@ -334,14 +334,13 @@ export default function Sidebar(_props: any) {
         </Drawer>
         <Box
           sx={{
-            width: 'auto',
+            width: '150%',
             ml: drawerWidth === 60 ? '60px' : '200px',
             overflowX: 'hidden',
           }}
         >
           <Routes>
             <Route index element={<Leads />} />
-            {/* <Route path='/' element={<Contacts />} /> */}
             <Route path="/app/leads" element={<Leads />} />
             <Route path="leads/add-leads" element={<AddLeads />} />
             <Route path="leads/edit-lead" element={<EditLead />} />
