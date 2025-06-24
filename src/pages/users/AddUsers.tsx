@@ -82,6 +82,7 @@ export function AddUsers() {
       Accept: 'application/json',
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      org: localStorage.getItem('org') || "",
     };
 
     try {
