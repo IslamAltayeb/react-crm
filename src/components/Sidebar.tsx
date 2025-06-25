@@ -321,6 +321,12 @@ export default function Sidebar(_props: any) {
                     permissions.includes("View own companies") 
                   ); 
                 }
+                else if (text === 'opportunities') {
+                  return (
+                    permissions.includes("View all opportunities") ||
+                    permissions.includes("View own opportunities")
+                  );
+                }
                 return true;
               })
               .map((text, _index) => (
