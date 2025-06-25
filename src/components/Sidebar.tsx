@@ -313,7 +313,13 @@ export default function Sidebar(_props: any) {
               {navList
               .filter((text) => {
                 if (text === 'users') {
-                  return permissions.includes("View all users"); // permissions is now an array of strings
+                  return permissions.includes("View all users"); 
+                }
+                else if (text === 'companies') {
+                  return (
+                    permissions.includes("View all companies") ||
+                    permissions.includes("View own companies") 
+                  ); 
                 }
                 return true;
               })
