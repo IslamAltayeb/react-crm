@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect , useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   TextField,
@@ -61,6 +61,12 @@ interface FormData {
   has_marketing_access: boolean;
   is_organization_admin: boolean;
 }
+
+interface Role {
+  id: number;
+  name: string;
+}
+
 export function AddUsers() {
   const navigate = useNavigate();
 
@@ -68,6 +74,42 @@ export function AddUsers() {
   const [countrySelectOpen, setCountrySelectOpen] = useState(false);
   const [_error, setError] = useState(false);
   const [_msg, setMsg] = useState('');
+  const [roles, setRoles] = useState<Role[]>([]);
+
+  // Fetch roles
+  const getRoles = async () => {
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      org: localStorage.getItem('org') || "",
+    };
+
+    try {
+      const res = await fetch("http://localhost:8000/api/roles/", {
+        method: 'GET',
+        headers: headers,
+      });
+
+      if (!res.ok) {
+        alert('HTTP error! status: ${res.status}');
+      }
+
+      const data = await res.json();
+      setRoles(data);
+    } catch (error) {
+      alert('An error occurred please try again');
+      console.error("Failed to fetch roles:", error);
+    }
+  };
+
+  useEffect(() => {
+    getRoles(); //
+  }, []);
+
+  useEffect(() => {
+    console.log("Loaded roles:", roles);
+  }, [roles]);
 
   const handleChange = (e: any) => {
     const { name, value, _files, type, checked } = e.target;
@@ -340,10 +382,10 @@ export function AddUsers() {
                             onChange={handleChange}
                             error={!!errors?.role?.[0]}
                           >
-                            {['ADMIN', 'USER'].map((option) => (
-                              <MenuItem key={option} value={option}>
-                                {option}
-                              </MenuItem>
+                            {roles.map((role) => (
+                                <MenuItem key={role.id} value={role.name}>
+                                  {role.name}
+                                </MenuItem>
                             ))}
                           </Select>
                           {/* <FormHelperText>{errors?.[0] ? errors[0] : ''}</FormHelperText> */}

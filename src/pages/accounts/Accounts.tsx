@@ -319,7 +319,7 @@ export default function Accounts() {
     const Header = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('Token'),
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       org: localStorage.getItem('org'),
     };
     fetchData(`${AccountsUrl}/${selectedId}/`, 'DELETE', null as any, Header)
