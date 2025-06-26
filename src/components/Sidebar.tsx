@@ -327,6 +327,24 @@ export default function Sidebar(_props: any) {
                     permissions.includes("View own opportunities")
                   );
                 }
+                else if (text === 'accounts') {
+                  return (
+                    permissions.includes("View all accounts") ||
+                    permissions.includes("View own accounts")
+                  );
+                } 
+                else if (text === 'cases') {
+                  return (
+                    permissions.includes("View all cases") ||
+                    permissions.includes("View own cases")
+                  );
+                } 
+                else if (text === 'leads') {
+                  return (
+                    permissions.includes("View all leads") ||
+                    permissions.includes("View own leads")
+                  );
+                } 
                 return true;
               })
               .map((text, _index) => (
