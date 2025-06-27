@@ -18,6 +18,7 @@ import Cases from './pages/cases/Cases';
 
 import ActivateUser from "./pages/auth/ActivateUser";
 import PasswordReset from './pages/auth/PasswordReset'; 
+import ImportContacts from './pages/contacts/ImportContacts';
 
 function ProtectedRoutes() {
   const token = localStorage.getItem('accessToken');
@@ -49,6 +50,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/activate-user/:uid/:token" element={<ActivateUser />} />
         <Route path="/reset-password/:uid/:token" element={<PasswordReset />} />
+        <Route path="/import-contacts" element={<ImportContacts />} />
         <Route path="/app/*" element={<ProtectedRoutes />}>
           <Route path="contacts" element={<Contacts />} />
           <Route path="leads" element={<Leads />} />
