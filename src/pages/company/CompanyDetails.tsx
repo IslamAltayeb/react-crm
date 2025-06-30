@@ -27,7 +27,7 @@ export default function CompanyDetails() {
     const Header = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('Token'),
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       org: localStorage.getItem('org')
     };
     fetchData(`${CompanyUrl}/${id}`, 'GET', null as any, Header)
