@@ -359,8 +359,9 @@ export default function Users() {
         navigate('/app/users/edit-user', {
           state: {
             value: {
+              username: data?.user_details?.username,
               email: data?.user_details?.email,
-              role: data?.role,
+              role: data?.role_details?.name,
               phone: data?.phone,
               alternate_phone: data?.alternate_phone,
               address_line: data?.address?.address_line,
@@ -667,7 +668,7 @@ export default function Users() {
                               </div>
                             </TableCell>
                             <TableCell className="tableCell">
-                              {item?.role ? item.role : '---'}
+                              {item?.role_details?.name ? item.role_details.name : '---'}
                             </TableCell>
                             {/* <TableCell
                                                             align='left'
@@ -768,7 +769,7 @@ export default function Users() {
                               </div>
                             </TableCell>
                             <TableCell className="tableCell">
-                              {item?.role ? item.role : '---'}
+                              {item?.role_details?.name ? item.role_details.name : '---'}
                             </TableCell>
                             {/* <TableCell
                                                             align='left'

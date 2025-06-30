@@ -41,7 +41,7 @@ interface HeadCell {
   numeric: boolean;
 }
 
-const headCells: readonly HeadCell[] = [
+/*const headCells: readonly HeadCell[] = [
   {
     id: 'first_name',
     numeric: false,
@@ -67,9 +67,45 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'Action',
   },
-];
+];*/
 
 export default function Contacts() {
+  const permissions = JSON.parse(localStorage.getItem("permissions") || "[]");
+  const canDelete = permissions.includes("Delete any contact") || permissions.includes("Delete own contacts");
+
+  const baseHeadCells: HeadCell[] = [
+  {
+    id: 'first_name',
+    numeric: false,
+    disablePadding: false,
+    label: 'Name',
+  },
+  {
+    id: 'primary_email',
+    numeric: true,
+    disablePadding: false,
+    label: 'Email Address',
+  },
+  {
+    id: 'mobile_number',
+    numeric: true,
+    disablePadding: false,
+    label: 'Phone Number',
+  },
+];
+
+const headCells: HeadCell[] = canDelete
+  ? [
+      ...baseHeadCells,
+      {
+        id: '',
+        numeric: true,
+        disablePadding: false,
+        label: 'Action',
+      },
+    ]
+  : baseHeadCells;
+
   const navigate = useNavigate();
   // const context = useMyContext();
 
@@ -359,15 +395,17 @@ async function handleConfirmImport(importId: string) {
               <FiChevronRight style={{ height: '15px' }} />
             </FabRight>
           </Box>
-          <Button
-            variant="contained"
-            startIcon={<FiPlus className="plus-icon" />}
-            onClick={onAddContact}
-            className={'add-button'}
-          >
-            Add Contact
-          </Button>
-          <Button
+
+          {permissions.includes("Create new contacts") &&(
+            <Button
+              variant="contained"
+              startIcon={<FiPlus className="plus-icon" />}
+              onClick={onAddContact}
+              className={'add-button'}
+            >
+              Add Contact
+            </Button>
+            <Button
             variant="outlined"
             startIcon={<FiUpload />}
             onClick={handleImportClick}
@@ -384,7 +422,8 @@ async function handleConfirmImport(importId: string) {
               const file = e.target.files?.[0];
               if (file) handlePreviewUpload(file);
             }}
-          />
+           />
+          )}
 
         </Stack>
       </CustomToolbar>
@@ -436,12 +475,14 @@ async function handleConfirmImport(importId: string) {
                                 ? item.mobile_number
                                 : '---'}
                             </TableCell>
-                            <TableCell className="tableCell">
-                              <FaTrashAlt
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => deleteRow(item.id)}
-                              />
-                            </TableCell>
+                            {canDelete && (
+                              <TableCell className="tableCell">
+                                <FaTrashAlt
+                                  style={{ cursor: 'pointer' }}
+                                  onClick={() => deleteRow(item.id)}
+                                />
+                              </TableCell>
+                            )}
                           </TableRow>
                         );
                       })

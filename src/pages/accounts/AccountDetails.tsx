@@ -124,7 +124,7 @@ export const AccountDetails = (_props: any) => {
     const Header = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('Token'),
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       org: localStorage.getItem('org'),
     };
     fetchData(`${AccountsUrl}/${id}/`, 'GET', null as any, Header)
