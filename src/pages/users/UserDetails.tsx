@@ -179,7 +179,7 @@ export default function UserDetails() {
                     mt: '5%',
                   }}
                 >
-                  {userDetails?.role || '---'}
+                  {userDetails?.role_details?.name || '---'}
                 </Typography>
               </Grid>
 
