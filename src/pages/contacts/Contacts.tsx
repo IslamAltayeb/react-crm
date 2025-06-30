@@ -31,6 +31,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { DeleteModal } from '../../components/DeleteModal';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
+import { FiUpload } from '@react-icons/all-files/fi/FiUpload';
 import { EnhancedTableHead } from '../../components/EnchancedTableHead';
 
 interface HeadCell {
@@ -233,6 +234,90 @@ const headCells: HeadCell[] = canDelete
     [40, '40 Records per page'],
     [50, '50 Records per page'],
   ];
+const [previewRes, setPreviewRes] = useState<any>(null);
+const [confirmResult, setConfirmResult] = useState<any>(null);
+const [isPreviewing, setIsPreviewing] = useState(false);
+const [isConfirming, setIsConfirming] = useState(false);
+const fileInputRef = React.useRef<HTMLInputElement>(null);
+function handleImportClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+  event.preventDefault();
+  fileInputRef.current?.click();
+}
+
+async function handlePreviewUpload(file: File) {
+  console.log("Preview upload triggered with file:", file);
+  const formData = new FormData();
+  formData.append('file', file);
+  setIsPreviewing(true);
+
+  const token = localStorage.getItem('accessToken'); 
+
+  if (!token) {
+    console.error('No token found in localStorage. User may not be logged in.');
+    setIsPreviewing(false);
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:8000/api/contacts/import/preview/', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+    console.log("Preview response:", data);
+    setPreviewRes(data);
+  } catch (error) {
+    console.error('Preview upload failed:', error);
+  } finally {
+    setIsPreviewing(false);
+  }
+}
+async function handleConfirmImport(importId: string) {
+  setIsConfirming(true);
+
+  const token = localStorage.getItem('accessToken');
+
+  if (!token) {
+    console.error('No token found in localStorage.');
+    setIsConfirming(false);
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:8000/api/contacts/import/confirm/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ import_id: importId }),
+    });
+
+    // const data = await response.json();
+    // setConfirmResult(data);
+    
+    if (response.ok ) {
+      
+      alert('Import confirmed successfully!');
+    } else {
+      const data = await response.json();
+      alert('Error: ' + (data.detail || 'Unable to upload contacts'));
+    }
+  } catch (error) {
+    console.error('Import confirmation failed:', error);
+    alert('An unexpected error occurred.');
+  } finally {
+    setIsConfirming(false);
+  }
+}
+
+
+
+  
   return (
     <Box
       sx={{
@@ -310,6 +395,7 @@ const headCells: HeadCell[] = canDelete
               <FiChevronRight style={{ height: '15px' }} />
             </FabRight>
           </Box>
+
           {permissions.includes("Create new contacts") &&(
             <Button
               variant="contained"
@@ -319,8 +405,26 @@ const headCells: HeadCell[] = canDelete
             >
               Add Contact
             </Button>
-
+            <Button
+            variant="outlined"
+            startIcon={<FiUpload />}
+            onClick={handleImportClick}
+            style={{ marginLeft: '10px' }}
+          >
+            Import CSV
+          </Button>
+          <input
+            type="file"
+            accept=".csv"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) handlePreviewUpload(file);
+            }}
+           />
           )}
+
         </Stack>
       </CustomToolbar>
 
@@ -389,6 +493,32 @@ const headCells: HeadCell[] = canDelete
             {loading && (
               <Spinner />
             )}
+            {previewRes && (
+    <Paper sx={{ p: 2, mt: 3 }}>
+      <Typography variant="h6">Import Preview</Typography>
+      {/* Show preview results here, e.g., number of rows, errors, etc. */}
+      <pre style={{ maxHeight: 200, overflowY: 'auto' }}>
+        {JSON.stringify(previewRes, null, 2)}
+      </pre>
+      <Stack direction="row" spacing={2} justifyContent="flex-end">
+        <Button
+          variant="contained"
+          disabled={isConfirming}
+          onClick={() => handleConfirmImport(previewRes.import_id)}
+        >
+          {isConfirming ? 'Importing...' : 'Confirm Import'}
+        </Button>
+      <Button
+        variant="outlined"
+        onClick={() => setPreviewRes(null)}
+        disabled={isConfirming}
+      >
+        Cancel
+      </Button>
+    </Stack>
+  </Paper>
+)}
+
           </Paper>
         </Box>
       </Container>
@@ -405,3 +535,5 @@ const headCells: HeadCell[] = canDelete
     </Box>
   );
 }
+
+
