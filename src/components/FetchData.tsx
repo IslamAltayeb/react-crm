@@ -25,10 +25,14 @@ export function fetchData(
   };
 
   if (method !== 'GET' && data) {
-    options.body = typeof data === 'string' ? data : JSON.stringify(data);
+    if (data instanceof FormData) {
+      options.body = data;
+      // Don't set Content-Type manually for FormData
+      delete options.headers['Content-Type'];
+    } else {
+      options.body = typeof data === 'string' ? data : JSON.stringify(data);
+    }
   }
-
-  console.log(`Fetching URL: ${SERVER}${url} with method: ${method}`, options);
 
   return fetch(`${SERVER}${url}`, options).then(async (response) => {
     // Optional: check for HTTP error codes before parsing json

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   TextField,
@@ -14,6 +14,7 @@ import {
   FormControl,
   FormHelperText,
   Avatar,
+  Input,
 } from '@mui/material';
 import { UserUrl } from '../../services/ApiUrls';
 import { fetchData } from '../../components/FetchData';
@@ -22,7 +23,6 @@ import { RequiredTextField } from '../../styles/CssStyled';
 import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 import { FiChevronUp } from '@react-icons/all-files/fi/FiChevronUp';
 import '../../styles/style.css';
-import { json } from 'stream/consumers';
 
 type FormErrors = {
   email?: string[];
@@ -48,6 +48,7 @@ interface FormData {
   state: string;
   postcode: string;
   country: string;
+  profile_pic: File | null;
 }
 
 export function EditUser() {
@@ -61,6 +62,9 @@ export function EditUser() {
   const [userErrors, setUserErrors] = useState<FormErrors>({});
   const [roleSelectOpen, setRoleSelectOpen] = useState(false);
   const [countrySelectOpen, setCountrySelectOpen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [formData, setFormData] = useState<FormData>({
     email: '',
     role: 'ADMIN',
@@ -72,22 +76,18 @@ export function EditUser() {
     state: '',
     postcode: '',
     country: '',
+    profile_pic: null,
   });
 
   useEffect(() => {
-    // state:  {
-    //   "value": {
-    //     "email": "kmoradi.ai@gmail.com",
-    //     "role": "ADMIN",
-    //     "phone": "+31642922857",
-    //     "profile_pic": null,
-    //     "has_sales_access": false,
-    //     "has_marketing_access": false
-    //   },
-    //   "id": "f81bc953-004a-4d98-bb44-68ce6da8b069"
-    // }
-    console.log("state: ", JSON.stringify(state, null, 2));
-    setFormData(state?.value);
+    if (state?.value) {
+      setFormData(state?.value);
+
+      const profilePic = state?.value?.profile_pic;
+      if (profilePic) {
+        setPreviewUrl(`http://localhost:8000${profilePic}`);
+      }
+    }
   }, [state?.id]);
 
   useEffect(() => {
@@ -130,24 +130,28 @@ export function EditUser() {
     const Header = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: localStorage.getItem('accessToken'),
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       org: localStorage.getItem('org'),
     };
 
-    const data = {
-      email: formData.email,
-      role: formData.role,
-      phone: formData.phone,
-      alternate_phone: formData.alternate_phone,
-      address_line: formData.address_line,
-      street: formData.street,
-      city: formData.city,
-      state: formData.state,
-      postcode: formData.postcode,
-      country: formData.country,
-    };
+    const formDataToSend = new FormData();
+    formDataToSend.append('email', formData.email);
+    formDataToSend.append('role', 'ADMIN');
+    formDataToSend.append('phone', formData.phone);
+    formDataToSend.append('alternate_phone', formData.alternate_phone);
+    formDataToSend.append('address_line', formData.address_line);
+    formDataToSend.append('street', formData.street);
+    formDataToSend.append('city', formData.city);
+    formDataToSend.append('state', formData.state);
+    formDataToSend.append('postcode', formData.postcode);
+    formDataToSend.append('username', 'UserName');
+    formDataToSend.append('name', 'Name');
+    formDataToSend.append('country', 'NL');
+    if (formData.profile_pic) {
+      formDataToSend.append('profile_pic', formData.profile_pic);
+    }
 
-    fetchData(`${UserUrl}/${state?.id}/`, 'PUT', JSON.stringify(data), Header)
+    fetchData(`${UserUrl}/${state?.id}/`, 'PUT', formDataToSend, Header)
       .then((res: any) => {
         if (!res.error) {
           resetForm();
@@ -176,6 +180,7 @@ export function EditUser() {
       state: '',
       postcode: '',
       country: '',
+      profile_pic: null,
     });
     setProfileErrors({});
     setUserErrors({});
@@ -183,6 +188,18 @@ export function EditUser() {
 
   const onCancel = () => {
     setReset(true);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData((prev) => ({ ...prev, profile_pic: file }));
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
   };
 
   const module = 'Users';
@@ -511,10 +528,19 @@ export function EditUser() {
                     autoComplete="off"
                   >
                     <Typography variant="h6">Profile pic</Typography>
-                    <Avatar alt={'sdf'}>
-                      {/* {userDetails?.user_details?.profile_pic} */}
-                    </Avatar>
-
+                    <Avatar
+                      alt={'User Profile'}
+                      src={previewUrl ?? undefined}
+                      sx={{ width: 180, height: 180, mb: 2, ml:75 }}
+                      onClick={handleAvatarClick}
+                    />
+                    <Input
+                      type="file"
+                      inputRef={fileInputRef}
+                      inputProps={{accept: 'image/*'}}
+                      onChange={handleFileChange}
+                      sx={{ display: 'none' }}
+                    />
                   </Box>
                 </AccordionDetails>
               </Accordion>

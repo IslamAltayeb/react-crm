@@ -156,9 +156,11 @@ export default function UserDetails() {
 
               <Grid item xs={8} sm={4}>
                 <Typography variant="h6">Profile pic</Typography>
-                <Avatar alt={'sdf'}>
-                  {userDetails?.user_details?.profile_pic}
-                </Avatar>
+                <Avatar
+                  sx={{ width: 150, height: 150, mb: 2, }}
+                  alt={'User'}
+                  src={"http://localhost:8000/" + userDetails?.user_details?.profile_pic}
+                />
               </Grid>
             </Grid>
 
@@ -217,7 +219,7 @@ export default function UserDetails() {
                 </Typography>
               </Box>
 
-              <Grid container spacing={2} sx={{ px: 2, py:2 }}>
+              <Grid container spacing={2} sx={{ px: 2, py: 2 }}>
                 <Grid item xs={12} sm={4} >
                   <Typography variant="h6">Address Lane</Typography>
                   <Typography variant="h6">
@@ -231,7 +233,7 @@ export default function UserDetails() {
                     {userDetails?.address?.street || '---'}
                   </Typography>
                 </Grid>
-                
+
                 <Grid item xs={12} sm={4} >
                   <Typography variant="h6">City</Typography>
                   <Typography variant="h6">
