@@ -1,6 +1,6 @@
 'use client';
  
-import React from 'react';
+import React , {useEffect} from 'react';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
 import { Button, Paper, Stack, Typography } from '@mui/material';
@@ -13,6 +13,32 @@ export const LoginForm: React.FC<{ toggleForm: () => void }> = ({
  
   const navigate = useNavigate();
  
+  const getuserRole = async () => {
+      const headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      };
+  
+      try {
+        const res = await fetch("http://localhost:8000/api/auth/login/?email="+email, {
+          method: 'GET',
+          headers: headers,
+        });
+  
+        if (!res.ok) {
+          alert('HTTP error! status: ${res.status}');
+        }
+  
+        const userData = await res.json();
+        const permissionNames = userData.role.permissions.map((p: any) => p.name);
+        localStorage.setItem('permissions', JSON.stringify(permissionNames));
+      } catch (error) {
+        alert('An error occurred please try again');
+        console.error("Failed to fetch user details:", error);
+      }
+    };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
  
@@ -30,7 +56,9 @@ export const LoginForm: React.FC<{ toggleForm: () => void }> = ({
       if (response.ok) {
         localStorage.setItem('accessToken', data.access);
         localStorage.setItem('refreshToken', data.refresh);
- 
+        
+        getuserRole(); //get user details to store user permissions
+
         alert('Login successful!');
         navigate('/app');
       } else {
@@ -41,7 +69,7 @@ export const LoginForm: React.FC<{ toggleForm: () => void }> = ({
       console.error('Login error:', error);
     }
   };
- 
+
   const handleForgotPassword = async () => {
     if (!email) {
       alert('Please enter your email first.');

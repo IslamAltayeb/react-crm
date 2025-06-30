@@ -16,11 +16,15 @@ import { fetchData } from '../../components/FetchData';
 
 type response = {
   user_details: {
+    username: string;
     email: string;
     is_active: boolean;
     profile_pic: string;
   };
-  role: string;
+  role_details: {
+    name: string;
+    description: string;
+  };
   address: {
     address_line: string;
     street: string;
@@ -80,8 +84,9 @@ export default function UserDetails() {
     navigate('/app/users/edit-user', {
       state: {
         value: {
+          username: userDetails?.user_details?.username,
           email: userDetails?.user_details?.email,
-          role: userDetails?.role,
+          role: userDetails?.role_details?.name,
           phone: userDetails?.phone,
           alternate_phone: userDetails?.alternate_phone,
           address_line: userDetails?.address?.address_line,
