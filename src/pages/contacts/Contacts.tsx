@@ -396,7 +396,8 @@ async function handleConfirmImport(importId: string) {
             </FabRight>
           </Box>
 
-          {permissions.includes("Create new contacts") &&(
+        {permissions.includes("Create new contacts") && (
+          <>
             <Button
               variant="contained"
               startIcon={<FiPlus className="plus-icon" />}
@@ -406,24 +407,25 @@ async function handleConfirmImport(importId: string) {
               Add Contact
             </Button>
             <Button
-            variant="outlined"
-            startIcon={<FiUpload />}
-            onClick={handleImportClick}
-            style={{ marginLeft: '10px' }}
-          >
-            Import CSV
-          </Button>
-          <input
-            type="file"
-            accept=".csv"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) handlePreviewUpload(file);
-            }}
-           />
-          )}
+              variant="outlined"
+              startIcon={<FiUpload />}
+              onClick={handleImportClick}
+              style={{ marginLeft: '10px' }}
+            >
+              Import CSV
+            </Button>
+            <input
+              type="file"
+              accept=".csv"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) handlePreviewUpload(file);
+              }}
+            />
+          </>
+        )}
 
         </Stack>
       </CustomToolbar>
