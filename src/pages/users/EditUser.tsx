@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   TextField,
@@ -13,6 +13,8 @@ import {
   Select,
   FormControl,
   FormHelperText,
+  Avatar,
+  Input,
 } from '@mui/material';
 import { UserUrl } from '../../services/ApiUrls';
 import { fetchData } from '../../components/FetchData';
@@ -35,11 +37,8 @@ type FormErrors = {
   state?: string[];
   postcode?: string[];
   country?: string[];
-  // profile_pic?: string[];
-  // has_sales_access?: string[];
-  // has_marketing_access?: string[];
-  // is_organization_admin?: string[];
 };
+
 interface FormData {
   username: string;
   email: string;
@@ -52,10 +51,7 @@ interface FormData {
   state: string;
   postcode: string;
   country: string;
-  // profile_pic: string | null,
-  // has_sales_access: boolean,
-  // has_marketing_access: boolean,
-  // is_organization_admin: boolean
+  profile_pic: File | null;
 }
 
 interface Role {
@@ -75,6 +71,9 @@ export function EditUser() {
   const [roleSelectOpen, setRoleSelectOpen] = useState(false);
   const [countrySelectOpen, setCountrySelectOpen] = useState(false);
   const [roles, setRoles] = useState<Role[]>([]);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [formData, setFormData] = useState<FormData>({
     username: '',
     email: '',
@@ -87,9 +86,18 @@ export function EditUser() {
     state: '',
     postcode: '',
     country: '',
+    profile_pic: null,
   });
+
   useEffect(() => {
-    setFormData(state?.value);
+    if (state?.value) {
+      setFormData(state?.value);
+
+      const profilePic = state?.value?.profile_pic;
+      if (profilePic) {
+        setPreviewUrl(`http://localhost:8000${profilePic}`);
+      }
+    }
   }, [state?.id]);
 
   useEffect(() => {
@@ -153,6 +161,7 @@ export function EditUser() {
       });
     }
   };
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     submitForm();
@@ -165,24 +174,26 @@ export function EditUser() {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       org: localStorage.getItem('org'),
     };
-    // console.log('Form data:', data);
-    const data = {
-      username: formData.username,
-      email: formData.email,
-      role: formData.role,
-      phone: formData.phone,
-      alternate_phone: formData.alternate_phone,
-      address_line: formData.address_line,
-      street: formData.street,
-      city: formData.city,
-      state: formData.state,
-      postcode: formData.postcode,
-      country: formData.country,
-    };
 
-    fetchData(`${UserUrl}/${state?.id}/`, 'PUT', JSON.stringify(data), Header)
+    const formDataToSend = new FormData();
+    formDataToSend.append('email', formData.email);
+    formDataToSend.append('role', 'ADMIN');
+    formDataToSend.append('phone', formData.phone);
+    formDataToSend.append('alternate_phone', formData.alternate_phone);
+    formDataToSend.append('address_line', formData.address_line);
+    formDataToSend.append('street', formData.street);
+    formDataToSend.append('city', formData.city);
+    formDataToSend.append('state', formData.state);
+    formDataToSend.append('postcode', formData.postcode);
+    formDataToSend.append('username', 'UserName');
+    formDataToSend.append('name', 'Name');
+    formDataToSend.append('country', 'NL');
+    if (formData.profile_pic) {
+      formDataToSend.append('profile_pic', formData.profile_pic);
+    }
+
+    fetchData(`${UserUrl}/${state?.id}/`, 'PUT', formDataToSend, Header)
       .then((res: any) => {
-        // console.log('editsubmit:', res);
         if (!res.error) {
           resetForm();
           navigate('/app/users');
@@ -195,8 +206,9 @@ export function EditUser() {
           setUserErrors(res?.errors?.user_errors || res?.user_errors[0]);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
+
   const resetForm = () => {
     setFormData({
       username: '',
@@ -210,20 +222,31 @@ export function EditUser() {
       state: '',
       postcode: '',
       country: '',
+      profile_pic: null,
     });
     setProfileErrors({});
     setUserErrors({});
   };
+
   const onCancel = () => {
     setReset(true);
   };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData((prev) => ({ ...prev, profile_pic: file }));
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
   const module = 'Users';
   const crntPage = 'Edit User';
   const backBtn = state?.edit ? 'Back To Users' : 'Back To UserDetails';
-
-  // const inputStyles = {
-  //   display: 'none',
-  // };
 
   return (
     <Box sx={{ mt: '60px' }}>
@@ -316,7 +339,7 @@ export function EditUser() {
                       <div className="fieldSubContainer">
                         <div className="fieldTitle">Alternate Phone</div>
                         <Tooltip title="Number must start with + followed by country code (e.g. +1, +44, +91)">
-                          <TextField                          
+                          <TextField
                             name="alternate_phone"
                             value={formData.alternate_phone}
                             onChange={handleChange}
@@ -335,10 +358,10 @@ export function EditUser() {
                         </Tooltip>
                       </div>
                     </div>
-                    <div className="fieldContainer">
+                    <div className="fieldContainer2">
                       <div className="fieldSubContainer">
                         <div className="fieldTitle">Role</div>
-                        <FormControl sx={{ width: '35%' }}>
+                        <FormControl sx={{ width: '70%' }}>
                           <Select
                             name="role"
                             value={formData.role}
@@ -371,11 +394,14 @@ export function EditUser() {
                           {/* <FormHelperText>{errors?.[0] ? errors[0] : ''}</FormHelperText> */}
                         </FormControl>
                       </div>
+                      <div className="fieldSubContainer">
+                      </div>
                     </div>
                   </Box>
                 </AccordionDetails>
               </Accordion>
             </div>
+
             {/* Address Details */}
             <div className="leadContainer">
               <Accordion defaultExpanded style={{ width: '98%' }}>
@@ -543,6 +569,42 @@ export function EditUser() {
                 </AccordionDetails>
               </Accordion>
             </div>
+
+            {/* Avatar */}
+            <div className="leadContainer">
+              <Accordion defaultExpanded style={{ width: '98%' }}>
+                <AccordionSummary
+                  expandIcon={<FiChevronDown style={{ fontSize: '25px' }} />}
+                >
+                  <Typography className="accordion-header">Avatar</Typography>
+                </AccordionSummary>
+                <Divider className="divider" />
+                <AccordionDetails>
+                  <Box
+                    sx={{ width: '98%', color: '#1A3353', mb: 1 }}
+                    component="form"
+                    noValidate
+                    autoComplete="off"
+                  >
+                    <Typography variant="h6">Profile pic</Typography>
+                    <Avatar
+                      alt={'User Profile'}
+                      src={previewUrl ?? undefined}
+                      sx={{ width: 180, height: 180, mb: 2, ml:75 }}
+                      onClick={handleAvatarClick}
+                    />
+                    <Input
+                      type="file"
+                      inputRef={fileInputRef}
+                      inputProps={{accept: 'image/*'}}
+                      onChange={handleFileChange}
+                      sx={{ display: 'none' }}
+                    />
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+
           </div>
         </form>
       </Box>

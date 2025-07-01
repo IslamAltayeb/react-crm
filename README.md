@@ -59,3 +59,8 @@ npm install
 - for running the project
 npm start
 
+# step for running the project in debug mode
+
+- press F5 in VSCode ( or press Run-> Start Debuggin)
+- for running the project
+npm start
