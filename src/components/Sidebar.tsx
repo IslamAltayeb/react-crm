@@ -177,6 +177,7 @@ export default function Sidebar(_props: any) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+  const permissions = JSON.parse(localStorage.getItem("permissions") || "[]");
   // const context = { drawerWidth: drawerWidth, screen: screen };
   return (
     <>
@@ -309,7 +310,44 @@ export default function Sidebar(_props: any) {
         >
           <Box>
             <List sx={{ pt: '65px' }}>
-              {navList.map((text, _index) => (
+              {navList
+              .filter((text) => {
+                if (text === 'users') {
+                  return permissions.includes("View all users"); 
+                }
+                else if (text === 'companies') {
+                  return (
+                    permissions.includes("View all companies") ||
+                    permissions.includes("View own companies") 
+                  ); 
+                }
+                else if (text === 'opportunities') {
+                  return (
+                    permissions.includes("View all opportunities") ||
+                    permissions.includes("View own opportunities")
+                  );
+                }
+                else if (text === 'accounts') {
+                  return (
+                    permissions.includes("View all accounts") ||
+                    permissions.includes("View own accounts")
+                  );
+                } 
+                else if (text === 'cases') {
+                  return (
+                    permissions.includes("View all cases") ||
+                    permissions.includes("View own cases")
+                  );
+                } 
+                else if (text === 'leads') {
+                  return (
+                    permissions.includes("View all leads") ||
+                    permissions.includes("View own leads")
+                  );
+                } 
+                return true;
+              })
+              .map((text, _index) => (
                 <ListItem key={text} disablePadding>
                   <StyledListItemButton
                     sx={{ pt: '6px', pb: '6px' }}
@@ -334,14 +372,13 @@ export default function Sidebar(_props: any) {
         </Drawer>
         <Box
           sx={{
-            width: 'auto',
+            width: '150%',
             ml: drawerWidth === 60 ? '60px' : '200px',
             overflowX: 'hidden',
           }}
         >
           <Routes>
             <Route index element={<Leads />} />
-            {/* <Route path='/' element={<Contacts />} /> */}
             <Route path="/app/leads" element={<Leads />} />
             <Route path="leads/add-leads" element={<AddLeads />} />
             <Route path="leads/edit-lead" element={<EditLead />} />

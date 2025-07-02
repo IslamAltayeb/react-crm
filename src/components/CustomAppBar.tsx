@@ -11,6 +11,11 @@ import { FaCheckCircle, FaEdit, FaTimesCircle } from 'react-icons/fa';
 import { FiChevronLeft } from '@react-icons/all-files/fi/FiChevronLeft';
 
 export function CustomAppBar(props: any) {
+  const permissions = JSON.parse(localStorage.getItem("permissions") || "[]");
+  const canEditAnything = Array.isArray(permissions)
+  ? permissions.some(p => p.includes("Edit"))
+  : false;
+
   const location = useLocation();
   const sharedData = useMyContext();
   const navigate = useNavigate();
@@ -63,17 +68,19 @@ export function CustomAppBar(props: any) {
               </Button>
             </div>
             <div>
-              <Button
-                type='submit'
-                variant='contained'
-                className='header-button'
-                size='small'
-                onClick={editHandle}
-                startIcon={<FaEdit style={{ fill: 'white', width: '16px' }} />}
-                style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: '16px' }}
-              >
-                Edit
-              </Button>
+              {canEditAnything && (
+                <Button
+                  type='submit'
+                  variant='contained'
+                  className='header-button'
+                  size='small'
+                  onClick={editHandle}
+                  startIcon={<FaEdit style={{ fill: 'white', width: '16px' }} />}
+                  style={{ textTransform: 'capitalize', fontWeight: 'bold', fontSize: '16px' }}
+                >
+                  Edit
+                </Button>
+              )}
             </div>
 
           </div> :
@@ -89,7 +96,7 @@ export function CustomAppBar(props: any) {
                 {backBtn}
               </Button>
             </div>
-            <div style={{ marginRight: '10px' }}>
+            {/* <div style={{ marginRight: '10px' }}>
               <Button
                 // onClick={backbtnHandle}
                 className='header-button'
@@ -113,7 +120,7 @@ export function CustomAppBar(props: any) {
               >
                 Save
               </Button>
-            </div>
+            </div> */}
           </div>
         }
       </div>

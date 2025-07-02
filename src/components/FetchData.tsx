@@ -25,7 +25,13 @@ export function fetchData(
   };
 
   if (method !== 'GET' && data) {
-    options.body = typeof data === 'string' ? data : JSON.stringify(data);
+    if (data instanceof FormData) {
+      options.body = data;
+      // Don't set Content-Type manually for FormData
+      delete options.headers['Content-Type'];
+    } else {
+      options.body = typeof data === 'string' ? data : JSON.stringify(data);
+    }
   }
 
   return fetch(`${SERVER}${url}`, options).then(async (response) => {
