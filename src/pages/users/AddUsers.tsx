@@ -13,6 +13,7 @@ import {
   Select,
   FormControl,
   FormHelperText,
+  Button, 
 } from '@mui/material';
 
 import '../../styles/style.css';
@@ -609,6 +610,11 @@ export function AddUsers() {
                 </AccordionDetails>
               </Accordion>
             </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
+            </Box>
           </div>
         </form>
       </Box>

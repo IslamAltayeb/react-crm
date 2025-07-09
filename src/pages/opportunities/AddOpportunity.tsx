@@ -678,7 +678,7 @@ export function AddOpportunity() {
                         <div ref={quillRef} />
                       </div>
                     </div>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', mt: 1.5 }}>
+                    {/*<Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', mt: 1.5 }}>
                       <Button
                         className='header-button'
                         onClick={resetQuillToInitialState}
@@ -699,11 +699,16 @@ export function AddOpportunity() {
                       >
                                                 Save
                       </Button>
-                    </Box>
+                    </Box>*/}
                   </Box>
                 </AccordionDetails>
               </Accordion>
             </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
+            </Box>
           </div>
         </form>
       </Box>
