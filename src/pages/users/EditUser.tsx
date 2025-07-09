@@ -77,7 +77,7 @@ export function EditUser() {
   const [formData, setFormData] = useState<FormData>({
     username: '',
     email: '',
-    role: 'ADMIN',
+    role: '',
     phone: '',
     alternate_phone: '',
     address_line: '',
@@ -177,7 +177,7 @@ export function EditUser() {
 
     const formDataToSend = new FormData();
     formDataToSend.append('email', formData.email);
-    formDataToSend.append('role', 'ADMIN');
+    formDataToSend.append('role', formData.role || '');
     formDataToSend.append('phone', formData.phone);
     formDataToSend.append('alternate_phone', formData.alternate_phone);
     formDataToSend.append('address_line', formData.address_line);
@@ -213,7 +213,7 @@ export function EditUser() {
     setFormData({
       username: '',
       email: '',
-      role: 'ADMIN',
+      role: '',
       phone: '',
       alternate_phone: '',
       address_line: '',

@@ -15,7 +15,8 @@ import {
   FormHelperText,
   IconButton,
   Select,
-  Divider
+  Divider,
+  Button,
 } from '@mui/material';
 import '../../styles/style.css';
 import { AccountsUrl } from '../../services/ApiUrls';
@@ -697,6 +698,11 @@ export function AddAccount() {
                 </AccordionDetails>
               </Accordion>
             </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
+          </Box>
           </div >
         </form >
       </Box >

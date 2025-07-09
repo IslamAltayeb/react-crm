@@ -251,7 +251,7 @@ export function AddLeads() {
     }
   });
 
-  fetch(`${LeadUrl}/`, {
+  fetch('http://localhost:8000/api/leads/', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -269,7 +269,8 @@ export function AddLeads() {
         });
 
         setTimeout(() => {
-          window.location.reload();
+          //window.location.reload();
+          navigate('/app/leads');
         }, 1500);
       } else {
         setSnackbar({
@@ -288,7 +289,7 @@ export function AddLeads() {
       });
     });
 };
-
+  console.log("Posting to:", `${LeadUrl}/`);
 
   const resetForm = () => {
   setFormData({
@@ -1145,7 +1146,7 @@ export function AddLeads() {
                         mt: 1.5,
                       }}
                     >
-                      <Button
+                      {/*<Button
                         className="header-button"
                         // onClick={resetQuillToInitialState}
                         onClick={onCancel}
@@ -1176,7 +1177,7 @@ export function AddLeads() {
                         sx={{ ml: 1 }}
 >
                         Save
-                      </Button>
+                      </Button>*/}
                       <Snackbar
                   open={snackbar.open}
                   autoHideDuration={6000}
@@ -1195,9 +1196,12 @@ export function AddLeads() {
                 </AccordionDetails>
               </Accordion>
             </div>
-          </div>
-               
-
+          </div>  
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
+          </Box>
         </form>
       </Box>
     </Box>

@@ -5,7 +5,8 @@ import {
   AccordionSummary,
   Typography,
   Box,
-  Divider
+  Divider,
+  Button,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { CompaniesUrl } from '../../services/ApiUrls';
@@ -121,6 +122,11 @@ function AddCompany() {
                 </AccordionDetails>
               </Accordion>
             </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
+          </Box>
           </div>
         </form>
       </Box>

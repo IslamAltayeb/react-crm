@@ -731,7 +731,7 @@ function AddContacts() {
                         <div ref={quillRef} />
                       </div>
                     </div>
-                    <Box
+                    {/*<Box
                       sx={{
                         display: "flex",
                         flexDirection: "row",
@@ -761,7 +761,7 @@ function AddContacts() {
                       >
                         Cancel
                       </Button>
-                    </Box>
+                    </Box>*/}
                   </Box>
                 </AccordionDetails>
               </Accordion>
@@ -902,14 +902,11 @@ function AddContacts() {
               </Accordion>
             </div>
           </div>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{ mt: 3, mb: 5 }}
-          >
-            Save Contact
-          </Button>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <Button type="submit" variant="contained">
+              Save
+            </Button>
+          </Box>
         </form>
       </Box>
     </Box>
