@@ -259,6 +259,34 @@ export function EditCase() {
     }
   };
 
+  const validate = (data: FormData): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!data.name) errors.name = ['Case name is required'];
+  if (!data.closed_on) errors.closed_on = ['Closed Date is required'];
+
+  return errors;
+};
+
+
+const handleBlur = (
+  e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+) => {
+  const { name, value } = e.target;
+  const fieldName = name as keyof FormData;
+  const singleFieldError = validate({ ...formData, [name]: value });
+
+  setErrors((prevErrors) => {
+    const updated = { ...prevErrors };
+    if (singleFieldError[fieldName]) {
+      updated[fieldName] = singleFieldError[fieldName];
+    } else {
+      delete updated[fieldName];
+    }
+    return updated;
+  });
+};
+
   const module = 'Cases';
   const crntPage = 'Add Case';
   const backBtn = state?.edit ? 'Back to Cases' : 'Back to CaseDetails';
@@ -286,6 +314,7 @@ export function EditCase() {
                           name='name'
                           value={formData.name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.name?.[0] ? errors?.name[0] : ''}
@@ -543,6 +572,7 @@ export function EditCase() {
                           name='closed_on'
                           value={formData.closed_on}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.closed_on?.[0] ? errors?.closed_on[0] : ''}
@@ -618,7 +648,7 @@ export function EditCase() {
                       <div ref={quillRef} />
                     </div>
                   </div>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', mt: 1.5 }}>
+                  {/*<Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', mt: 1.5 }}>
                     <Button
                       className='header-button'
                       onClick={emptyDescription}
@@ -639,11 +669,16 @@ export function EditCase() {
                     >
                                             Save
                     </Button>
-                  </Box>
+                  </Box>*/}
                 </Box>
               </AccordionDetails>
             </Accordion>
           </div>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <Button type="submit" variant="contained">
+              Save
+            </Button>
+          </Box>
         </form >
       </Box >
     </Box >

@@ -434,7 +434,7 @@ const handleSelectBlur = (name: keyof FormData, value: string) => {
                             onClick={() => setRoleSelectOpen(!roleSelectOpen)}
                             onClose={() => {
                               setRoleSelectOpen(false);
-                              handleSelectBlur('role', formData.role); // 👈 run validation here
+                              handleSelectBlur('role', formData.role); 
                             }}
                             IconComponent={() => (
                               <div
@@ -450,7 +450,7 @@ const handleSelectBlur = (name: keyof FormData, value: string) => {
                             )}
                             className={'select'}
                             onChange={handleChange}
-                            error={!!userErrors?.role?.[0]} // 👈 show error styling
+                            error={!!userErrors?.role?.[0]} 
                           >
                             {roles.map((role) => (
                               <MenuItem key={role.id} value={role.name}>
