@@ -15,7 +15,8 @@ import {
   FormHelperText,
   IconButton,
   Select,
-  Divider
+  Divider,
+  Button,
 } from '@mui/material';
 import '../../styles/style.css';
 import { AccountsUrl } from '../../services/ApiUrls';
@@ -265,6 +266,36 @@ export function EditAccount() {
   };
 
 
+  const validate = (data: FormData): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!data.name) errors.name = ['Account name is required'];
+  if (!data.phone) errors.phone = ['Phone number is required'];
+  if (!data.email) errors.email = ['Email is required'];
+  else if (!/^\S+@\S+\.\S+$/.test(data.email)) errors.email = ['Invalid email format'];
+  if (!data.contact_name) errors.contact_name = ['Contact name is required'];
+
+  return errors;
+};
+
+const handleBlur = (
+  e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+) => {
+  const { name, value } = e.target;
+  const fieldName = name as keyof FormData;
+  const singleFieldError = validate({ ...formData, [name]: value });
+
+  setErrors((prevErrors) => {
+    const updated = { ...prevErrors };
+    if (singleFieldError[fieldName]) {
+      updated[fieldName] = singleFieldError[fieldName];
+    } else {
+      delete updated[fieldName];
+    }
+    return updated;
+  });
+};
+
   const module = 'Accounts';
   const crntPage = 'Add Account';
   const backBtn = state?.edit ? 'Back to Accounts' : 'Back to AccountDetails';
@@ -290,6 +321,7 @@ export function EditAccount() {
                           name='name'
                           value={formData.name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.name?.[0] ? errors?.name[0] : ''}
@@ -317,6 +349,7 @@ export function EditAccount() {
                           type='text'
                           value={formData.phone}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.phone?.[0] ? errors?.phone[0] : ''}
@@ -329,6 +362,7 @@ export function EditAccount() {
                           name='email'
                           value={formData.email}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.email?.[0] ? errors?.email[0] : ''}
@@ -704,6 +738,11 @@ export function EditAccount() {
                 </AccordionDetails>
               </Accordion>
             </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
+            </Box>
           </div >
         </form >
       </Box >
