@@ -127,11 +127,24 @@ export function AddUsers() {
   const backbtnHandle = () => {
     navigate('/app/users');
   };
-  const handleSubmit = (e: any) => {
+  /*const handleSubmit = (e: any) => {
     console.log('Payload being submitted:', formData);
     e.preventDefault();
     submitForm();
-  };
+  };*/
+
+  const handleSubmit = (e: any) => {
+  e.preventDefault();
+
+  const errors = validate(formData);
+  setUserErrors(errors);
+
+  if (Object.keys(errors).length === 0) {
+     submitForm();
+    console.log('Submitting:', formData);
+  }
+};
+
   const [errors, _setErrors] = useState<FormErrors>({});
   const [profileErrors, setProfileErrors] = useState<FormErrors>({});
   const [userErrors, setUserErrors] = useState<FormErrors>({});
@@ -269,6 +282,57 @@ export function AddUsers() {
   const onCancel = () => {
     resetForm();
   };
+
+  const validate = (data: FormData): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!data.username) errors.username = ['Username is required'];
+  if (!data.password || data.password.length < 8) errors.password = ['Password must be at least 8 characters'];
+  if (!data.email) errors.email = ['Email is required'];
+  else if (!/^\S+@\S+\.\S+$/.test(data.email)) errors.email = ['Invalid email format'];
+  if (!data.role) errors.role = ['Role is required'];
+  if (!data.phone) errors.phone = ['Phone number is required'];
+
+  return errors;
+};
+
+  const handleBlur = (
+  e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+) => {
+  const { name, value } = e.target;
+  const fieldName = name as keyof FormData;
+  const singleFieldError = validate({ ...formData, [name]: value });
+
+  setUserErrors((prevErrors) => {
+    const updated = { ...prevErrors };
+    if (singleFieldError[fieldName]) {
+      updated[fieldName] = singleFieldError[fieldName];
+    } else {
+      delete updated[fieldName];
+    }
+    return updated;
+  });
+};
+
+const handleSelectBlur = (name: keyof FormData, value: string) => {
+  const singleFieldError = validate({ ...formData, [name]: value });
+
+  setUserErrors((prevErrors) => {
+    const updated = { ...prevErrors };
+
+    // Always check for required field (even if not changed)
+    if (!value) {
+      updated[name] = [`${name[0].toUpperCase() + name.slice(1)} is required`];
+    } else if (singleFieldError[name]) {
+      updated[name] = singleFieldError[name];
+    } else {
+      delete updated[name];
+    }
+
+    return updated;
+  });
+};
+
   const module = 'Users';
   const crntPage = 'Add Users';
   const backBtn = 'Back To Users';
@@ -314,6 +378,7 @@ export function AddUsers() {
                           name="username"
                           value={formData.username}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size="small"
                           error={!!userErrors?.username?.[0]}
@@ -329,6 +394,7 @@ export function AddUsers() {
                           name="password"
                           value={formData.password}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size="small"
                           error={!!userErrors?.password?.[0]}
@@ -344,6 +410,7 @@ export function AddUsers() {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size="small"
                           error={
@@ -365,11 +432,13 @@ export function AddUsers() {
                             value={formData.role}
                             open={roleSelectOpen}
                             onClick={() => setRoleSelectOpen(!roleSelectOpen)}
+                            onClose={() => {
+                              setRoleSelectOpen(false);
+                              handleSelectBlur('role', formData.role); 
+                            }}
                             IconComponent={() => (
                               <div
-                                onClick={() =>
-                                  setRoleSelectOpen(!roleSelectOpen)
-                                }
+                                onClick={() => setRoleSelectOpen(!roleSelectOpen)}
                                 className="select-icon-background"
                               >
                                 {roleSelectOpen ? (
@@ -381,15 +450,17 @@ export function AddUsers() {
                             )}
                             className={'select'}
                             onChange={handleChange}
-                            error={!!errors?.role?.[0]}
+                            error={!!userErrors?.role?.[0]} 
                           >
                             {roles.map((role) => (
-                                <MenuItem key={role.id} value={role.name}>
-                                  {role.name}
-                                </MenuItem>
+                              <MenuItem key={role.id} value={role.name}>
+                                {role.name}
+                              </MenuItem>
                             ))}
                           </Select>
-                          {/* <FormHelperText>{errors?.[0] ? errors[0] : ''}</FormHelperText> */}
+                          <FormHelperText sx={{ color: 'red' }}>
+                            {userErrors?.role?.[0] || ''}
+                          </FormHelperText>
                         </FormControl>
                       </div>
                     </div>
@@ -402,6 +473,7 @@ export function AddUsers() {
                             id="outlined-error-helper-text"
                             value={formData.phone}
                             onChange={handleChange}
+                            onBlur={handleBlur}
                             required
                             style={{ width: '70%' }}
                             size="small"

@@ -157,10 +157,23 @@ export function AddCase() {
     }
   };
 
+  // const handleSubmit = (e: any) => {
+  //   e.preventDefault();
+  //   submitForm();
+  // };
+
   const handleSubmit = (e: any) => {
-    e.preventDefault();
-    submitForm();
-  };
+  e.preventDefault();
+
+  const errors = validate(formData);
+  setErrors(errors);
+
+  if (Object.keys(errors).length === 0) {
+     submitForm();
+    console.log('Submitting:', formData);
+  }
+};
+
   const submitForm = () => {
     const Header = {
       Accept: 'application/json',
@@ -227,6 +240,32 @@ export function AddCase() {
     navigate('/app/cases');
   };
 
+  const validate = (data: FormData): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!data.name) errors.name = ['Case name is required'];
+  if (!data.closed_on) errors.closed_on = ['Closed Date is required'];
+
+  return errors;
+};
+
+ const handleBlur = (
+  e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+) => {
+  const { name, value } = e.target;
+  const fieldName = name as keyof FormData;
+  const singleFieldError = validate({ ...formData, [name]: value });
+
+  setErrors((prevErrors) => {
+    const updated = { ...prevErrors };
+    if (singleFieldError[fieldName]) {
+      updated[fieldName] = singleFieldError[fieldName];
+    } else {
+      delete updated[fieldName];
+    }
+    return updated;
+  });
+};
   const module = 'Cases';
   const crntPage = 'Add Case';
   const backBtn = 'Back to Cases';
@@ -252,6 +291,7 @@ export function AddCase() {
                           name='name'
                           value={formData.name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.name?.[0] ? errors?.name[0] : ''}
@@ -506,6 +546,7 @@ export function AddCase() {
                           name='closed_on'
                           value={formData.closed_on}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.closed_on?.[0] ? errors?.closed_on[0] : ''}

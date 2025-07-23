@@ -66,7 +66,7 @@ type FormErrors = {
   country?: string[];
   tags?: string[];
   company?: string[];
-  probability?: number[];
+  probability?: string[];
   industry?: string[];
   skype_ID?: string[];
   file?: string[];
@@ -95,7 +95,7 @@ interface FormData {
   country: string;
   tags: string[];
   company: string;
-  probability: number;
+  probability: string;
   industry: string;
   skype_ID: string;
   file: string | null;
@@ -148,7 +148,7 @@ export function AddLeads() {
     country: '',
     tags: [],
     company: '',
-    probability: 1,
+    probability: '1',
     industry: 'ADVERTISING',
     skype_ID: '',
     file: null,
@@ -316,7 +316,7 @@ export function AddLeads() {
     country: '',
     tags: [],
     company: '',
-    probability: 1,
+    probability: '1',
     industry: 'ADVERTISING',
     skype_ID: '',
     file: null,
@@ -331,6 +331,34 @@ export function AddLeads() {
   const backbtnHandle = () => {
     navigate('/app/leads');
   };
+
+  const validate = (data: FormData): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!data.first_name) errors.first_name = ['First name is required'];
+  if (!data.last_name) errors.last_name = ['Last name is required'];
+  if (!data.title) errors.title = ['Title number is required'];
+
+  return errors;
+};
+
+const handleBlur = (
+  e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+) => {
+  const { name, value } = e.target;
+  const fieldName = name as keyof FormData;
+  const singleFieldError = validate({ ...formData, [name]: value });
+
+  setErrors((prevErrors) => {
+    const updated = { ...prevErrors };
+    if (singleFieldError[fieldName]) {
+      updated[fieldName] = singleFieldError[fieldName];
+    } else {
+      delete updated[fieldName];
+    }
+    return updated;
+  });
+};
 
   const module = 'Leads';
   const crntPage = 'Add Leads';
@@ -889,6 +917,7 @@ export function AddLeads() {
                           required
                           value={formData.first_name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size="small"
                           error={Boolean(errors.first_name)}
@@ -902,6 +931,7 @@ export function AddLeads() {
                           required
                           value={formData.last_name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size="small"
                           error={Boolean(errors.last_name)}
@@ -916,6 +946,7 @@ export function AddLeads() {
                           name="title"
                           value={formData.title}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size="small"
                           error={Boolean(errors.title)}

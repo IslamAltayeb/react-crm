@@ -146,10 +146,23 @@ export function AddAccount() {
   const backbtnHandle = () => {
     navigate('/app/accounts');
   };
+  // const handleSubmit = (e: any) => {
+  //   e.preventDefault();
+  //   submitForm();
+  // };
+
   const handleSubmit = (e: any) => {
-    e.preventDefault();
-    submitForm();
-  };
+  e.preventDefault();
+
+  const errors = validate(formData);
+  setErrors(errors);
+
+  if (Object.keys(errors).length === 0) {
+     submitForm();
+    console.log('Submitting:', formData);
+  }
+};
+
   const submitForm = () => {
     const Header = {
       Accept: 'application/json',
@@ -249,6 +262,55 @@ export function AddAccount() {
     }
   };
 
+  const validate = (data: FormData): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!data.name) errors.name = ['Account name is required'];
+  if (!data.phone) errors.phone = ['Phone number is required'];
+  if (!data.email) errors.email = ['Email is required'];
+  else if (!/^\S+@\S+\.\S+$/.test(data.email)) errors.email = ['Invalid email format'];
+  if (!data.contact_name) errors.contact_name = ['Contact name is required'];
+
+  return errors;
+};
+
+const handleBlur = (
+  e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+) => {
+  const { name, value } = e.target;
+  const fieldName = name as keyof FormData;
+  const singleFieldError = validate({ ...formData, [name]: value });
+
+  setErrors((prevErrors) => {
+    const updated = { ...prevErrors };
+    if (singleFieldError[fieldName]) {
+      updated[fieldName] = singleFieldError[fieldName];
+    } else {
+      delete updated[fieldName];
+    }
+    return updated;
+  });
+};
+
+const handleSelectBlur = (name: keyof FormData, value: string) => {
+  const singleFieldError = validate({ ...formData, [name]: value });
+
+  setErrors((prevErrors) => {
+    const updated = { ...prevErrors };
+
+    // Always check for required field (even if not changed)
+    if (!value) {
+      updated[name] = [`${name[0].toUpperCase() + name.slice(1)} is required`];
+    } else if (singleFieldError[name]) {
+      updated[name] = singleFieldError[name];
+    } else {
+      delete updated[name];
+    }
+
+    return updated;
+  });
+};
+
   // console.log(formData, 'leadsform')
   return (
     <Box sx={{ mt: '60px' }}>
@@ -271,6 +333,7 @@ export function AddAccount() {
                           name='name'
                           value={formData.name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.name?.[0] ? errors?.name[0] : ''}
@@ -298,6 +361,7 @@ export function AddAccount() {
                           type='text'
                           value={formData.phone}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.phone?.[0] ? errors?.phone[0] : ''}
@@ -310,6 +374,7 @@ export function AddAccount() {
                           name='email'
                           value={formData.email}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.email?.[0] ? errors?.email[0] : ''}
@@ -352,6 +417,10 @@ export function AddAccount() {
                             value={formData.contact_name}
                             open={contactSelectOpen}
                             onClick={() => setContactSelectOpen(!contactSelectOpen)}
+                            onClose={() => {
+                              setContactSelectOpen(false);
+                              handleSelectBlur('contact_name', formData.contact_name); 
+                            }}
                             IconComponent={() => (
                               <div onClick={() => setContactSelectOpen(!contactSelectOpen)} className="select-icon-background">
                                 {contactSelectOpen ? <FiChevronUp className='select-icon' /> : <FiChevronDown className='select-icon' />}
