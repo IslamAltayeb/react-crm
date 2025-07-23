@@ -171,10 +171,23 @@ export function AddOpportunity() {
   };
 
 
+  // const handleSubmit = (e: any) => {
+  //   e.preventDefault();
+  //   submitForm();
+  // };
+
   const handleSubmit = (e: any) => {
-    e.preventDefault();
-    submitForm();
-  };
+  e.preventDefault();
+
+  const errors = validate(formData);
+  setErrors(errors);
+
+  if (Object.keys(errors).length === 0) {
+     submitForm();
+    console.log('Submitting:', formData);
+  }
+};
+
   const submitForm = () => {
     const Header = {
       Accept: 'application/json',
@@ -249,6 +262,53 @@ export function AddOpportunity() {
     navigate('/app/opportunities');
   };
 
+  const validate = (data: FormData): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!data.name) errors.name = ['Opportunity name is required'];
+  if (!data.stage) errors.stage = ['Stage is required']; 
+  if (!data.due_date) errors.due_date = ['Due Date is required'];
+
+  return errors;
+};
+
+const handleBlur = (
+  e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+) => {
+  const { name, value } = e.target;
+  const fieldName = name as keyof FormData;
+  const singleFieldError = validate({ ...formData, [name]: value });
+
+  setErrors((prevErrors) => {
+    const updated = { ...prevErrors };
+    if (singleFieldError[fieldName]) {
+      updated[fieldName] = singleFieldError[fieldName];
+    } else {
+      delete updated[fieldName];
+    }
+    return updated;
+  });
+};
+
+const handleSelectBlur = (name: keyof FormData, value: string) => {
+  const singleFieldError = validate({ ...formData, [name]: value });
+
+  setErrors((prevErrors) => {
+    const updated = { ...prevErrors };
+
+    // Always check for required field (even if not changed)
+    if (!value) {
+      updated[name] = [`${name[0].toUpperCase() + name.slice(1)} is required`];
+    } else if (singleFieldError[name]) {
+      updated[name] = singleFieldError[name];
+    } else {
+      delete updated[name];
+    }
+
+    return updated;
+  });
+};
+
   const module = 'Opportunities';
   const crntPage = 'Add Opportunity';
   const backBtn = 'Back To Opportunities';
@@ -276,6 +336,7 @@ export function AddOpportunity() {
                           name='name'
                           value={formData.name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.name?.[0] ? errors?.name[0] : ''}
@@ -359,6 +420,10 @@ export function AddOpportunity() {
                             value={formData.stage}
                             open={stageSelectOpen}
                             onClick={() => setStageSelectOpen(!stageSelectOpen)}
+                            onClose={() => {
+                              setStageSelectOpen(false);
+                              handleSelectBlur('stage', formData.stage); 
+                            }}
                             IconComponent={() => (
                               <div onClick={() => setStageSelectOpen(!stageSelectOpen)} className="select-icon-background">
                                 {stageSelectOpen ? <FiChevronUp className='select-icon' /> : <FiChevronDown className='select-icon' />}
@@ -500,6 +565,7 @@ export function AddOpportunity() {
                           name='due_date'
                           value={formData.due_date}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.due_date?.[0] ? errors?.due_date[0] : ''}

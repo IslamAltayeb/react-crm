@@ -293,6 +293,32 @@ export function EditOpportunity() {
     setReset(true);
   };
 
+  const validate = (data: FormData): FormErrors => {
+    const errors: FormErrors = {};
+
+    if (!data.name) errors.name = ['Opportunity name is required'];
+    if (!data.due_date) errors.due_date = ['Due Date is required'];
+
+    return errors;
+  };
+
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    const fieldName = name as keyof FormData;
+    const singleFieldError = validate({ ...formData, [name]: value });
+  
+    setErrors((prevErrors) => {
+      const updated = { ...prevErrors };
+      if (singleFieldError[fieldName]) {
+        updated[fieldName] = singleFieldError[fieldName];
+      } else {
+        delete updated[fieldName];
+      }
+      return updated;
+    });
+  };
 
   const module = 'Opportunities';
   const crntPage = 'Add Opportunities';
@@ -322,6 +348,7 @@ export function EditOpportunity() {
                           name='account_name'
                           value={formData.name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.name?.[0] ? errors?.name[0] : ''}
@@ -589,6 +616,7 @@ export function EditOpportunity() {
                           name='due_date'
                           value={formData.due_date}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.due_date?.[0] ? errors?.due_date[0] : ''}
@@ -767,7 +795,7 @@ export function EditOpportunity() {
                         <div ref={quillRef} />
                       </div>
                     </div>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', mt: 1.5 }}>
+                    {/*<Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', mt: 1.5 }}>
                       <Button
                         className='header-button'
                         onClick={emptyDescription}
@@ -788,11 +816,16 @@ export function EditOpportunity() {
                       >
                                                 Save
                       </Button>
-                    </Box>
+                    </Box>*/}
                   </Box>
                 </AccordionDetails>
               </Accordion>
             </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
+            </Box>
           </div>
         </form>
       </Box >

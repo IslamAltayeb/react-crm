@@ -29,7 +29,8 @@ import '../../styles/style.css';
 // interface FormErrors {
 //   [key: string]: string;
 // }
-type FormErrors = {
+type FormErrors = Partial<{
+  date_of_birth: any;
   salutation?: string[];
   first_name?: string[];
   last_name?: string[];
@@ -42,7 +43,7 @@ type FormErrors = {
   department?: string[];
   country?: string[];
   language?: string[];
-  do_not_call?: string[];
+  do_not_call?: boolean;
   address_line?: string[];
   street?: string[];
   city?: string[];
@@ -52,8 +53,33 @@ type FormErrors = {
   linked_in_url?: string[];
   facebook_url?: string[];
   twitter_username?: string[];
-};
+}>;
 
+interface FormData {
+  date_of_birth: any;
+  salutation: string;
+  first_name: string;
+  last_name: string;
+  organization: string;
+  title: string;
+  primary_email: string;
+  secondary_email: string;
+  mobile_number: string;
+  secondary_number: string;
+  department: string;
+  country: string;
+  language: string;
+  do_not_call: boolean;
+  address_line: string;
+  street: string;
+  city: string;
+  state: string;
+  postcode: string;
+  description: string;
+  linked_in_url: string;
+  facebook_url: string;
+  twitter_username: string;
+};
 // interface FormData {
 //   salutation: string;
 //   // Add other form fields as needed
@@ -241,6 +267,41 @@ function EditContact() {
     setReset(true);
     // resetForm()
   };
+
+  const validate = (data: FormData): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!data.first_name) errors.first_name = ['First name is required'];
+  if (!data.last_name) errors.last_name = ['Last name is required'];
+  if (!data.organization) errors.organization = ['Organization is required'];
+  if (!data.primary_email) errors.primary_email = ['Email is required'];
+  else if (!/^\S+@\S+\.\S+$/.test(data.primary_email)) errors.primary_email = ['Invalid email format'];
+  if (!data.mobile_number) errors.mobile_number = ['Mobile number is required'];
+  if (!data.department) errors.department = ['Department is required'];
+  if (!data.language) errors.language = ['Language is required']; 
+  if (!data.date_of_birth) errors.date_of_birth = ['Date of Birth is required'];
+
+  return errors;
+};
+
+const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    const fieldName = name as keyof FormData;
+    const singleFieldError = validate({ ...formData, [name]: value });
+  
+    setErrors((prevErrors) => {
+      const updated = { ...prevErrors };
+      if (singleFieldError[fieldName]) {
+        updated[fieldName] = singleFieldError[fieldName];
+      } else {
+        delete updated[fieldName];
+      }
+      return updated;
+    });
+  };
+
   // console.log(formData, 'editform')
   return (
     <Box sx={{ mt: '60px' }}>
@@ -284,6 +345,7 @@ function EditContact() {
                           name='first_name'
                           value={formData.first_name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           required
@@ -299,6 +361,7 @@ function EditContact() {
                           name='last_name'
                           value={formData.last_name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           required
@@ -312,6 +375,7 @@ function EditContact() {
                           name='organization'
                           value={formData.organization}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           required
@@ -327,6 +391,7 @@ function EditContact() {
                           name='primary_email'
                           value={formData.primary_email}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           required
                           style={{ width: '70%' }}
                           size='small'
@@ -356,6 +421,7 @@ function EditContact() {
                           id='outlined-error-helper-text'
                           value={formData.department}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           required
                           style={{ width: '70%' }}
                           size='small'
@@ -385,6 +451,7 @@ function EditContact() {
                             name='mobile_number'
                             value={formData.mobile_number}
                             onChange={handleChange}
+                            onBlur={handleBlur}
                             required
                             style={{ width: '70%' }}
                             size='small'
@@ -417,6 +484,7 @@ function EditContact() {
                           name='language'
                           value={formData.language}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           error={!!errors?.language?.[0]}
@@ -582,7 +650,7 @@ function EditContact() {
                         <div ref={quillRef} />
                       </div>
                     </div>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', mt: 1.5 }}>
+                    {/*<Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', mt: 1.5 }}>
                       <Button
                         className='header-button'
                         onClick={emptyDescription}
@@ -603,7 +671,7 @@ function EditContact() {
                       >
                         Save
                       </Button>
-                    </Box>
+                    </Box>*/}
                   </Box>
                 </AccordionDetails>
               </Accordion>
@@ -672,6 +740,11 @@ function EditContact() {
                 </AccordionDetails>
               </Accordion>
             </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
+            </Box>
           </div>
         </form>
       </Box>
