@@ -15,6 +15,7 @@ import {
   FormHelperText,
   Avatar,
   Input,
+  Button,
 } from '@mui/material';
 import { UserUrl } from '../../services/ApiUrls';
 import { fetchData } from '../../components/FetchData';
@@ -185,9 +186,9 @@ export function EditUser() {
     formDataToSend.append('city', formData.city);
     formDataToSend.append('state', formData.state);
     formDataToSend.append('postcode', formData.postcode);
-    formDataToSend.append('username', 'UserName');
-    formDataToSend.append('name', 'Name');
-    formDataToSend.append('country', 'NL');
+    formDataToSend.append('username', formData.username);
+    //formDataToSend.append('name', 'Name');
+    formDataToSend.append('country', formData.country);
     if (formData.profile_pic) {
       formDataToSend.append('profile_pic', formData.profile_pic);
     }
@@ -244,6 +245,39 @@ export function EditUser() {
     fileInputRef.current?.click();
   };
 
+  const validate = (data: FormData): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!data.username) errors.username = ['Username is required'];
+  if (!data.email) errors.email = ['Email is required'];
+  else if (!/^\S+@\S+\.\S+$/.test(data.email)) errors.email = ['Invalid email format'];
+  if (!data.role) errors.role = ['Role is required'];
+  if (!data.phone) errors.phone = ['Phone number is required'];
+
+  return errors;
+};
+
+const handleBlur = (
+  e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+) => {
+  const { name, value } = e.target;
+  const fieldName = name as keyof FormData;
+
+  const singleFieldError = validate({ ...formData, [name]: value });
+
+  setUserErrors((prevErrors) => {
+  const updated = { ...prevErrors };
+
+  if (Object.prototype.hasOwnProperty.call(singleFieldError, fieldName)) {
+    updated[fieldName as keyof FormErrors] = singleFieldError[fieldName as keyof FormErrors];
+  } else {
+    delete updated[fieldName as keyof FormErrors];
+  }
+
+  return updated;
+});
+};
+
   const module = 'Users';
   const crntPage = 'Edit User';
   const backBtn = state?.edit ? 'Back To Users' : 'Back To UserDetails';
@@ -286,6 +320,7 @@ export function EditUser() {
                           name="username"
                           value={formData.username}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size="small"
                           error={!!userErrors?.username?.[0]}
@@ -299,6 +334,7 @@ export function EditUser() {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size="small"
                           error={
@@ -321,6 +357,7 @@ export function EditUser() {
                             name="phone"
                             value={formData.phone}
                             onChange={handleChange}
+                            onBlur={handleBlur}
                             required
                             style={{ width: '70%' }}
                             size="small"
@@ -604,7 +641,11 @@ export function EditUser() {
                 </AccordionDetails>
               </Accordion>
             </div>
-
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
+            </Box>
           </div>
         </form>
       </Box>

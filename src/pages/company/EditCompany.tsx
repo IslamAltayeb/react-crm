@@ -5,7 +5,8 @@ import {
   AccordionSummary,
   Typography,
   Box,
-  Divider
+  Divider,
+  Button,
 } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
@@ -18,6 +19,10 @@ import { FiChevronDown } from '@react-icons/all-files/fi/FiChevronDown';
 
 type FormErrors = {
     name?: string[];
+};
+
+type FormData = {
+  name: string;
 };
 
 function EditCompany() {
@@ -93,6 +98,33 @@ function EditCompany() {
   const onCancel = () => {
     setReset(true);
   };
+
+  const validate = (data: FormData): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!data.name) errors.name = ['Company name is required'];
+
+  return errors;
+};
+
+const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    const fieldName = name as keyof FormData;
+    const singleFieldError = validate({ ...formData, [name]: value });
+  
+    _setErrors((prevErrors) => {
+      const updated = { ...prevErrors };
+      if (singleFieldError[fieldName]) {
+        updated[fieldName] = singleFieldError[fieldName];
+      } else {
+        delete updated[fieldName];
+      }
+      return updated;
+    });
+  };
+
     // console.log(formData, 'editform')
   return (
     <Box sx={{ mt: '60px' }}>
@@ -122,6 +154,7 @@ function EditCompany() {
                           name='name'
                           value={formData.name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: '70%' }}
                           size='small'
                           helperText={errors?.name?.[0] ? errors?.name[0] : ''}
@@ -133,6 +166,11 @@ function EditCompany() {
                 </AccordionDetails>
               </Accordion>
             </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+              <Button type="submit" variant="contained">
+                Save
+              </Button>
+            </Box>
           </div>
         </form>
       </Box>

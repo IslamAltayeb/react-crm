@@ -20,6 +20,10 @@ type FormErrors = {
     name?: string[];
 };
 
+type FormData = {
+  name: string;
+};
+
 function AddCompany() {
   const navigate = useNavigate();
   // const { state } = useLocation();
@@ -34,10 +38,22 @@ function AddCompany() {
     setFormData({ ...formData, [name]: value });
   };
 
+  // const handleSubmit = (e: any) => {
+  //   e.preventDefault();
+  //   submitForm();
+  // };
+
   const handleSubmit = (e: any) => {
-    e.preventDefault();
-    submitForm();
-  };
+  e.preventDefault();
+
+  const errors = validate(formData);
+  setErrors(errors);
+
+  if (Object.keys(errors).length === 0) {
+     submitForm();
+    console.log('Submitting:', formData);
+  }
+};
 
   const submitForm = () => {
     const Header = {
@@ -77,6 +93,32 @@ function AddCompany() {
     resetForm();
   };
 
+  const validate = (data: FormData): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!data.name) errors.name = ['Company name is required'];
+
+  return errors;
+};
+
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    const fieldName = name as keyof FormData;
+    const singleFieldError = validate({ ...formData, [name]: value });
+  
+    setErrors((prevErrors) => {
+      const updated = { ...prevErrors };
+      if (singleFieldError[fieldName]) {
+        updated[fieldName] = singleFieldError[fieldName];
+      } else {
+        delete updated[fieldName];
+      }
+      return updated;
+    });
+  };
+
   return (
     <Box sx={{ mt: '60px' }}>
       <CustomAppBar backbtnHandle={backbtnHandle} module={module} backBtn={backBtn} crntPage={crntPage} onCancel={onCancel} onSubmit={handleSubmit} />
@@ -106,6 +148,7 @@ function AddCompany() {
                           name='name'
                           value={formData.name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                               e.preventDefault();

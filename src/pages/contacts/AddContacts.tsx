@@ -29,7 +29,7 @@ import "../../styles/style.css";
 // interface FormErrors {
 //   [key: string]: string;
 // }
-type FormErrors = {
+type FormErrors = Partial<{
   date_of_birth: any;
   salutation?: string[];
   first_name?: string[];
@@ -43,7 +43,7 @@ type FormErrors = {
   department?: string[];
   country?: string[];
   language?: string[];
-  do_not_call?: string[];
+  do_not_call?: boolean;
   address_line?: string[];
   street?: string[];
   city?: string[];
@@ -53,6 +53,32 @@ type FormErrors = {
   linked_in_url?: string[];
   facebook_url?: string[];
   twitter_username?: string[];
+}>;
+
+interface FormData {
+  date_of_birth: any;
+  salutation: string;
+  first_name: string;
+  last_name: string;
+  organization: string;
+  title: string;
+  primary_email: string;
+  secondary_email: string;
+  mobile_number: string;
+  secondary_number: string;
+  department: string;
+  country: string;
+  language: string;
+  do_not_call: boolean;
+  address_line: string;
+  street: string;
+  city: string;
+  state: string;
+  postcode: string;
+  description: string;
+  linked_in_url: string;
+  facebook_url: string;
+  twitter_username: string;
 };
 
 function AddContacts() {
@@ -101,7 +127,7 @@ function AddContacts() {
     department: [],
     country: [],
     language: [],
-    do_not_call: [],
+    do_not_call: false,
     address_line: [],
     street: [],
     city: [],
@@ -141,14 +167,20 @@ function AddContacts() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (quillRef.current) {
-      const html = quillRef.current.firstChild.innerHTML;
-      setFormData((prev) => ({ ...prev, description: html }));
 
-      // Since setState is async, use a callback or just submit after updating:
-      submitFormWithDescription(html);
-    } else {
-      submitForm();
+    const errors = validate(formData);
+    setErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      if (quillRef.current) {
+        const html = quillRef.current.firstChild.innerHTML;
+        setFormData((prev) => ({ ...prev, description: html }));
+
+        // Since setState is async, use a callback or just submit after updating:
+        submitFormWithDescription(html);
+      } else {
+        submitForm();
+      }
     }
   };
 
@@ -277,6 +309,40 @@ function AddContacts() {
     resetForm();
   };
 
+  const validate = (data: FormData): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!data.first_name) errors.first_name = ['First name is required'];
+  if (!data.last_name) errors.last_name = ['Last name is required'];
+  if (!data.organization) errors.organization = ['Organization is required'];
+  if (!data.primary_email) errors.primary_email = ['Email is required'];
+  else if (!/^\S+@\S+\.\S+$/.test(data.primary_email)) errors.primary_email = ['Invalid email format'];
+  if (!data.mobile_number) errors.mobile_number = ['Mobile number is required'];
+  if (!data.department) errors.department = ['Department is required'];
+  if (!data.language) errors.language = ['Language is required']; 
+  if (!data.date_of_birth) errors.date_of_birth = ['Date of Birth is required'];
+
+  return errors;
+};
+
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    const fieldName = name as keyof FormData;
+    const singleFieldError = validate({ ...formData, [name]: value });
+  
+    setErrors((prevErrors) => {
+      const updated = { ...prevErrors };
+      if (singleFieldError[fieldName]) {
+        updated[fieldName] = singleFieldError[fieldName];
+      } else {
+        delete updated[fieldName];
+      }
+      return updated;
+    });
+  };
+
   // console.log(errors, 'err')
   return (
     <Box sx={{ mt: "60px" }}>
@@ -343,6 +409,7 @@ function AddContacts() {
                           name="first_name"
                           value={formData.first_name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: "70%" }}
                           size="small"
                           required
@@ -360,6 +427,7 @@ function AddContacts() {
                           name="last_name"
                           value={formData.last_name}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: "70%" }}
                           size="small"
                           required
@@ -375,6 +443,7 @@ function AddContacts() {
                           name="organization"
                           value={formData.organization}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: "70%" }}
                           size="small"
                           required
@@ -394,6 +463,7 @@ function AddContacts() {
                           name="primary_email"
                           value={formData.primary_email}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           required
                           style={{ width: "70%" }}
                           size="small"
@@ -430,6 +500,7 @@ function AddContacts() {
                           id="outlined-error-helper-text"
                           value={formData.department}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           required
                           style={{ width: "70%" }}
                           size="small"
@@ -463,6 +534,7 @@ function AddContacts() {
                             name="mobile_number"
                             value={formData.mobile_number}
                             onChange={handleChange}
+                            onBlur={handleBlur}
                             required
                             inputProps={{
                               pattern: "^\\+\\d{8,15}$",
@@ -503,6 +575,7 @@ function AddContacts() {
                           name="language"
                           value={formData.language}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: "70%" }}
                           size="small"
                           error={!!errors?.language?.[0]}
@@ -536,6 +609,7 @@ function AddContacts() {
                           name="date_of_birth"
                           value={formData.date_of_birth}
                           onChange={handleChange}
+                          onBlur={handleBlur}
                           style={{ width: "70%" }}
                           size="small"
                           error={!!errors?.date_of_birth?.[0]}
